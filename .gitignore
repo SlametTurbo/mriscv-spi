@@ -1,0 +1,27 @@
+# === Hasil sintesis & build (intermediate) ===
+*.log
+*.frames
+*.fasm
+
+# Netlist hasil yosys — biasanya tidak perlu disimpan
+# (HATI-HATI: hapus baris ini kalau ada file sumber .json yang penting)
+*.json
+
+# === Bitstream ===
+# spi.bit / *.bit adalah hasil build, bisa di-regenerate.
+# Tapi kalau mau simpan bitstream final untuk dokumentasi thesis,
+# komentari baris di bawah dengan menambahkan # di depannya.
+*.bit
+
+# === File memori/program SPI (opsional) ===
+# Kalau .hex/.mem ini adalah OUTPUT build, ignore.
+# Kalau ini SOURCE program yang kamu tulis, JANGAN ignore — hapus barisnya.
+# *.hex
+# *.mem
+
+# === Editor / OS ===
+.vscode/
+*.swp
+*.swo
+.DS_Store
+*~
