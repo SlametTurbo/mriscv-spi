@@ -174,10 +174,9 @@ Debug with **layered isolation** — verify each layer independently before draw
 - [x] SPI runtime loader
 - [x] Automatic POR
 - [x] Peripherals: LED, seven-segment, Pmod JB
-- [ ] Switch input (`sw[7:0]` → LED via SPI-uploaded program) — *end-to-end validation in progress*
-- [ ] Bitstream persistence option (flash) — *future work*
+- [x] Switch input (`sw[7:0]` → LED via SPI-uploaded program)
 - [ ] Additional peripherals — *future work*
 
 ---
 
-*Developed as part of an undergraduate thesis. Questions/discussion welcome via Issues.*
+*Developed as part of an undergraduate thesis. Questions/discussion welcome.*
