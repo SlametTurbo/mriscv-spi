@@ -11,7 +11,7 @@ This project was developed as part of an undergraduate thesis: demonstrating tha
 ## Features
 
 - **RV32I soft-core** running on the Basys3 via an open-source flow (no Vivado).
-- **SPI runtime loader** — programs are uploaded to the core's memory over SPI (Cheetah adapter), so switching programs requires **no** bitstream rebuild.
+- **SPI runtime loader** — programs are uploaded to the core's memory over SPI (Cheetah adapter), so switching programs requires **no** bitstream rebuild.en code
 - **Automatic Power-On Reset (POR)** — the bitstream runs immediately after configuration, no need to press `btnC` manually.
 - **Integrated peripherals** via `basys3_top.v`:
   - `gpio_datanw[7:0]` → 8 onboard LEDs
@@ -76,7 +76,7 @@ mriscv-spi/
 ### 1. Build the bitstream (once, or when adding peripherals)
 
 ```bash
-make            # runs synth (yosys) → pnr (nextpnr) → fasm → spi.bit
+make synth        # runs synth (yosys) → pnr (nextpnr) → fasm → spi.bit
 ```
 
 This `spi.bit` contains the **core + peripherals**, but no application program yet.
@@ -84,21 +84,17 @@ This `spi.bit` contains the **core + peripherals**, but no application program y
 ### 2. Upload the bitstream to the board
 
 ```bash
-openFPGALoader spi.bit
+make flash
 ```
 
-> ⚠️ **Important:** The Basys3 stores the bitstream in **volatile SRAM** (depending on the JTAG jumper position). After the board is powered off / unplugged, the bitstream is **lost**. Re-run `openFPGALoader spi.bit` every time the board powers on, **before** uploading a program.
+> ⚠️ **Important:** The Basys3 stores the bitstream in **volatile SRAM** (depending on the JTAG jumper position). After the board is powered off / unplugged, the bitstream is **lost**. Re-run `make flash` every time the board powers on, **before** uploading a program.
 
 ### 3. Upload a program over SPI (no rebuild!)
 
 Compile the firmware and send it via the SPI master:
 
 ```bash
-# Compile firmware (e.g. ledshow)
-make -f fw.mk ledshow.bin
-
-# Upload to the core over Cheetah SPI
-python3 cheetah_mriscv.py ledshow.bin
+make prog FW=<program_name>
 ```
 
 Swap programs anytime by uploading a different `.bin` — **no** need to re-`make` the bitstream. This is the essence of the *SPI runtime loader*.
