@@ -89,7 +89,7 @@ make flash
 
 > ⚠️ **Important:** The Basys3 stores the bitstream in **volatile SRAM** (depending on the JTAG jumper position). After the board is powered off / unplugged, the bitstream is **lost**. Re-run `make flash` every time the board powers on, **before** uploading a program.
 
-### 3. Upload a program over SPI (no rebuild!)
+### 3. Upload a program over SPI
 
 Compile the firmware and send it via the SPI master:
 
