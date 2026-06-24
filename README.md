@@ -1,4 +1,4 @@
-# mriscv-spi
+# mriscv-SPI
 
 Porting the **mriscv** RISC-V soft-core (RV32I) to the **Digilent Basys3 (Artix-7)** FPGA using a **fully open-source toolchain — no Vivado** (yosys + nextpnr-xilinx + prjxray), with an **SPI runtime loader** for uploading programs to the core without rebuilding the bitstream.
 
