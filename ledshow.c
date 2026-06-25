@@ -1,6 +1,6 @@
 #include "mriscv.h"
 
-/* Kecepatan dasar; sim bisa override -DSPEED=kecil. */
+/* Kecepatan dasar; -DSPEED=kecil. */
 #ifndef SPEED
 #define SPEED 0x1000
 #endif
@@ -60,10 +60,12 @@ static void mode_shift(void){
     unsigned q
      = 0;
     for (int i = 0; i < 8; i++){ q |=  (1u << orderRun[i]); show(q); delay(SPEED); }
+    delay(SPEED * 3);
     for (int i = 0; i < 8; i++){ q &= ~(1u << orderRun[i]); show(q); delay(SPEED); }
+
 }
 int main(void){
     for (;;){
-        mode_shift();
+        mode_random();
     }
 }
