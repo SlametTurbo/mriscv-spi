@@ -9,10 +9,8 @@
  *   4. drawPixel() pola garis    -> garis diagonal titik-titik
  *   5. fillRect() hapus (color=0)-> sebagian kotak terhapus
  *
- *   Tidak ada loop cepat -- tiap tahap diberi delay panjang supaya
- *   mudah diamati & difoto utk dokumentasi skripsi.
  */
-#include "SSD1306_direct.h"
+#include "ssd1306.h"
 
 static void long_delay(unsigned n){
     volatile unsigned i, j;
