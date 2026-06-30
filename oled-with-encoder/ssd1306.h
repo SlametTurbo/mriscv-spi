@@ -59,13 +59,13 @@ static inline void ssd1306__cmd(unsigned c){
     ssd1306__stop();
 }
 
-/* ---- state cursor (gaya Adafruit_GFX) ---- */
+/* ---- state cursor ---- */
 static int ssd1306__cx = 0, ssd1306__cy = 0;
 static int ssd1306__color = 1;
 
 /* ================= API gaya Adafruit_SSD1306/GFX ================= */
 
-/* begin(): inisialisasi controller -- setara Adafruit_SSD1306::begin() */
+/* begin(): inisialisasi controller -- equivalent dari Adafruit_SSD1306::begin() */
 static inline void ssd1306_begin(void){
     ssd1306__sda(1); ssd1306__scl(1);
     ssd1306__cmd(0xAE);ssd1306__cmd(0xD5);ssd1306__cmd(0x80);
@@ -78,7 +78,7 @@ static inline void ssd1306_begin(void){
     ssd1306__cmd(0xA4);ssd1306__cmd(0xA6);ssd1306__cmd(0xAF);
 }
 
-/* clearDisplay(): hapus seluruh layar -- setara Adafruit_GFX::clearDisplay() */
+/* clearDisplay(): hapus seluruh layar -- equivalent dari Adafruit_GFX::clearDisplay() */
 static inline void ssd1306_clearDisplay(void){
     ssd1306__cmd(0x21);ssd1306__cmd(0);ssd1306__cmd(127);
     ssd1306__cmd(0x22);ssd1306__cmd(0);ssd1306__cmd(7);
@@ -90,9 +90,9 @@ static inline void ssd1306_clearDisplay(void){
 
 /* display(): NO-OP di mode direct-draw (gambar sudah langsung tampil).
    Tetap disediakan agar API kompatibel dengan pola Adafruit_GFX. */
-static inline void ssd1306_display(void){ /* intentionally empty */ }
+static inline void ssd1306_display(void){ /* intentionally blank */ }
 
-/* fillRect(): isi/hapus blok piksel -- setara Adafruit_GFX::fillRect() */
+/* fillRect(): isi/hapus blok piksel -- equivalent dari Adafruit_GFX::fillRect() */
 static inline void ssd1306_fillRect(int x, int y, int w, int h, int color){
     int pg0 = y/8, pg1 = (y+h-1)/8;
     unsigned pat = color ? 0xFF : 0x00;
@@ -105,7 +105,7 @@ static inline void ssd1306_fillRect(int x, int y, int w, int h, int color){
     }
 }
 
-/* drawPixel(): satu titik -- setara Adafruit_GFX::drawPixel().
+/* drawPixel(): satu titik -- equivalent dari Adafruit_GFX::drawPixel().
    CATATAN: di hardware SSD1306, menulis 1 piksel tetap perlu kirim 1 byte
    (1 kolom penuh 8 piksel vertikal), jadi piksel lain di kolom yang sama
    bisa ikut berubah kalau tidak ditangani hati-hati -- di mode direct-draw
@@ -114,13 +114,13 @@ static inline void ssd1306_drawPixel(int x, int y, int color){
     ssd1306_fillRect(x, y, 1, 1, color);
 }
 
-/* setCursor(): set posisi teks -- setara Adafruit_GFX::setCursor() */
+/* setCursor(): set posisi teks -- equivalent dari Adafruit_GFX::setCursor() */
 static inline void ssd1306_setCursor(int x, int y){ ssd1306__cx=x; ssd1306__cy=y; }
 
-/* setTextColor(): -- setara Adafruit_GFX::setTextColor() */
+/* setTextColor(): -- equivalent dari Adafruit_GFX::setTextColor() */
 static inline void ssd1306_setTextColor(int color){ ssd1306__color=color; }
 
-/* drawChar(): satu karakter font 5x7 -- setara Adafruit_GFX::drawChar() */
+/* drawChar(): satu karakter font 5x7 -- equivalent dari Adafruit_GFX::drawChar() */
 static inline void ssd1306_drawChar(int x, int page, char c){
     const unsigned char *g;
     if (c < FONT5x7_FIRST || c >= FONT5x7_FIRST + FONT5x7_COUNT) c = ' ';
@@ -133,7 +133,7 @@ static inline void ssd1306_drawChar(int x, int page, char c){
     ssd1306__stop();
 }
 
-/* print(): cetak string mulai dari cursor -- setara Adafruit_GFX::print() */
+/* print(): cetak string mulai dari cursor -- equivalent dari Adafruit_GFX::print() */
 static inline void ssd1306_print(const char *s){
     int x = ssd1306__cx;
     int page = ssd1306__cy / 8;
