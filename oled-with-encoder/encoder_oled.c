@@ -3,6 +3,9 @@
  *   pindata[0]=enc CLK, pindata[1]=enc DT.
  *   Putar -> nilai naik/turun, ditampilkan sbg 2 digit hex di OLED.
  */
+
+
+
 #include "mriscv.h"
 #define SCL 0
 #define SDA 1
@@ -22,7 +25,12 @@ static void i2c_tx(unsigned b){
     for(int i=0;i<8;i++){ sda((b>>7)&1); b<<=1; scl(1); ihold(); scl(0); ihold(); }
     sda(1); scl(1); ihold(); scl(0); ihold();
 }
-static void cmd(unsigned c){ i2c_start(); i2c_tx(I2C_ADDR); i2c_tx(CTL_CMD); i2c_tx(c); i2c_stop(); }
+static void cmd(unsigned c){ 
+    i2c_start(); 
+    i2c_tx(I2C_ADDR); 
+    i2c_tx(CTL_CMD); 
+    i2c_tx(c); 
+    i2c_stop(); }
 
 static void ssd1306_init(void){
     cmd(0xAE); cmd(0xD5); cmd(0x80); cmd(0xA8); cmd(0x3F); cmd(0xD3); cmd(0x00);
@@ -30,6 +38,7 @@ static void ssd1306_init(void){
     cmd(0xDA); cmd(0x12); cmd(0x81); cmd(0xCF); cmd(0xD9); cmd(0xF1); cmd(0xDB);
     cmd(0x40); cmd(0xA4); cmd(0xA6); cmd(0xAF);
 }
+
 static void clear(void){
     cmd(0x21); cmd(0); cmd(127); cmd(0x22); cmd(0); cmd(7);
     i2c_start(); i2c_tx(I2C_ADDR); i2c_tx(CTL_DATA);
@@ -47,6 +56,8 @@ static const unsigned char font8x8[16][8] = {
  {0x3E,0x41,0x41,0x41,0x22,0,0,0},{0x7F,0x41,0x41,0x22,0x1C,0,0,0},
  {0x7F,0x49,0x49,0x49,0x41,0,0,0},{0x7F,0x09,0x09,0x09,0x01,0,0,0},
 };
+
+
 static void draw_glyph(unsigned page, unsigned col, const unsigned char *g){
     cmd(0x21); cmd(col); cmd(col+7);
     cmd(0x22); cmd(page); cmd(page);
@@ -66,7 +77,7 @@ int main(void){
 
     int count = 0, shown = -1;
     unsigned last_clk = gpio_rd(ENC_CLK);
-    draw_hex2(0x00);                          /* tampilkan 00 di awal */
+    draw_hex2(0x00);
     shown = 0;
 
     for(;;){
