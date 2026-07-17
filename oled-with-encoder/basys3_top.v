@@ -16,9 +16,7 @@ module basys3_top (
         if(por_cnt!=16'hFFFF) begin por_cnt<=por_cnt+1; por_n<=0; end else por_n<=1;
     end
     wire rst_n = por_n & ~btnC;
-    reg [5:0] divcnt=0; 
-    
-    always @(posedge clk100) divcnt<=divcnt+1; wire clk=divcnt[3];
+    reg [5:0] divcnt=0; always @(posedge clk100) divcnt<=divcnt+1; wire clk=divcnt[2];
 
     // sinkronisasi encoder -> pindata[0]=CLK, [1]=DT
     reg [1:0] sc=0, sd=0;
