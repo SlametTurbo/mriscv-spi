@@ -3,13 +3,15 @@
 /* ============================================================================
  * mriscv.h -- helper GPIO untuk core mriscv (RV32I) @ Basys3
  *
- * GPIO bit-addressed: pin i pada alamat byte (0x1040 + i*4), i = 0..7.
+ * GPIO bit-addressed: pin i pada alamat byte (0x10040 + i*4), i = 0..7.
+ *   (base direlokasi dari 0x1040 -> 0x10040 setelah SRAM diperbesar 4 KB -> 32 KB,
+ *    supaya tidak tabrakan dengan rentang alamat SRAM yang baru)
  *   - TULIS : 0x3 = nyala (data=1, enable/DSE=1)
  *             0x2 = mati  (data=0, enable=1)        -> datanw[i] (output: LED, dsb)
  *   - BACA  : bit0 hasil load = pindata[i]          (input: switch, encoder, dsb)
  * ============================================================================ */
 
-#define GPIO(i)  (*(volatile unsigned *)(0x1040u + (unsigned)(i) * 4u))
+#define GPIO(i)  (*(volatile unsigned *)(0x10040u + (unsigned)(i) * 4u))
 
 /* ---------------- OUTPUT (tulis) ---------------- */
 

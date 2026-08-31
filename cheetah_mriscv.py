@@ -11,7 +11,8 @@
 #   * SPI mode 0 (CPOL=0, CPHA=0), MSB-first, CS (CEB) aktif-rendah.
 #   * Frame 66-bit dikemas ke 9 byte (72 bit), left-aligned, 6 bit padding 0 di akhir
 #     (padding dibuang hardware saat CS naik).
-#   * Syarat: SCLK <= ~CLK/4. Dengan core /64 (~1.5 MHz) -> pakai SCLK <= ~200 kHz.
+#   * Syarat: SCLK <= ~CLK/4. Dengan core /2 (50 MHz) -> SCLK 100 kHz jauh di bawah batas
+#     (~12.5 MHz), tetap dipakai 100 kHz karena belum ada alasan menaikkannya.
 #
 # Wiring Cheetah -> Pmod JA Basys3:
 #   SCLK -> JA1 (J1),  MOSI -> JA2 (L2),  SS0/CS -> JA3 (J2),  GND -> GND Pmod.
@@ -31,15 +32,15 @@ from array import array
 # --- konstanta protokol ---
 INSTR_WRITE = 0b10
 INSTR_NOP   = 0b00
-SRAM_BASE   = 0x000          # word-address RAM (program) 0x000..0x3FF
-GPIO_BASE   = 0x410          # word-address GPIO pin 0; pin i -> 0x410 + i
+SRAM_BASE   = 0x000          # word-address RAM (program) 0x0000..0x1FFF (32 KB)
+GPIO_BASE   = 0x4010         # word-address GPIO pin 0; pin i -> 0x4010 + i (direlokasi dari 0x410)
 GPIO_ON     = 0x3            # data=1, DSE(enable)=1
 GPIO_OFF    = 0x2            # data=0, DSE(enable)=1
 FRAME_BYTES = 9              # 66 bit -> 9 byte (72 bit) dgn padding
 
 # --- konfigurasi Cheetah (mode 0) ---
 DEFAULT_PORT    = 0
-DEFAULT_BITRATE = 100        # kHz (aman utk core /64; naikkan hanya bila CLK dinaikkan)
+DEFAULT_BITRATE = 100        # kHz (core sekarang 50 MHz -> margin oversampling jauh lebih longgar dari sebelumnya)
 
 
 def frame_bytes(instr, addr, data):
