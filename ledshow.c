@@ -1,8 +1,9 @@
 #include "mriscv.h"
 
-/* Kecepatan dasar; -DSPEED=kecil. */
+/* Kecepatan dasar; -DSPEED=kecil.
+ * Dikalibrasi ulang untuk clock core 50 MHz (sebelumnya 1.5625 MHz -> naik 32x). */
 #ifndef SPEED
-#define SPEED 0x1000
+#define SPEED 0x20000
 #endif
 #ifndef N_COUNT
 #define N_COUNT 256

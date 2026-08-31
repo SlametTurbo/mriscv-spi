@@ -17,7 +17,7 @@
 
 static inline void scl(unsigned v){ gpio_pin(SCL, v); }
 static inline void sda(unsigned v){ gpio_pin(SDA, v); }
-static inline void ihold(void){ volatile int i; for(i=0;i<4;i++); }
+static inline void ihold(void){ volatile int i; for(i=0;i<16;i++); }  /* x4: clock naik 12.5->50MHz */
 
 static void i2c_start(void){ sda(1); scl(1); ihold(); sda(0); ihold(); scl(0); ihold(); }
 static void i2c_stop(void){  sda(0); scl(1); ihold(); sda(1); ihold(); }

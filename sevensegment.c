@@ -1,4 +1,4 @@
-#define GP(i) (*(volatile unsigned *)(0x1040 + (i)*4u))
+#define GP(i) (*(volatile unsigned *)(0x10040 + (i)*4u))
 
 // Fungsi delay bare-metal agar perubahan angka bisa dilihat mata
 void delay(volatile unsigned int count) {

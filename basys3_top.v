@@ -22,10 +22,10 @@ module basys3_top (
     end
     wire rst_n = por_n & ~btnC;
 
-    // Clock /64: 100 MHz -> ~1.5625 MHz
-    reg [5:0] divcnt = 0;
-    always @(posedge clk100) divcnt <= divcnt + 1'b1;
-    wire clk = divcnt[5];
+    // Clock /2: 100 MHz -> 50 MHz
+    reg divcnt = 0;
+    always @(posedge clk100) divcnt <= ~divcnt;
+    wire clk = divcnt;
 
     // Sinkronisasi switch (2-FF, hindari metastabil)
     reg [7:0] sw0 = 0, sw1 = 0;

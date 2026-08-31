@@ -38,8 +38,10 @@ module impl_axi(
     localparam                sword = 32;
     localparam              masters = 2;
     localparam              slaves = 5;
-    localparam [slaves*sword-1:0] addr_mask = {32'h00000000,32'h0000000F,32'h00000001,32'h00000001,32'h000003FF};
-    localparam [slaves*sword-1:0] addr_use  = {32'h04000000,32'h00000410,32'h00000408,32'h00000400,32'h00000000};
+    // SRAM diperbesar 4 KB -> 32 KB (1024 -> 8192 word, mask 0x3FF -> 0x1FFF).
+    // DAC/ADC/GPIO direlokasi ke 0x4000+ supaya tidak tabrakan dengan rentang SRAM baru.
+    localparam [slaves*sword-1:0] addr_mask = {32'h00000000,32'h0000000F,32'h00000001,32'h00000001,32'h00001FFF};
+    localparam [slaves*sword-1:0] addr_use  = {32'h04000000,32'h00004010,32'h00004008,32'h00004000,32'h00000000};
     
     // AXI4-lite master memory interfaces
 
@@ -135,14 +137,17 @@ module impl_axi(
     // Slave 1 (AXI_SP32B1024), Memory Interface
     wire  [31:0]     AXI_SP32B1024_D;
     wire  [31:0]     AXI_SP32B1024_Q;
-    wire  [9:0]      AXI_SP32B1024_A;
+    wire  [12:0]     AXI_SP32B1024_A;
     wire             AXI_SP32B1024_CEN;
     wire             AXI_SP32B1024_WEN;
     
     // Instances
     
     // AXI INTERCONNECT, axi4_interconnect
-    axi4_interconnect inst_axi4_interconnect
+    axi4_interconnect #(
+        .addr_mask(addr_mask),
+        .addr_use(addr_use)
+    ) inst_axi4_interconnect
     (
         .CLK        (CLK),
         .RST    (RST),

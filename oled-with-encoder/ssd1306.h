@@ -36,7 +36,7 @@
 #define SSD1306_CTL_DATA 0x40
 
 /* ================= I2C bit-bang (dipakai kedua mode) ================= */
-static inline void ssd1306__ihold(void){ volatile int i; for(i=0;i<4;i++); }
+static inline void ssd1306__ihold(void){ volatile int i; for(i=0;i<16;i++); }  /* x4: clock naik 12.5->50MHz */
 static inline void ssd1306__scl(unsigned v){ gpio_pin(SSD1306_SCL_PIN,v); }
 static inline void ssd1306__sda(unsigned v){ gpio_pin(SSD1306_SDA_PIN,v); }
 static inline void ssd1306__start(void){

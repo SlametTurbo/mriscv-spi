@@ -5,7 +5,7 @@
  * Versi ini meng-cermin-kan 8 switch -> 8 LED. Untuk "1 switch -> 1 LED",
  * cukup pakai pin 0 saja (lihat main_satu di bawah).
  */
-#define GP(i) (*(volatile unsigned *)(0x1040 + (i)*4u))
+#define GP(i) (*(volatile unsigned *)(0x10040 + (i)*4u))
 
 int main(void){
     for(;;){
