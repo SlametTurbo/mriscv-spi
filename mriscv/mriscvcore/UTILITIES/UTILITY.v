@@ -66,7 +66,18 @@ module UTILITY(
         is_inst = 1;
         rd_n = 0; 
         case (opcode)
-            12'b000001110011 : rd_n = RD_DATA;        // CSRR*
+            // DECO_INSTR: codif = {2'b00, funct3, opcode}. Dulu cuma funct3=000
+            // (= ECALL) yang dicocokkan, jadi rdcycle/rdtime/rdinstret (CSRRS,
+            // funct3=010) tidak diklaim unit manapun -> done_exec tidak pernah
+            // naik -> FSM macet di S2_exec. Semua CSR di sini read-only, jadi
+            // bagian tulis CSRRS/C/xI diabaikan. CSRRW (001) tidak bisa
+            // didukung: kodenya sama dengan EBREAK dan di-trap oleh FSM.
+            12'b000001110011 : rd_n = RD_DATA;        // ECALL (rd=x0, efektif NOP)
+            12'b000101110011 : rd_n = RD_DATA;        // CSRRS  (rdcycle, rdtime, rdinstret, ...H)
+            12'b000111110011 : rd_n = RD_DATA;        // CSRRC
+            12'b001011110011 : rd_n = RD_DATA;        // CSRRWI
+            12'b001101110011 : rd_n = RD_DATA;        // CSRRSI
+            12'b001111110011 : rd_n = RD_DATA;        // CSRRCI
             12'b000001101111 : rd_n = PC_ORIG;        // JAL
             12'b000001100111 : rd_n = PC_ORIG;        // JALR
             12'b000000010111 : rd_n = PC_N2+imm;    // AUIPC

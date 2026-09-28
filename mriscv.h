@@ -137,4 +137,18 @@ static inline void uart_puts(const char *s){
     }
 }
 
+/* ---------------- Counter siklus / instruksi (CSR read-only) ----------------
+ * rdcycle = siklus clock core (50 MHz) sejak reset, rdinstret = jumlah
+ * instruksi, rdtime = +1 tiap 101 siklus (bukan waktu nyata). Butuh RTL dengan
+ * fix CSRRS di UTILITY.v (2026-09-28) -- di bitstream lama instruksi ini bikin
+ * CPU macet. Counter 64-bit; di sini cuma 32 bit bawah (wrap ~86 s @50MHz),
+ * pakai selisih unsigned (akhir - awal) supaya aman melewati wrap.
+ * always_inline: lihat catatan uart_putc() soal jal/ret. */
+static inline __attribute__((always_inline)) unsigned rdcycle(void){
+    unsigned v; __asm__ volatile("rdcycle %0" : "=r"(v)); return v;
+}
+static inline __attribute__((always_inline)) unsigned rdinstret(void){
+    unsigned v; __asm__ volatile("rdinstret %0" : "=r"(v)); return v;
+}
+
 #endif /* MRISCV_H */
