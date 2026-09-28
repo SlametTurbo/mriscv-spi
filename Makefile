@@ -37,6 +37,13 @@ TOP_VERILOG  := basys3_top.v
 # XDC: default LED; untuk switch -> 'make synth XDC=basys3_switch.xdc'
 XDC          ?= basys3_spi.xdc
 
+# Target frekuensi P&R (MHz). nextpnr-xilinx MENGABAIKAN create_clock di XDC
+# (tanpa ini log menulis "PASS at 12.00 MHz" = placer cuma mengejar 12 MHz).
+# Samakan dengan clock core (basys3_top.v). 'override +=' supaya tetap ikut
+# walau PNR_ARGS diisi dari command line, mis. PNR_ARGS="--seed 3".
+PNR_FREQ     ?= 50
+override PNR_ARGS += --freq $(PNR_FREQ)
+
 # Semua sumber Verilog SELAIN top -> ADDITIONAL_SOURCES (dibaca openXC7.mk).
 # Top + BRAM behavioral di folder ini; sisanya dari repo mriscv. _tb.v dibuang.
 MRISCV       ?= mriscv
@@ -79,7 +86,12 @@ CC           := $(RISCV_PREFIX)-gcc
 OBJCOPY      := $(RISCV_PREFIX)-objcopy
 OBJDUMP      := $(RISCV_PREFIX)-objdump
 SIZE         := $(RISCV_PREFIX)-size
-CFLAGS       := -march=rv32i -mabi=ilp32 -nostdlib -nostartfiles -ffreestanding -Os -Wall
+# ISA firmware. Default rv32i. 'make build FW=x MARCH=rv32i_zmmul' -> operator *
+# di C jadi instruksi mul hardware (MULT.v, terverifikasi di board 2026-09-28).
+# JANGAN pakai rv32im: '/' dan '%' jadi instruksi div/rem yang TIDAK ada di
+# core -> trap saat runtime. Dengan zmmul, '/' tetap gagal di tahap link (aman).
+MARCH        ?= rv32i
+CFLAGS       := -march=$(MARCH) -mabi=ilp32 -nostdlib -nostartfiles -ffreestanding -Os -Wall
 
 ELF_FILE     := $(FW).elf
 BIN_FILE     := $(FW).bin

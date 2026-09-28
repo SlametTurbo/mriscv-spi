@@ -15,8 +15,10 @@ module basys3_top (
     always @(posedge clk100) begin
         if(por_cnt!=16'hFFFF) begin por_cnt<=por_cnt+1; por_n<=0; end else por_n<=1;
     end
-    wire rst_n = por_n & ~btnC;
     reg divcnt=0; always @(posedge clk100) divcnt<=~divcnt; wire clk=divcnt; // /2: 100MHz -> 50MHz
+    // sinkronizer reset 3-FF di domain clk (sama seperti ../basys3_top.v)
+    reg [2:0] rst_sync=0; always @(posedge clk) rst_sync<={rst_sync[1:0], por_n & ~btnC};
+    wire rst_n = rst_sync[2];
 
     // sinkronisasi encoder -> pindata[0]=CLK, [1]=DT
     reg [1:0] sc=0, sd=0;
