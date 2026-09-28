@@ -1,13 +1,12 @@
 #include <stdint.h>
 #include "mriscv.h"
 
-/* WORKAROUND (2026-09-28): setiap karakter ditulis literal langsung, TANPA
- * baca memori runtime sama sekali (bukan lewat uart_puts()/loop atas
- * string). Bug core yang belum terpecahkan bikin loop apapun yang baca
- * data (termasuk baca karakter dari string di RAM) lalu tulis peripheral
- * hang permanen di hardware -- lihat CLAUDE.md bagian "UART hardware
- * (TX-only)" untuk kronologi lengkap. Pola literal-only ini identik dengan
- * uart_probe2.c yang sudah berkali-kali terbukti aman di hardware asli. */
+/* Kirim tiap karakter literal langsung (uart_putc() always_inline, TANPA
+ * loop atas string, TANPA panggil uart_puts()). Ini satu-satunya pola yang
+ * terbukti SELALU aman di hardware -- lihat CLAUDE.md bagian "UART hardware
+ * (TX-only)" untuk kronologi lengkap kenapa uart_puts(char*) TIDAK dipakai
+ * di sini (ambang ~3 iterasi loop sebelum core hang, bug hardware yang
+ * belum terpecahkan). */
 static void send_hello(void){
     uart_putc('H'); uart_putc('e'); uart_putc('l'); uart_putc('l');
     uart_putc('o'); uart_putc(' '); uart_putc('U'); uart_putc('A');

@@ -49,7 +49,7 @@ static inline void gpio_wr(unsigned i, unsigned v){ gpio_pin(i, v); }
 
 static inline void delay(volatile unsigned n){ while (n--) __asm__ volatile(""); }
 
-/* ---------------- UART (TX-only, 9600 8N1 fixed) ----------------
+/* ---------------- UART (TX-only, 115200 8N1 fixed) ----------------
  * Register di byte addr 0x10080 (word 0x4020, tepat setelah GPIO).
  *   TULIS byte apapun -> kirim 1 byte lewat UART. Transaksi AXI SELALU cepat
  *     (non-blocking di level hardware, persis seperti GPIO) -- kalau
@@ -57,8 +57,10 @@ static inline void delay(volatile unsigned n){ while (n--) __asm__ volatile("");
  *     hardware. uart_putc() di bawah POLLING uart_busy() di SOFTWARE dulu
  *     sebelum tulis, supaya byte tidak pernah hilang.
  *   BACA -> bit0 = busy (1 = masih transmit).
- * Baud rate di-hardcode di RTL (uart_tx.v, CLK_HZ=50MHz/BAUD=9600) -- kalau
- * clock core proyek diubah, parameter CLK_HZ di impl_axi.v WAJIB disesuaikan.
+ * Baud rate di-hardcode di RTL (uart_tx.v, CLK_HZ=50MHz/BAUD=115200) --
+ * dinaikkan dari 9600 (2026-09-28), DIV=434, error real-baud ~0.0064%,
+ * jauh di bawah toleransi UART standar (~2%). Kalau clock core proyek
+ * diubah, parameter CLK_HZ di impl_axi.v WAJIB disesuaikan juga.
  *
  * CATATAN DESAIN (2026-09-28, penting -- dua percobaan sebelumnya GAGAL di
  * hardware nyata meski lolos simulasi & elaborate check):
@@ -92,29 +94,47 @@ static inline __attribute__((always_inline)) void uart_putc(char c){
     UART_TXD = (unsigned)(unsigned char)c;
 }
 
-/* ---- uart_puts(): WORKAROUND, BUKAN fix akar masalah (2026-09-28) ----
- * uart_putc() SENDIRI aman dipanggil sekali (uart_probe.c teruji OK). Tapi
- * pola LOOP yang baca *s lalu tulis UART lalu baca *s berikutnya lagi --
- * apapun bentuknya, bahkan cuma 1 karakter -- TERBUKTI bikin CPU core hang
- * permanen di hardware asli (lihat CLAUDE.md bagian "UART hardware (TX-only)"
- * untuk kronologi lengkap: bug ini BUKAN spesifik UART, GPIO polos kena juga,
- * root cause di CPU core belum ketemu meski margin timing sudah bagus &
- * uart_tx.v sudah non-blocking).
+/* ---- uart_puts(): dua-fase, TAPI MASIH TIDAK SEPENUHNYA AMAN (2026-09-28) --
+ * ==========================================================================
+ * ⚠️  JANGAN PAKAI uart_puts() UNTUK STRING >3 KARAKTER. GUNAKAN uart_putc()
+ * ⚠️  LITERAL BERULANG TANPA LOOP (lihat pola send_hello() di uart_hello.c)
+ * ⚠️  UNTUK SEMUA KEBUTUHAN NYATA. Ini satu-satunya pola yang TERBUKTI
+ * ⚠️  SELALU aman di hardware.
+ * ==========================================================================
+ * Kronologi (baca CLAUDE.md bagian "UART hardware (TX-only)" utk detail):
+ *   - Loop baca-RAM -> tulis-RAM-lokal (SRAM-ke-SRAM)                 -> AMAN.
+ *   - Loop baca-buffer(SRAM) -> tulis-UART TANPA polling busy         -> AMAN
+ *     (utk string PENDEK).
+ *   - TAPI begitu diuji dgn loop yg IKUT MENGULANG whole dance (uart_puts
+ *     dipanggil berulang dlm for(;;)), ketemu AMBANG BATAS YANG SANGAT
+ *     SPESIFIK: loop di dalam uart_puts() aman kalau iterasi <=3, TAPI
+ *     HANG kalau iterasi >=4 -- diverifikasi dengan disassembly BYTE-PER-
+ *     BYTE IDENTIK antara string 3 karakter (aman) vs 4 karakter (hang),
+ *     cuma beda ISI DATA string-nya, bukan kode yg dijalankan. ROOT CAUSE
+ *     PASTI belum ketemu (kemungkinan counter/state internal beberapa bit
+ *     yang wrap di iterasi ke-4 -- butuh logic analyzer/ILA utk pasti,
+ *     di luar jangkauan sesi debugging ini).
  *
- * uart_puts() DIHINDARI polling uart_busy() di dalam loop (mengurangi jumlah
- * baca AXI per iterasi dari 2 jadi 1) dan pakai delay() tetap (>1 periode
- * baud @ 9600bps = ~1.04ms) sebagai ganti nunggu busy clear. Ini BELUM
- * terbukti 100% aman untuk SEMUA panjang string -- kalau mulai hang lagi,
- * itu bukti bug core ini masih ada & workaround ini cuma mengurangi risiko,
- * bukan menghilangkan. Kalibrasi delay: sesuaikan DELAY_PER_CHAR di bawah
- * kalau observasi di serial terminal menunjukkan karakter hilang/gepeng. */
-#define UART_DELAY_PER_CHAR 20000u
+ * uart_puts() di bawah TETAP menerapkan pola dua-fase (baca RAM->buffer,
+ * lalu buffer->UART tanpa polling) karena itu strictly LEBIH AMAN daripada
+ * desain sebelumnya, TAPI CUMA cocok utk string SANGAT PENDEK (<=3 char).
+ * Kalau butuh kirim string lebih panjang SEKALI PAKAI (bukan dipanggil
+ * berulang dalam loop luar), mungkin masih aman -- TAPI BELUM DIUJI
+ * SECARA MENYELURUH, jangan asumsikan aman tanpa tes hardware langsung. */
+#define UART_BUF_MAX 128u
+#define UART_DELAY_PER_CHAR 20000u  /* nilai ini yang TERUJI aman di hardware
+                                        (uart_probe5.c) -- jauh lebih besar dari
+                                        1 periode baud @ 115200 (~86.8us) yang
+                                        sebenarnya dibutuhkan, belum dikecilkan/
+                                        dikalibrasi presisi krn belum perlu */
 static inline void uart_puts(const char *s){
-    do {
-        UART_TXD = (unsigned)(unsigned char)*s;
+    char buf[UART_BUF_MAX];
+    unsigned n = 0;
+    while (n < UART_BUF_MAX - 1u && s[n]) { buf[n] = s[n]; n++; }
+    for (unsigned i = 0; i < n; i++) {
+        UART_TXD = (unsigned)(unsigned char)buf[i];
         delay(UART_DELAY_PER_CHAR);
-        s++;
-    } while (*s);
+    }
 }
 
 #endif /* MRISCV_H */

@@ -387,10 +387,11 @@ module impl_axi(
         .axi_rdata(s_axi_rdata_o[4])
     );
 
-    // Slave 6, uart_tx (TX-only, baud tetap 9600 @ CLK_HZ=50MHz -- lihat komentar di uart_tx.v)
+    // Slave 6, uart_tx (TX-only, baud tetap 115200 @ CLK_HZ=50MHz -- lihat komentar di uart_tx.v)
+    // DIV = 50_000_000/115200 = 434 (real baud ~115207, error ~0.0064%, jauh di bawah toleransi UART ~2%)
     uart_tx #(
         .CLK_HZ(50_000_000),
-        .BAUD(9600)
+        .BAUD(115200)
     ) inst_uart_tx
     (
         .CLK(CLK),
