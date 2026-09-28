@@ -13,7 +13,10 @@ SECTIONS {
   } > RAM
   .data : { *(.data*) *(.sdata*) } > RAM
   . = ALIGN(4);
-  .bss : {
+  /* ALIGN(4) WAJIB di dalam section: ". = ALIGN(4);" di luar tidak mencegah
+   * ld menaruh .bss di alamat ganjil (mis. 0x105 kalau .rodata 5 byte), lalu
+   * crt0.S "sw zero" ke alamat misaligned -> FSM trap sebelum main(). */
+  .bss : ALIGN(4) {
     PROVIDE(__bss_start = .);
     *(.sbss*) *(.bss*) *(COMMON)
     . = ALIGN(4);
