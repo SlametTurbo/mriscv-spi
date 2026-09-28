@@ -12,12 +12,12 @@
 // Baca alamat manapun -> RDATA[0] = busy (1 = sedang transmit).
 //
 // Baud rate FIXED, dihitung dari CLK_HZ (default 50 MHz, sesuai clock core
-// proyek ini) / BAUD (default 9600). Kalau clock core proyek diubah, parameter
+// proyek ini) / BAUD (default 115200). Kalau clock core proyek diubah, parameter
 // CLK_HZ di instansiasi WAJIB disesuaikan juga, kalau tidak baud rate salah.
 // ============================================================================
 module uart_tx #(
     parameter CLK_HZ = 50_000_000,
-    parameter BAUD   = 9600
+    parameter BAUD   = 115200
 )(
     input             CLK, RST,
     input             AWVALID, input WVALID, input BREADY,
@@ -105,7 +105,7 @@ module uart_tx #(
     //      benar secara protokol AXI, lolos testbench, TAPI CPU tetap macet
     //      permanen di hardware nyata SPESIFIK saat program menahan
     //      AWvalid/Wvalid selama ribuan-puluhan ribu siklus berturut-turut
-    //      (durasi 1 baud period @ 9600bps = ~52080 siklus @ 50MHz) sambil
+    //      (durasi 1 baud period, dulu @ 9600bps = ~52080 siklus @ 50MHz) sambil
     //      nunggu !busy -- program lain (GPIO dibaca-tulis berulang, dst)
     //      yang TIDAK PERNAH menahan bus selama itu semua terbukti aman.
     //      Kemungkinan root cause: timing marginal/metastabilitas di suatu
