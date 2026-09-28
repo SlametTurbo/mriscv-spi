@@ -24,7 +24,7 @@
 # ------------------------------------------------------------------------------
 # (A) Variabel yang dibaca openXC7.mk  - definisikan SEBELUM include
 # ------------------------------------------------------------------------------
-PROJECT      := spi
+PROJECT      := basys
 PART         := xc7a35tcpg236-1
 FAMILY       := artix7
 BOARD        := basys3
@@ -49,6 +49,7 @@ RTL_DIRS := \
 	$(MRISCV)/mriscv_axi/DAC_interface_AXI \
 	$(MRISCV)/mriscv_axi/ADC_interface_AXI \
 	$(MRISCV)/mriscv_axi/GPIO \
+	$(MRISCV)/mriscv_axi/UART_TX \
 	$(MRISCV)/mriscv_axi/util \
 	$(MRISCV)/mriscvcore \
 	$(MRISCV)/mriscvcore/ALU \

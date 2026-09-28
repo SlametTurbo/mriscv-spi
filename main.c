@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "mriscv.h"
 int main(void) {
     uint8_t v = 0;

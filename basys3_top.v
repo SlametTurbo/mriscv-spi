@@ -11,7 +11,8 @@ module basys3_top (
     output [6:0] seg,
     output       dp,
     output [3:0] an,
-    input  spi_sclk, input spi_ceb, input spi_mosi, output spi_miso
+    input  spi_sclk, input spi_ceb, input spi_mosi, output spi_miso,
+    output uart_txd
 );
     // Power-On Reset (~0.65 ms @ 100 MHz)
     reg [15:0] por_cnt = 0;
@@ -55,7 +56,8 @@ module basys3_top (
         .completogpio_DSE       (gpio_DSE),
         .spi_axi_slave_CEB      (sc),
         .spi_axi_slave_SCLK     (ss),
-        .spi_axi_slave_DATA     (sd)
+        .spi_axi_slave_DATA     (sd),
+        .uart_tx_TXD            (uart_txd)
     );
 
     assign led = gpio_datanw;

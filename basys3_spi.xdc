@@ -5,6 +5,9 @@ create_clock -add -name sys_clk -period 10.00 [get_ports clk100]
 ## Reset (btnC)
 set_property -dict { PACKAGE_PIN U18 IOSTANDARD LVCMOS33 } [get_ports btnC]
 
+## UART TX (lewat FTDI channel-B di kabel USB-JTAG yang sama, muncul sbg virtual COM port)
+set_property -dict { PACKAGE_PIN A18 IOSTANDARD LVCMOS33 } [get_ports uart_txd]
+
 ## SPI dari host (Pmod JA)
 set_property -dict { PACKAGE_PIN J1 IOSTANDARD LVCMOS33 } [get_ports spi_sclk]
 set_property -dict { PACKAGE_PIN L2 IOSTANDARD LVCMOS33 } [get_ports spi_mosi]
