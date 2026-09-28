@@ -24,9 +24,11 @@ module impl_axi(
     output [7:0]     completogpio_datanw,
     output [7:0]     completogpio_DSE,
     // Slave 5 (spi_axi_slave), SPI Master Interface
-    output             spi_axi_slave_CEB, 
-    output             spi_axi_slave_SCLK, 
-    output             spi_axi_slave_DATA
+    output             spi_axi_slave_CEB,
+    output             spi_axi_slave_SCLK,
+    output             spi_axi_slave_DATA,
+    // Slave 6 (uart_tx), UART TX-only
+    output             uart_tx_TXD
     );
     
     // Internals
@@ -37,11 +39,13 @@ module impl_axi(
     // MEMORY MAP SPEC
     localparam                sword = 32;
     localparam              masters = 2;
-    localparam              slaves = 5;
+    localparam              slaves = 6;
     // SRAM diperbesar 4 KB -> 32 KB (1024 -> 8192 word, mask 0x3FF -> 0x1FFF).
     // DAC/ADC/GPIO direlokasi ke 0x4000+ supaya tidak tabrakan dengan rentang SRAM baru.
-    localparam [slaves*sword-1:0] addr_mask = {32'h00000000,32'h0000000F,32'h00000001,32'h00000001,32'h00001FFF};
-    localparam [slaves*sword-1:0] addr_use  = {32'h04000000,32'h00004010,32'h00004008,32'h00004000,32'h00000000};
+    // Slave 6 (UART TX) ditambah di 0x4020 (word), tepat setelah rentang GPIO
+    // (0x4010-0x401F), mask=0 -> exact match, cuma 1 register.
+    localparam [slaves*sword-1:0] addr_mask = {32'h00000000,32'h00000000,32'h0000000F,32'h00000001,32'h00000001,32'h00001FFF};
+    localparam [slaves*sword-1:0] addr_use  = {32'h00004020,32'h04000000,32'h00004010,32'h00004008,32'h00004000,32'h00000000};
     
     // AXI4-lite master memory interfaces
 
@@ -145,6 +149,8 @@ module impl_axi(
     
     // AXI INTERCONNECT, axi4_interconnect
     axi4_interconnect #(
+        .masters(masters),
+        .slaves(slaves),
         .addr_mask(addr_mask),
         .addr_use(addr_use)
     ) inst_axi4_interconnect
@@ -377,8 +383,34 @@ module impl_axi(
         .axi_araddr(s_axi_araddr_o[4]), 
         .axi_arprot(s_axi_arprot_o[4]), 
         .axi_rvalid(s_axi_rvalid[4]),
-        .axi_rready(s_axi_rready[4]), 
+        .axi_rready(s_axi_rready[4]),
         .axi_rdata(s_axi_rdata_o[4])
     );
-    
+
+    // Slave 6, uart_tx (TX-only, baud tetap 9600 @ CLK_HZ=50MHz -- lihat komentar di uart_tx.v)
+    uart_tx #(
+        .CLK_HZ(50_000_000),
+        .BAUD(9600)
+    ) inst_uart_tx
+    (
+        .CLK(CLK),
+        .RST(RST),
+        .AWVALID(s_axi_awvalid[5]),
+        .WVALID(s_axi_wvalid[5]),
+        .BREADY(s_axi_bready[5]),
+        .AWADDR(s_axi_awaddr_o[5]),
+        .WDATA(s_axi_wdata_o[5]),
+        .WSTRB(s_axi_wstrb_o[5]),
+        .AWREADY(s_axi_awready[5]),
+        .WREADY(s_axi_wready[5]),
+        .BVALID(s_axi_bvalid[5]),
+        .ARVALID(s_axi_arvalid[5]),
+        .RREADY(s_axi_rready[5]),
+        .ARADDR(s_axi_araddr_o[5]),
+        .ARREADY(s_axi_arready[5]),
+        .RVALID(s_axi_rvalid[5]),
+        .RDATA(s_axi_rdata_o[5]),
+        .TXD(uart_tx_TXD)
+    );
+
 endmodule
