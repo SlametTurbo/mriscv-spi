@@ -22,12 +22,20 @@ module basys3_top (
         if (por_cnt != 16'hFFFF) begin por_cnt <= por_cnt + 1'b1; por_n <= 1'b0; end
         else por_n <= 1'b1;
     end
-    wire rst_n = por_n & ~btnC;
 
     // Clock /2: 100 MHz -> 50 MHz
     reg divcnt = 0;
     always @(posedge clk100) divcnt <= ~divcnt;
     wire clk = divcnt;
+
+    // Sinkronizer reset 3-FF di domain clk. Dulu rst_n = por_n & ~btnC langsung
+    // dipakai semua logika domain clk: por_n dari domain clk100 dan btnC mentah
+    // (async) -> jalur cross-domain ~13 ns ke register file dll., pelepasan
+    // reset bisa tidak serentak. Sekarang reset masuk/lepas sinkron ke clk;
+    // rst_sync=0 saat konfigurasi, jadi reset tetap aktif sejak awal.
+    reg [2:0] rst_sync = 3'b000;
+    always @(posedge clk) rst_sync <= {rst_sync[1:0], por_n & ~btnC};
+    wire rst_n = rst_sync[2];
 
     // Sinkronisasi switch (2-FF, hindari metastabil)
     reg [7:0] sw0 = 0, sw1 = 0;
