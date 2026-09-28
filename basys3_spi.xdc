@@ -29,6 +29,9 @@ set_property -dict { PACKAGE_PIN U15 IOSTANDARD LVCMOS33 } [get_ports {led[5]}]
 set_property -dict { PACKAGE_PIN U14 IOSTANDARD LVCMOS33 } [get_ports {led[6]}]
 set_property -dict { PACKAGE_PIN V14 IOSTANDARD LVCMOS33 } [get_ports {led[7]}]
 
+## LED indikator trap core (LD15)
+set_property -dict { PACKAGE_PIN L1  IOSTANDARD LVCMOS33 } [get_ports led_trap]
+
 ## Slide switch onboard (8 bawah) -> input GPIO
 set_property -dict { PACKAGE_PIN V17 IOSTANDARD LVCMOS33 } [get_ports {sw[0]}]
 set_property -dict { PACKAGE_PIN V16 IOSTANDARD LVCMOS33 } [get_ports {sw[1]}]
