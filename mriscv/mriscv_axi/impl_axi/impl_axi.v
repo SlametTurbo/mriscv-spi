@@ -34,6 +34,37 @@ module impl_axi(
     // Internals
     // Picorv RST
     wire PICORV_RST;
+
+    // Reset fabric bus (interconnect + semua slave). Isinya RST global, DITAMBAH
+    // pulsa pendek tepat saat CPU masuk reset (PICORV_RST 1->0). Tanpa pulsa ini,
+    // kalau CPU di-reset/trap di tengah transaksi AXI, interconnect (rtrans/wtrans,
+    // round-robin) dan slave (FSM GPIO/UART, flag SRAM) bisa tertahan menunggu
+    // handshake dari CPU yang sudah diam -> master SPI tidak pernah dapat bus dan
+    // semua upload berikutnya gagal diam-diam sampai reset penuh.
+    // Aman untuk loader: host selalu kirim NOP data=0 (tahan CPU) DULU, frame
+    // WRITE berikutnya baru datang >=66 bit SPI kemudian (ribuan siklus), jauh
+    // setelah pulsa 4 siklus ini selesai. spi_axi_master SENGAJA tidak ikut
+    // (dia yang memegang PICORV_RST). Efek samping: output GPIO (LED) ikut nol
+    // setiap kali CPU masuk reset.
+    reg       picorv_rst_q = 1'b0;
+    reg [2:0] busrst_cnt   = 3'd0;
+    reg       busrst_n_r   = 1'b0;
+    always @(posedge CLK) begin
+        if (RST == 1'b0) begin
+            picorv_rst_q <= 1'b0;
+            busrst_cnt   <= 3'd0;
+            busrst_n_r   <= 1'b0;
+        end else begin
+            picorv_rst_q <= PICORV_RST;
+            if (picorv_rst_q & ~PICORV_RST)
+                busrst_cnt <= 3'd4;
+            else if (busrst_cnt != 3'd0)
+                busrst_cnt <= busrst_cnt - 1'b1;
+            // teregister supaya bebas glitch (DAC/ADC pakai reset async)
+            busrst_n_r <= (busrst_cnt == 3'd0) & ~(picorv_rst_q & ~PICORV_RST);
+        end
+    end
+    wire BUS_RST = RST & busrst_n_r;
     
     // ALL-AXI and its distribution
     // MEMORY MAP SPEC
@@ -156,7 +187,7 @@ module impl_axi(
     ) inst_axi4_interconnect
     (
         .CLK        (CLK),
-        .RST    (RST),
+        .RST    (BUS_RST),
         .m_axi_awvalid(m_axi_awvalid),
         .m_axi_awready(m_axi_awready),
         .m_axi_awaddr(m_axi_awaddr),
@@ -257,7 +288,7 @@ module impl_axi(
     // Slave 1, AXI_SP32B1024
     AXI_SP32B1024 inst_AXI_SP32B1024(
         .CLK(CLK),
-        .RST(RST),
+        .RST(BUS_RST),
         .axi_awvalid(s_axi_awvalid[0]),
         .axi_awready(s_axi_awready[0]),
         .axi_awaddr(s_axi_awaddr_o[0]),
@@ -294,7 +325,7 @@ module impl_axi(
     // Slave 2, DAC_interface_AXI
     DAC_interface_AXI inst_DAC_interface_AXI(
         .CLK(CLK),
-        .RST(RST),
+        .RST(BUS_RST),
         .AWVALID(s_axi_awvalid[1]),
         .WVALID(s_axi_wvalid[1]),
         .BREADY(s_axi_bready[1]),
@@ -315,7 +346,7 @@ module impl_axi(
     //Slave 3, ADC_interface_AXI
     ADC_interface_AXI inst_ADC_interface_AXI(
         .CLK(CLK),
-        .RST(RST),
+        .RST(BUS_RST),
         .AWVALID(s_axi_awvalid[2]),
         .WVALID(s_axi_wvalid[2]),
         .BREADY(s_axi_bready[2]),
@@ -338,7 +369,7 @@ module impl_axi(
     //Slave 4, completogpio
     completogpio inst_completogpio(
         .clock(CLK),
-        .reset(RST),
+        .reset(BUS_RST),
         .WAddress(s_axi_awaddr_o[3]),
         .Wdata(s_axi_wdata_o[3]),
         .Rdata(s_axi_rdata_o[3]),
@@ -366,7 +397,7 @@ module impl_axi(
         .CEB(spi_axi_slave_CEB), 
         .SCLK(spi_axi_slave_SCLK), 
         .DATA(spi_axi_slave_DATA), 
-        .RST(RST), 
+        .RST(BUS_RST), 
         .CLK(CLK), 
         .axi_awvalid(s_axi_awvalid[4]), 
         .axi_awready(s_axi_awready[4]), 
@@ -395,7 +426,7 @@ module impl_axi(
     ) inst_uart_tx
     (
         .CLK(CLK),
-        .RST(RST),
+        .RST(BUS_RST),
         .AWVALID(s_axi_awvalid[5]),
         .WVALID(s_axi_wvalid[5]),
         .BREADY(s_axi_bready[5]),

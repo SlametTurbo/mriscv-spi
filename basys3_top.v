@@ -12,7 +12,8 @@ module basys3_top (
     output       dp,
     output [3:0] an,
     input  spi_sclk, input spi_ceb, input spi_mosi, output spi_miso,
-    output uart_txd
+    output uart_txd,
+    output led_trap          // LD15: nyala = core trap (misaligned/ILLISN), latch sampai reset
 );
     // Power-On Reset (~0.65 ms @ 100 MHz)
     reg [15:0] por_cnt = 0;
@@ -61,6 +62,12 @@ module basys3_top (
     );
 
     assign led = gpio_datanw;
+
+    // Indikator trap core. Tanpa ini "trap" dan "bus macet" terlihat identik
+    // (dua-duanya cuma LED berhenti) -- bug .bss misaligned sempat lama salah
+    // didiagnosis sebagai bug hardware karena ini (lihat CLAUDE.md, bagian UART).
+    // Sengaja di LD15, bukan led[7], supaya tidak merebut LED GPIO firmware.
+    assign led_trap = trap;
 
     // ---- Seven-segment: 2 digit hex dari byte gpio_datanw, time-multiplex ----
     wire [7:0] val = gpio_datanw;
