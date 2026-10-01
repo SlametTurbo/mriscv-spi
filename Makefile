@@ -8,12 +8,12 @@
 # chipdb), lalu target firmware/upload ditambahkan di atasnya.
 # ==============================================================================
 #
-#   make synth   XDC=basys3_switch.xdc     - sintesis -> spi.bit
+#   make synth                             - sintesis -> spi.bit
 #   make flash                             - upload bitstream ke board (JTAG)
 #   make build   FW=<nama>                 - compile <nama>.c -> <nama>.bin
 #   make upload  FW=<nama>                 - upload <nama>.bin via SPI
 #   make prog    FW=<nama>                 - compile + upload via SPI
-#   make allflow FW=<nama> XDC=basys3_switch.xdc  - synth + flash + prog
+#   make allflow FW=<nama>                 - synth + flash + prog
 #   make gpio PIN=0 STATE=on               - set 1 pin GPIO via SPI
 #   make release                           - lepas core (PICORV_RST=1)
 #   make clean        (bitstream)  |  make clean-fw (firmware)
@@ -32,10 +32,12 @@ BOARD        := basys3
 # Top module proyek (override default ${PROJECT}.v di openXC7.mk)
 TOP          := basys3_top
 TOP_MODULE   := basys3_top
-TOP_VERILOG  := basys3_top.v
+TOP_VERILOG  := rtl/basys3_top.v
 
-# XDC: default LED; untuk switch -> 'make synth XDC=basys3_switch.xdc'
-XDC          ?= basys3_spi.xdc
+# XDC tunggal untuk semua firmware (top tunggal, lihat rtl/basys3_top.v)
+XDC          ?= rtl/basys3_spi.xdc
+# kompatibilitas: 'XDC=basys3_spi.xdc' (tanpa rtl/) tetap ketemu
+override XDC := $(or $(wildcard $(XDC)),$(wildcard rtl/$(XDC)),$(XDC))
 
 # Target frekuensi P&R (MHz). nextpnr-xilinx MENGABAIKAN create_clock di XDC
 # (tanpa ini log menulis "PASS at 12.00 MHz" = placer cuma mengejar 12 MHz).
@@ -44,9 +46,18 @@ XDC          ?= basys3_spi.xdc
 PNR_FREQ     ?= 50
 override PNR_ARGS += --freq $(PNR_FREQ)
 
+# Seed P&R terkunci (hasil sweep 20 seed 2026-10-01 pada RTL top tunggal + GPIO bank 2: seed 13 =
+# 66.28 MHz terbaik; lihat seed_summary_unified.md). Tanpa ini
+# nextpnr pakai seed internal default. Diabaikan kalau PNR_ARGS sudah memuat
+# --seed atau -r. Ubah RTL -> sweep ulang, seed lama tidak berlaku lagi.
+PNR_SEED     ?= 13
+ifeq ($(findstring --seed,$(PNR_ARGS))$(filter -r,$(PNR_ARGS)),)
+override PNR_ARGS += --seed $(PNR_SEED)
+endif
+
 # Semua sumber Verilog SELAIN top -> ADDITIONAL_SOURCES (dibaca openXC7.mk).
 # Top + BRAM behavioral di folder ini; sisanya dari repo mriscv. _tb.v dibuang.
-MRISCV       ?= mriscv
+MRISCV       ?= rtl/mriscv
 RTL_DIRS := \
 	$(MRISCV)/mriscv_axi/impl_axi \
 	$(MRISCV)/mriscv_axi/axi4_interconnect \
@@ -57,6 +68,7 @@ RTL_DIRS := \
 	$(MRISCV)/mriscv_axi/ADC_interface_AXI \
 	$(MRISCV)/mriscv_axi/GPIO \
 	$(MRISCV)/mriscv_axi/UART_TX \
+	$(MRISCV)/mriscv_axi/UART_RX \
 	$(MRISCV)/mriscv_axi/util \
 	$(MRISCV)/mriscvcore \
 	$(MRISCV)/mriscvcore/ALU \
@@ -68,7 +80,7 @@ RTL_DIRS := \
 	$(MRISCV)/mriscvcore/REG_FILE \
 	$(MRISCV)/mriscvcore/UTILITIES
 RTL_RAW            := $(foreach d,$(RTL_DIRS),$(wildcard $(d)/*.v))
-ADDITIONAL_SOURCES := SP32B1024.v $(filter-out %_tb.v,$(RTL_RAW))
+ADDITIONAL_SOURCES := rtl/SP32B1024.v $(filter-out %_tb.v,$(RTL_RAW))
 
 # Lokasi openXC7.mk (struktur demo-projects: satu level di atas project).
 OPENXC7_MK   ?= ../openXC7.mk
@@ -77,9 +89,14 @@ OPENXC7_MK   ?= ../openXC7.mk
 # (B) Variabel firmware & uploader SPI
 # ------------------------------------------------------------------------------
 FW           ?= main
-CRT          := crt0.S
-LDS          := link_c.ld
-HDR          := mriscv.h
+# Layout: firmware/{apps,tests,probes}/<nama>.c, firmware/include, firmware/startup.
+# FW=<nama> dicari otomatis di semua subfolder firmware/*/. Hasil build -> build/fw/.
+FW_DIR       := firmware
+FW_SRC       := $(firstword $(wildcard $(FW_DIR)/*/$(FW).c))
+BUILD_FW     := build/fw
+CRT          := $(FW_DIR)/startup/crt0.S
+LDS          := $(FW_DIR)/startup/link_c.ld
+HDR          := $(wildcard $(FW_DIR)/include/*.h)
 
 RISCV_PREFIX ?= riscv64-unknown-elf
 CC           := $(RISCV_PREFIX)-gcc
@@ -91,12 +108,13 @@ SIZE         := $(RISCV_PREFIX)-size
 # JANGAN pakai rv32im: '/' dan '%' jadi instruksi div/rem yang TIDAK ada di
 # core -> trap saat runtime. Dengan zmmul, '/' tetap gagal di tahap link (aman).
 MARCH        ?= rv32i
-CFLAGS       := -march=$(MARCH) -mabi=ilp32 -nostdlib -nostartfiles -ffreestanding -Os -Wall
+CFLAGS       := -march=$(MARCH) -mabi=ilp32 -nostdlib -nostartfiles -ffreestanding -Os -Wall -I$(FW_DIR)/include
 
-ELF_FILE     := $(FW).elf
-BIN_FILE     := $(FW).bin
+ELF_FILE     := $(BUILD_FW)/$(FW).elf
+BIN_FILE     := $(BUILD_FW)/$(FW).bin
+DUMP_FILE    := $(BUILD_FW)/$(FW).dump
 
-SPI_UPLOAD   := python3 cheetah_mriscv.py
+SPI_UPLOAD   := python3 tools/cheetah_mriscv.py
 # kHz; <= ~200 utk core /64
 SPI_BITRATE  ?= 100
 
@@ -114,11 +132,12 @@ flash: program
 ## build: compile FW=<nama> -> <nama>.bin
 build: check-fw $(BIN_FILE)
 
-$(ELF_FILE): $(FW).c $(CRT) $(LDS) $(HDR)
-	@echo "==== COMPILE FIRMWARE: $(FW).c ===="
-	$(CC) $(CFLAGS) -T $(LDS) $(CRT) $(FW).c -o $(ELF_FILE)
+$(ELF_FILE): $(FW_SRC) $(CRT) $(LDS) $(HDR)
+	@mkdir -p $(BUILD_FW)
+	@echo "==== COMPILE FIRMWARE: $(FW_SRC) ===="
+	$(CC) $(CFLAGS) -T $(LDS) $(CRT) $(FW_SRC) -o $(ELF_FILE)
 	@$(SIZE) $(ELF_FILE)
-	@$(OBJDUMP) -d $(ELF_FILE) > $(FW).dump
+	@$(OBJDUMP) -d $(ELF_FILE) > $(DUMP_FILE)
 
 $(BIN_FILE): $(ELF_FILE)
 	$(OBJCOPY) -O binary $(ELF_FILE) $(BIN_FILE)
@@ -148,13 +167,13 @@ release:
 
 ## clean-fw: hapus artefak firmware (bitstream pakai 'make clean' dari openXC7.mk)
 clean-fw:
-	rm -f *.elf *.bin *.dump
+	rm -rf $(BUILD_FW)
 	@echo "[OK] firmware bersih."
 
 check-fw:
-	@if [ ! -f "$(FW).c" ]; then \
-		echo "[ERR] $(FW).c tidak ada. Tentukan: make $(MAKECMDGOALS) FW=<nama>"; \
-		echo "      Tersedia: $$(ls *.c 2>/dev/null | sed 's/\.c//' | tr '\n' ' ')"; \
+	@if [ -z "$(FW_SRC)" ]; then \
+		echo "[ERR] $(FW).c tidak ada di $(FW_DIR)/*/. Tentukan: make $(MAKECMDGOALS) FW=<nama>"; \
+		echo "      Tersedia: $$(ls $(FW_DIR)/*/*.c 2>/dev/null | sed 's|.*/||; s/\.c//' | tr '\n' ' ')"; \
 		exit 1; fi
 
 check-tools:
@@ -166,7 +185,7 @@ help:
 	@echo ""
 	@echo "mriscv-spi - Makefile terpadu (include openXC7.mk)"
 	@echo "=================================================="
-	@echo "  make synth   XDC=basys3_switch.xdc   sintesis -> spi.bit"
+	@echo "  make synth                           sintesis -> spi.bit"
 	@echo "  make flash                           upload bitstream ke board"
 	@echo "  make build FW=<nama>                 compile <nama>.c -> .bin"
 	@echo "  make upload FW=<nama>                upload .bin via SPI"
@@ -176,10 +195,10 @@ help:
 	@echo "  make clean (bitstream)    |  make clean-fw (firmware)"
 	@echo ""
 	@echo "Contoh program switch:"
-	@echo "  make synth XDC=basys3_switch.xdc && make flash"
+	@echo "  make synth && make flash"
 	@echo "  make prog FW=switch_led_satu"
 	@echo ""
-	@echo "Firmware tersedia: $$(ls *.c 2>/dev/null | sed 's/\.c//' | tr '\n' ' ')"
+	@echo "Firmware tersedia (firmware/{apps,tests,probes}): $$(ls $(FW_DIR)/*/*.c 2>/dev/null | sed 's|.*/||; s/\.c//' | tr '\n' ' ')"
 	@echo ""
 	@echo "CATATAN:"
 	@echo "  - Butuh openXC7.mk di $(OPENXC7_MK) (repo openXC7/demo-projects)."
