@@ -1,0 +1,1450 @@
+Info: Packing constants..
+Info: Inserting IO buffers..
+Info:     IO port 'btnC' driven by IBUF '$iopadmap$basys3_top.btnC'
+Info:     IO port 'clk100' driven by IBUF '$iopadmap$basys3_top.clk100'
+Info:     IO port 'dp' driven by OBUF '$iopadmap$basys3_top.dp'
+Info:     IO port 'spi_ceb' driven by IBUF '$iopadmap$basys3_top.spi_ceb'
+Info:     IO port 'spi_miso' driven by OBUF '$iopadmap$basys3_top.spi_miso'
+Info:     IO port 'spi_mosi' driven by IBUF '$iopadmap$basys3_top.spi_mosi'
+Info:     IO port 'spi_sclk' driven by IBUF '$iopadmap$basys3_top.spi_sclk'
+Info:     IO port 'an[0]' driven by OBUF '$iopadmap$basys3_top.an'
+Info:     IO port 'an[1]' driven by OBUF '$iopadmap$basys3_top.an_1'
+Info:     IO port 'an[2]' driven by OBUF '$iopadmap$basys3_top.an_2'
+Info:     IO port 'an[3]' driven by OBUF '$iopadmap$basys3_top.an_3'
+Info:     IO port 'led[0]' driven by OBUF '$iopadmap$basys3_top.led'
+Info:     IO port 'led[1]' driven by OBUF '$iopadmap$basys3_top.led_1'
+Info:     IO port 'led[2]' driven by OBUF '$iopadmap$basys3_top.led_2'
+Info:     IO port 'led[3]' driven by OBUF '$iopadmap$basys3_top.led_3'
+Info:     IO port 'led[4]' driven by OBUF '$iopadmap$basys3_top.led_4'
+Info:     IO port 'led[5]' driven by OBUF '$iopadmap$basys3_top.led_5'
+Info:     IO port 'led[6]' driven by OBUF '$iopadmap$basys3_top.led_6'
+Info:     IO port 'led[7]' driven by OBUF '$iopadmap$basys3_top.led_7'
+Info:     IO port 'seg[0]' driven by OBUF '$iopadmap$basys3_top.seg'
+Info:     IO port 'seg[1]' driven by OBUF '$iopadmap$basys3_top.seg_1'
+Info:     IO port 'seg[2]' driven by OBUF '$iopadmap$basys3_top.seg_2'
+Info:     IO port 'seg[3]' driven by OBUF '$iopadmap$basys3_top.seg_3'
+Info:     IO port 'seg[4]' driven by OBUF '$iopadmap$basys3_top.seg_4'
+Info:     IO port 'seg[5]' driven by OBUF '$iopadmap$basys3_top.seg_5'
+Info:     IO port 'seg[6]' driven by OBUF '$iopadmap$basys3_top.seg_6'
+Info:     IO port 'sw[0]' driven by IBUF '$iopadmap$basys3_top.sw'
+Info:     IO port 'sw[1]' driven by IBUF '$iopadmap$basys3_top.sw_1'
+Info:     IO port 'sw[2]' driven by IBUF '$iopadmap$basys3_top.sw_2'
+Info:     IO port 'sw[3]' driven by IBUF '$iopadmap$basys3_top.sw_3'
+Info:     IO port 'sw[4]' driven by IBUF '$iopadmap$basys3_top.sw_4'
+Info:     IO port 'sw[5]' driven by IBUF '$iopadmap$basys3_top.sw_5'
+Info:     IO port 'sw[6]' driven by IBUF '$iopadmap$basys3_top.sw_6'
+Info:     IO port 'sw[7]' driven by IBUF '$iopadmap$basys3_top.sw_7'
+Info:     Constraining 'btnC' to site 'IOB_X0Y13'
+Info:     Tile 'LIOB33_X0Y13'
+Info:     Constraining 'clk100' to site 'IOB_X1Y26'
+Info:     Tile 'RIOB33_X43Y25'
+Info:     Constraining 'dp' to site 'IOB_X1Y11'
+Info:     Tile 'RIOB33_X43Y11'
+Info:     Constraining 'spi_ceb' to site 'IOB_X1Y95'
+Info:     Tile 'RIOB33_X43Y95'
+Info:     Constraining 'spi_miso' to site 'IOB_X1Y97'
+Info:     Tile 'RIOB33_X43Y97'
+Info:     Constraining 'spi_mosi' to site 'IOB_X1Y89'
+Info:     Tile 'RIOB33_X43Y89'
+Info:     Constraining 'spi_sclk' to site 'IOB_X1Y93'
+Info:     Tile 'RIOB33_X43Y93'
+Info:     Constraining 'an[0]' to site 'IOB_X1Y31'
+Info:     Tile 'RIOB33_X43Y31'
+Info:     Constraining 'an[1]' to site 'IOB_X1Y28'
+Info:     Tile 'RIOB33_X43Y27'
+Info:     Constraining 'an[2]' to site 'IOB_X1Y27'
+Info:     Tile 'RIOB33_X43Y27'
+Info:     Constraining 'an[3]' to site 'IOB_X1Y25'
+Info:     Tile 'RIOB33_X43Y25'
+Info:     Constraining 'led[0]' to site 'IOB_X0Y3'
+Info:     Tile 'LIOB33_X0Y3'
+Info:     Constraining 'led[1]' to site 'IOB_X0Y43'
+Info:     Tile 'LIOB33_X0Y43'
+Info:     Constraining 'led[2]' to site 'IOB_X0Y20'
+Info:     Tile 'LIOB33_X0Y19'
+Info:     Constraining 'led[3]' to site 'IOB_X0Y19'
+Info:     Tile 'LIOB33_X0Y19'
+Info:     Constraining 'led[4]' to site 'IOB_X0Y18'
+Info:     Tile 'LIOB33_X0Y17'
+Info:     Constraining 'led[5]' to site 'IOB_X0Y4'
+Info:     Tile 'LIOB33_X0Y3'
+Info:     Constraining 'led[6]' to site 'IOB_X0Y0'
+Info:     Tile 'LIOB33_SING_X0Y0'
+Info:     Constraining 'led[7]' to site 'IOB_X0Y1'
+Info:     Tile 'LIOB33_X0Y1'
+Info:     Constraining 'seg[0]' to site 'IOB_X1Y24'
+Info:     Tile 'RIOB33_X43Y23'
+Info:     Constraining 'seg[1]' to site 'IOB_X1Y23'
+Info:     Tile 'RIOB33_X43Y23'
+Info:     Constraining 'seg[2]' to site 'IOB_X1Y22'
+Info:     Tile 'RIOB33_X43Y21'
+Info:     Constraining 'seg[3]' to site 'IOB_X1Y21'
+Info:     Tile 'RIOB33_X43Y21'
+Info:     Constraining 'seg[4]' to site 'IOB_X1Y18'
+Info:     Tile 'RIOB33_X43Y17'
+Info:     Constraining 'seg[5]' to site 'IOB_X1Y17'
+Info:     Tile 'RIOB33_X43Y17'
+Info:     Constraining 'seg[6]' to site 'IOB_X1Y12'
+Info:     Tile 'RIOB33_X43Y11'
+Info:     Constraining 'sw[0]' to site 'IOB_X0Y11'
+Info:     Tile 'LIOB33_X0Y11'
+Info:     Constraining 'sw[1]' to site 'IOB_X0Y12'
+Info:     Tile 'LIOB33_X0Y11'
+Info:     Constraining 'sw[2]' to site 'IOB_X0Y10'
+Info:     Tile 'LIOB33_X0Y9'
+Info:     Constraining 'sw[3]' to site 'IOB_X0Y9'
+Info:     Tile 'LIOB33_X0Y9'
+Info:     Constraining 'sw[4]' to site 'IOB_X0Y7'
+Info:     Tile 'LIOB33_X0Y7'
+Info:     Constraining 'sw[5]' to site 'IOB_X0Y8'
+Info:     Tile 'LIOB33_X0Y7'
+Info:     Constraining 'sw[6]' to site 'IOB_X0Y5'
+Info:     Tile 'LIOB33_X0Y5'
+Info:     Constraining 'sw[7]' to site 'IOB_X0Y6'
+Info:     Tile 'LIOB33_X0Y5'
+Info: Generating input buffer for '$iopadmap$basys3_top.btnC'
+Info: Generating input buffer for '$iopadmap$basys3_top.clk100'
+Info: Generating output buffer for '$iopadmap$basys3_top.dp'
+Info: Generating input buffer for '$iopadmap$basys3_top.spi_ceb'
+Info: Generating output buffer for '$iopadmap$basys3_top.spi_miso'
+Info: Generating input buffer for '$iopadmap$basys3_top.spi_mosi'
+Info: Generating input buffer for '$iopadmap$basys3_top.spi_sclk'
+Info: Generating output buffer for '$iopadmap$basys3_top.an'
+Info: Generating output buffer for '$iopadmap$basys3_top.an_1'
+Info: Generating output buffer for '$iopadmap$basys3_top.an_2'
+Info: Generating output buffer for '$iopadmap$basys3_top.an_3'
+Info: Generating output buffer for '$iopadmap$basys3_top.led'
+Info: Generating output buffer for '$iopadmap$basys3_top.led_1'
+Info: Generating output buffer for '$iopadmap$basys3_top.led_2'
+Info: Generating output buffer for '$iopadmap$basys3_top.led_3'
+Info: Generating output buffer for '$iopadmap$basys3_top.led_4'
+Info: Generating output buffer for '$iopadmap$basys3_top.led_5'
+Info: Generating output buffer for '$iopadmap$basys3_top.led_6'
+Info: Generating output buffer for '$iopadmap$basys3_top.led_7'
+Info: Generating output buffer for '$iopadmap$basys3_top.seg'
+Info: Generating output buffer for '$iopadmap$basys3_top.seg_1'
+Info: Generating output buffer for '$iopadmap$basys3_top.seg_2'
+Info: Generating output buffer for '$iopadmap$basys3_top.seg_3'
+Info: Generating output buffer for '$iopadmap$basys3_top.seg_4'
+Info: Generating output buffer for '$iopadmap$basys3_top.seg_5'
+Info: Generating output buffer for '$iopadmap$basys3_top.seg_6'
+Info: Generating input buffer for '$iopadmap$basys3_top.sw'
+Info: Generating input buffer for '$iopadmap$basys3_top.sw_1'
+Info: Generating input buffer for '$iopadmap$basys3_top.sw_2'
+Info: Generating input buffer for '$iopadmap$basys3_top.sw_3'
+Info: Generating input buffer for '$iopadmap$basys3_top.sw_4'
+Info: Generating input buffer for '$iopadmap$basys3_top.sw_5'
+Info: Generating input buffer for '$iopadmap$basys3_top.sw_6'
+Info: Generating input buffer for '$iopadmap$basys3_top.sw_7'
+Info:     Created 34 PAD cells from:
+Info:             34x PAD
+Info: Preparing clocking...
+Info: Packing constants..
+Info: Packing cfg...
+Info: Packing PLLs...
+Info: Packing GTP Transceivers..
+Info: Packing global buffers...
+Info:     Constrained BUFGCTRL '$auto$clkbufmap.cc:261:execute$121852' to bel 'BUFGCTRL_X0Y0/BUFGCTRL' based on dedicated routing
+Info: Packing MUX[789]s..
+Info: Packing carries..
+Info:    Grouped 892 MUXCYs and 892 XORCYs into 37 chains.
+Info:    Blasted 0 non-chain MUXCYs and 2 non-chain XORCYs to soft logic
+Info: Packing LUTs..
+Info:     Created 3713 SLICE_LUTX cells from:
+Info:           1530x LUT1
+Info:            565x LUT2
+Info:            414x LUT3
+Info:            334x LUT4
+Info:            488x LUT5
+Info:            382x LUT6
+Info: Packing DRAM..
+Info:    Transformed 0 tied-low DRAM address inputs to be tied-high
+Info: Packing BRAM..
+Info: Packing DSPs..
+Info: Packing flipflops..
+Info:     Created 1403 SLICE_FFX cells from:
+Info:             13x FDCE
+Info:           1339x FDRE
+Info:             45x FDRE_1
+Info:              4x FDSE
+Info:              2x FDSE_1
+Info: Constrained 738 LUTFF pairs.
+
+Info: Annotating ports with timing budgets for target frequency 12.00 MHz
+Info: Checksum: 0x30656252
+
+Info: Device utilisation:
+Info: 	          SLICE_LUTX:  3777/65200     5%
+Info: 	           SLICE_FFX:  1403/65200     2%
+Info: 	              CARRY4:   225/ 8150     2%
+Info: 	          PSEUDO_GND:     1/18055     0%
+Info: 	          PSEUDO_VCC:     1/18055     0%
+Info: 	               HARD0:     0/ 1980     0%
+Info: 	            RAMB18E1:     0/  150     0%
+Info: 	            FIFO18E1:     0/   75     0%
+Info: 	        RAMBFIFO36E1:     0/   75     0%
+Info: 	            RAMB36E1:     8/   75    10%
+Info: 	             DSP48E1:     0/  120     0%
+Info: 	                 PAD:    34/  512     6%
+Info: 	       IOB33M_OUTBUF:     0/  120     0%
+Info: 	       IOB33S_OUTBUF:     0/  120     0%
+Info: 	        IOB33_OUTBUF:    21/  250     8%
+Info: 	     IOB33M_INBUF_EN:     0/  120     0%
+Info: 	     IOB33S_INBUF_EN:     0/  120     0%
+Info: 	      IOB33_INBUF_EN:    13/  250     5%
+Info: 	IOB33M_TERM_OVERRIDE:     0/  120     0%
+Info: 	IOB33S_TERM_OVERRIDE:     0/  120     0%
+Info: 	 IOB33_TERM_OVERRIDE:     0/  250     0%
+Info: 	       PULL_OR_KEEP1:     0/  490     0%
+Info: 	            IDELAYE2:     0/  250     0%
+Info: 	        OLOGICE3_TFF:     0/  250     0%
+Info: 	      OLOGICE3_OUTFF:     0/  250     0%
+Info: 	       OLOGICE3_MISR:     0/  250     0%
+Info: 	           OSERDESE2:     0/  250     0%
+Info: 	        ILOGICE3_IFF:     0/  250     0%
+Info: 	ILOGICE3_ZHOLD_DELAY:     0/  250     0%
+Info: 	           ISERDESE2:     0/  250     0%
+Info: 	               BUFIO:     0/   20     0%
+Info: 	          IDELAYCTRL:     0/    5     0%
+Info: 	            BUFGCTRL:     2/   32     6%
+Info: 	               BSCAN:     0/    4     0%
+Info: 	                BUFG:     0/   32     0%
+Info: 	              BUFHCE:     0/   72     0%
+Info: 	            DCIRESET:     0/    1     0%
+Info: 	            DNA_PORT:     0/    1     0%
+Info: 	           EFUSE_USR:     0/    1     0%
+Info: 	           FRAME_ECC:     0/    1     0%
+Info: 	       GTPE2_CHANNEL:     0/    4     0%
+Info: 	        GTPE2_COMMON:     0/    1     0%
+Info: 	         IBUFDS_GTE2:     0/    2     0%
+Info: 	                ICAP:     0/    2     0%
+Info: 	            INVERTER:     0/  120     0%
+Info: 	          MMCME2_ADV:     0/    5     0%
+Info: 	        OLOGICE2_TFF:     0/  250     0%
+Info: 	      OLOGICE2_OUTFF:     0/  250     0%
+Info: 	           PLLE2_ADV:     0/    5     0%
+Info: 	           SELMUX2_1:     0/25450     0%
+Info: 	             STARTUP:     0/    1     0%
+Info: 	          USR_ACCESS:     0/    1     0%
+Info: 	              BUFFER:     0/   22     0%
+Info: 	        ILOGICE2_IFF:     0/  250     0%
+Info: 	       OLOGICE2_MISR:     0/  250     0%
+
+Info: Placed 69 cells based on constraints.
+Info: Creating initial analytic placement for 2646 cells, random placement wirelen = 691092.
+Info:     at initial placer iter 0, wirelen = 17851
+Info:     at initial placer iter 1, wirelen = 17620
+Info:     at initial placer iter 2, wirelen = 17621
+Info:     at initial placer iter 3, wirelen = 17604
+Info: Running main analytical placer.
+Info:     at iteration #1, type ALL: wirelen solved = 17626, spread = 156645, legal = 157391; time = 0.24s
+Info:     at iteration #2, type ALL: wirelen solved = 20211, spread = 123385, legal = 127035; time = 0.21s
+Info:     at iteration #3, type ALL: wirelen solved = 28058, spread = 114948, legal = 118497; time = 0.18s
+Info:     at iteration #4, type ALL: wirelen solved = 35462, spread = 112981, legal = 117104; time = 0.63s
+Info:     at iteration #5, type ALL: wirelen solved = 39637, spread = 108537, legal = 111059; time = 0.46s
+Info:     at iteration #6, type ALL: wirelen solved = 44119, spread = 105579, legal = 108577; time = 0.43s
+Info:     at iteration #7, type ALL: wirelen solved = 47321, spread = 93963, legal = 100832; time = 0.44s
+Info:     at iteration #8, type ALL: wirelen solved = 50423, spread = 95641, legal = 97992; time = 0.51s
+Info:     at iteration #9, type ALL: wirelen solved = 52852, spread = 105288, legal = 104153; time = 0.18s
+Info:     at iteration #10, type ALL: wirelen solved = 54726, spread = 113590, legal = 112908; time = 0.16s
+Info:     at iteration #11, type ALL: wirelen solved = 56721, spread = 91956, legal = 92230; time = 0.16s
+Info:     at iteration #12, type ALL: wirelen solved = 56515, spread = 91255, legal = 92303; time = 0.16s
+Info:     at iteration #13, type ALL: wirelen solved = 58531, spread = 99332, legal = 102442; time = 0.14s
+Info:     at iteration #14, type ALL: wirelen solved = 60075, spread = 106377, legal = 110322; time = 0.32s
+Info:     at iteration #15, type ALL: wirelen solved = 63770, spread = 114532, legal = 117384; time = 0.47s
+Info:     at iteration #16, type ALL: wirelen solved = 63943, spread = 85371, legal = 90382; time = 0.14s
+Info:     at iteration #17, type ALL: wirelen solved = 65462, spread = 117825, legal = 122809; time = 0.26s
+Info:     at iteration #18, type ALL: wirelen solved = 68852, spread = 118411, legal = 121164; time = 0.27s
+Info:     at iteration #19, type ALL: wirelen solved = 69245, spread = 97970, legal = 95883; time = 0.24s
+Info:     at iteration #20, type ALL: wirelen solved = 71173, spread = 103480, legal = 105660; time = 0.39s
+Info:     at iteration #21, type ALL: wirelen solved = 71612, spread = 93882, legal = 96266; time = 0.29s
+Info: HeAP Placer Time: 8.66s
+Info:   of which solving equations: 5.74s
+Info:   of which spreading cells: 1.15s
+Info:   of which strict legalisation: 0.42s
+
+Info: Running simulated annealing placer for refinement.
+Info:   at iteration #1: temp = 0.000000, timing cost = 408, wirelen = 90382
+Info:   at iteration #5: temp = 0.000000, timing cost = 282, wirelen = 83702
+Info:   at iteration #10: temp = 0.000000, timing cost = 334, wirelen = 83030
+Info:   at iteration #12: temp = 0.000000, timing cost = 328, wirelen = 83007 
+Info: SA placement time 1.64s
+
+Info: Max frequency for clock                         'clk': 50.43 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock '$abc$118129$iopadmap$clk100': 218.96 MHz (PASS at 12.00 MHz)
+
+Info: Max delay posedge $abc$118129$iopadmap$clk100 -> posedge clk: 13.70 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 7 endpoint(s)
+Info:          + represents [1,7) endpoint(s)
+Info: [ 63503,  64479) |*+
+Info: [ 64479,  65455) |+
+Info: [ 65455,  66431) |+
+Info: [ 66431,  67407) |+
+Info: [ 67407,  68383) |**+
+Info: [ 68383,  69359) |********+
+Info: [ 69359,  70335) |***********+
+Info: [ 70335,  71311) |********+
+Info: [ 71311,  72287) |**********+
+Info: [ 72287,  73263) |**************+
+Info: [ 73263,  74239) |**************+
+Info: [ 74239,  75215) |********************+
+Info: [ 75215,  76191) |****************************+
+Info: [ 76191,  77167) |********************************************+
+Info: [ 77167,  78143) |************************************************************ 
+Info: [ 78143,  79119) |***********************************************+
+Info: [ 79119,  80095) |************************************************+
+Info: [ 80095,  81071) |**************************************************+
+Info: [ 81071,  82047) |*****************+
+Info: [ 82047,  83023) |**************************+
+Info: Checksum: 0xdcba8fec
+Info: Running post-placement legalisation...
+Info: Routing global clocks...
+Info:     routing clock 'clk'
+Info:     routing clock '$abc$118129$iopadmap$clk100'
+Info: Running router2...
+Info: Setting up routing resources...
+Info: Running main router loop...
+Info:     iter=1 wires=88636 overused=3398 overuse=3551 archfail=NA
+Info:     iter=2 wires=91220 overused=24 overuse=24 archfail=NA
+Info:     iter=3 wires=91250 overused=0 overuse=0 archfail=0
+Info: 1000 slowest nets by runtime:
+                                                                       u_impl.PICORV_RST    178 621.4ms
+                                            $abc$118129$auto$rtlil.cc:2675:NotGate$60529    541 588.0ms
+                            $techmap120986$auto$abc9_ops.cc:1550:reintegrate$118413.A[0]    264 433.5ms
+                            $techmap121061$auto$abc9_ops.cc:1550:reintegrate$118391.A[4]     62 273.6ms
+                                          u_impl.mriscvcore_inst.REG_FILE_inst.addr_a[3]     97 249.6ms
+                            $techmap120160$auto$abc9_ops.cc:1550:reintegrate$118182.A[0]     54 233.1ms
+                            $techmap119168$auto$abc9_ops.cc:1550:reintegrate$118808.A[1]    114 227.4ms
+                            $techmap120090$auto$abc9_ops.cc:1550:reintegrate$118142.A[3]     41 214.6ms
+                            $techmap120251$auto$abc9_ops.cc:1550:reintegrate$118313.A[2]     98 214.5ms
+                            $techmap120975$auto$abc9_ops.cc:1550:reintegrate$118400.A[1]     65 199.0ms
+                            $techmap120251$auto$abc9_ops.cc:1550:reintegrate$118313.A[3]     91 192.5ms
+                                                        u_impl.mriscvcore_inst.enable_pc     95 177.3ms
+                            $techmap119323$auto$abc9_ops.cc:1550:reintegrate$118711.A[2]    121 171.8ms
+                                                  u_impl.mriscvcore_inst.ALU_inst.en_reg    103 167.4ms
+                                          u_impl.mriscvcore_inst.REG_FILE_inst.addr_a[2]     96 155.8ms
+                                                            $abc$118129$aiger118128$5803     64 151.9ms
+                                          u_impl.mriscvcore_inst.REG_FILE_inst.addr_a[4]     97 149.4ms
+                                          u_impl.mriscvcore_inst.REG_FILE_inst.addr_a[0]     97 148.9ms
+                                         u_impl.inst_axi4_interconnect.counter_wrequests     89 130.5ms
+                            $techmap119186$auto$abc9_ops.cc:1550:reintegrate$118793.A[1]    137 126.6ms
+                                                                         $PACKER_GND_NET   1948 124.5ms
+                            $techmap119311$auto$abc9_ops.cc:1550:reintegrate$118723.A[0]     67 114.3ms
+                                          u_impl.mriscvcore_inst.REG_FILE_inst.addr_a[1]     96 114.2ms
+                                                         u_impl.mriscvcore_inst.rdw_rsrn     69 107.5ms
+                                             u_impl.mriscvcore_inst.MULT_inst.OutFSM2[0]     42 106.0ms
+                               $abc$118129$auto$opt_dff.cc:219:make_patterns_logic$39809     65 100.0ms
+                                     $techmap119422$abc$118129$lut$aiger118128$9844.A[3]     32 94.1ms
+                                                                         $PACKER_VCC_NET   1965 88.4ms
+                            $techmap120092$auto$abc9_ops.cc:1550:reintegrate$118144.A[0]     63 84.2ms
+                                                                          gpio_datanw[0]      2 82.4ms
+                                                                          gpio_datanw[3]      2 74.6ms
+                                                               u_impl.AXI_SP32B1024_A[1]     16 74.2ms
+                                                         u_impl.mriscvcore_inst.codif[8]     38 67.0ms
+                                                          u_impl.mriscvcore_inst.rs2i[2]     33 65.0ms
+                                                                          gpio_datanw[7]      2 64.5ms
+                            $techmap120163$auto$abc9_ops.cc:1550:reintegrate$118183.A[3]     32 59.9ms
+                                     $techmap119465$abc$118129$lut$aiger118128$9622.A[3]     32 59.9ms
+                                                          u_impl.mriscvcore_inst.rs2i[4]     33 59.5ms
+                            $techmap120090$auto$abc9_ops.cc:1550:reintegrate$118142.A[2]     33 57.6ms
+                               $abc$118129$auto$opt_dff.cc:219:make_patterns_logic$39775     64 55.8ms
+                                                                  u_impl.s_axi_wdata[96]      8 55.2ms
+                            $techmap119135$auto$abc9_ops.cc:1550:reintegrate$118839.A[2]     45 53.6ms
+                                             u_impl.mriscvcore_inst.MULT_inst.OutFSM1[0]     40 50.1ms
+                                                             $abc$118129$iopadmap$seg[6]      1 49.0ms
+                                                          u_impl.mriscvcore_inst.rs2i[3]     33 46.4ms
+                            $techmap120095$auto$abc9_ops.cc:1550:reintegrate$118149.A[1]     32 46.2ms
+                                                              u_impl.AXI_SP32B1024_A[12]     16 45.4ms
+                                                       u_impl.mriscvcore_inst.W_R_mem[1]     35 45.3ms
+                                                                 u_impl.m_axi_arvalid[0]     33 43.6ms
+                                     $techmap119537$abc$118129$lut$aiger118128$4715.A[4]     31 43.5ms
+                                     $techmap119454$abc$118129$lut$aiger118128$9669.A[1]     32 43.4ms
+                                             u_impl.mriscvcore_inst.MULT_inst.OutFSM3[0]     26 42.8ms
+                            $techmap120196$auto$abc9_ops.cc:1550:reintegrate$118210.A[4]     15 42.5ms
+                            $techmap119087$auto$abc9_ops.cc:1550:reintegrate$118870.A[2]     45 42.1ms
+                            $techmap119499$auto$abc9_ops.cc:1550:reintegrate$118434.A[3]     35 42.0ms
+                                                           u_impl.mriscvcore_inst.rs1[3]     13 41.9ms
+                                                          u_impl.mriscvcore_inst.code[3]     31 41.4ms
+                                     $techmap118957\u_impl.SP32B1024_INT.mem.0.0.ENARDEN     16 40.7ms
+                                     $techmap119465$abc$118129$lut$aiger118128$9622.A[2]     32 39.1ms
+                                                           u_impl.mriscvcore_inst.rs1[2]     13 39.0ms
+                                                         u_impl.mriscvcore_inst.codif[7]     32 39.0ms
+                                                          u_impl.mriscvcore_inst.rs1[28]     12 38.9ms
+        $techmap119593$abc$118129$lut\u_impl.mriscvcore_inst.MEMORY_INTERFACE_inst.Rdata_mem[31].A[1]     34 38.8ms
+                            $techmap120130$auto$abc9_ops.cc:1550:reintegrate$118167.A[3]     32 38.7ms
+                                     $techmap119444$abc$118129$lut$aiger118128$9735.A[2]     16 38.3ms
+                                     $techmap119445$abc$118129$lut$aiger118128$9739.A[2]     32 37.2ms
+                                                                 u_impl.m_axi_awvalid[1]     34 37.1ms
+                                                               u_impl.AXI_SP32B1024_A[3]     16 36.9ms
+                      $techmap119897$abc$118129$lut\u_impl.inst_completogpio.Wvalid.A[0]     40 36.5ms
+                                                u_impl.mriscvcore_inst.ALU_inst.is_rd_nr     33 35.3ms
+                                     $techmap119466$abc$118129$lut$aiger118128$9626.A[2]     32 35.1ms
+                                            $abc$118129$auto$rtlil.cc:2675:NotGate$60951     32 34.6ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[54]      2 34.6ms
+                                                              u_impl.AXI_SP32B1024_A[10]     16 34.5ms
+                                                                 u_impl.m_axi_awvalid[0]     32 34.0ms
+                                                           u_impl.mriscvcore_inst.rs1[5]     13 33.1ms
+                                                               u_impl.AXI_SP32B1024_A[5]     16 33.1ms
+                            $techmap120083$auto$abc9_ops.cc:1550:reintegrate$118140.A[0]     18 33.0ms
+                                                           u_impl.mriscvcore_inst.rs1[0]     14 33.0ms
+                                         u_impl.inst_axi4_interconnect.counter_rrequests     25 31.8ms
+                                     $techmap119535$abc$118129$lut$aiger118128$4710.A[3]     17 31.0ms
+                                                          u_impl.mriscvcore_inst.rs2[14]      6 30.8ms
+                                                                          gpio_datanw[5]      2 30.6ms
+                                                             $abc$118129$iopadmap$seg[4]      1 30.2ms
+                                                             $abc$118129$iopadmap$seg[3]      1 30.0ms
+                                     $techmap119590$abc$118129$lut$aiger118128$7457.A[0]     25 29.8ms
+                                                           u_impl.mriscvcore_inst.rs1[8]     13 29.7ms
+                               $abc$118129$auto$opt_dff.cc:194:make_patterns_logic$39591     15 29.5ms
+        $techmap121242$abc$118129$lut$flatten\u_impl.\mriscvcore_inst.\MULT_inst.\u4.$procmux$34926.Y[14].A[3]      1 28.9ms
+                               $abc$118129$auto$opt_dff.cc:194:make_patterns_logic$39905     13 28.8ms
+                                                          u_impl.mriscvcore_inst.rs1[24]     12 28.7ms
+                            $techmap121107$auto$abc9_ops.cc:1550:reintegrate$118525.A[2]     22 28.5ms
+                                     $techmap119457$abc$118129$lut$aiger118128$9664.A[4]     31 28.4ms
+                                                                          gpio_datanw[6]      2 28.3ms
+                                                          u_impl.mriscvcore_inst.rs2i[0]     32 28.3ms
+                                                          u_impl.mriscvcore_inst.rs1[22]     12 28.0ms
+                                                                               digit_sel      7 27.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[38]      1 27.7ms
+                                                               u_impl.AXI_SP32B1024_A[4]     16 27.7ms
+                                            u_impl.mriscvcore_inst.MULT_inst.u5.state[2]     19 27.0ms
+                                                                          gpio_datanw[2]      2 26.5ms
+                                                               u_impl.AXI_SP32B1024_A[7]     16 26.4ms
+                                                          u_impl.mriscvcore_inst.rs1[25]     12 26.3ms
+                                     $techmap119428$abc$118129$lut$aiger118128$9841.A[5]     32 25.9ms
+                                                                          gpio_datanw[4]      2 25.7ms
+                                                           u_impl.mriscvcore_inst.rs1[4]     13 25.4ms
+                                                          u_impl.mriscvcore_inst.imm[16]      6 25.4ms
+              $techmap119487$abc$118129$lut\u_impl.inst_AXI_SP32B1024.axi_wdata[17].A[3]     39 25.3ms
+                                                          u_impl.mriscvcore_inst.rs2i[1]     32 25.0ms
+                                                         u_impl.mriscvcore_inst.inst[13]     11 24.9ms
+                            $techmap120187$auto$abc9_ops.cc:1550:reintegrate$118204.A[1]     32 24.8ms
+                                     $techmap119428$abc$118129$lut$aiger118128$9841.A[3]     21 24.3ms
+                                                                          gpio_datanw[1]      2 24.2ms
+                                             u_impl.mriscvcore_inst.MULT_inst.OutFSM1[1]     33 24.1ms
+                                     $techmap119422$abc$118129$lut$aiger118128$9844.A[2]     17 23.8ms
+                                                              $abc$118129$iopadmap$an[1]      1 23.7ms
+                                             u_impl.mriscvcore_inst.MULT_inst.OutFSM2[1]     35 23.7ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[53]      1 23.5ms
+                                                             $abc$118129$iopadmap$seg[2]      1 23.4ms
+                                     $techmap118983$abc$118129$lut$aiger118128$4959.A[2]     32 23.3ms
+                                            $abc$118129$auto$rtlil.cc:2675:NotGate$60887     32 23.2ms
+                                                           u_impl.mriscvcore_inst.rs1[1]     12 23.2ms
+                                                          u_impl.mriscvcore_inst.rs2[10]      6 23.1ms
+        $abc$118129$flatten\u_impl.\mriscvcore_inst.\MEMORY_INTERFACE_inst.$logic_and$mriscv/mriscvcore/MEMORY_INTERFACE/MEMORY_INTERFACE.v:332$34614_Y     32 22.8ms
+                                                          u_impl.mriscvcore_inst.rs1[19]     12 22.7ms
+                            $techmap121025$auto$abc9_ops.cc:1550:reintegrate$118474.A[4]      8 22.6ms
+                            $techmap120083$auto$abc9_ops.cc:1550:reintegrate$118140.A[5]     31 22.6ms
+                            $techmap120220$auto$abc9_ops.cc:1550:reintegrate$118296.A[3]     18 22.3ms
+                                                           u_impl.mriscvcore_inst.rs1[6]     13 22.2ms
+                                                             $abc$118129$iopadmap$seg[5]      1 22.1ms
+                                             $auto$alumacc.cc:485:replace_alu$40557.Y[3]      1 21.1ms
+        $techmap119593$abc$118129$lut\u_impl.mriscvcore_inst.MEMORY_INTERFACE_inst.Rdata_mem[31].A[2]     16 20.8ms
+                                                           u_impl.mriscvcore_inst.rs2[9]      6 20.6ms
+                                                         u_impl.mriscvcore_inst.inst[12]      8 20.3ms
+                                     $techmap119438$abc$118129$lut$aiger118128$9814.A[3]     11 20.3ms
+                                    $abc$118129$auto$opt_dff.cc:253:combine_resets$39582     19 20.3ms
+                                                           u_impl.mriscvcore_inst.rs2[7]      8 20.1ms
+                                                               u_impl.AXI_SP32B1024_A[9]     16 20.1ms
+                                                          u_impl.mriscvcore_inst.rs1[30]     12 20.1ms
+                                                          u_impl.mriscvcore_inst.rs1[11]     13 20.1ms
+                                    $abc$118129$auto$opt_dff.cc:253:combine_resets$39599     20 20.1ms
+                                                           u_impl.mriscvcore_inst.rs1[7]     13 19.8ms
+                                                                  u_impl.m_axi_rdata[23]      4 19.8ms
+                                                           u_impl.mriscvcore_inst.rs2[5]      8 19.8ms
+                                                           u_impl.mriscvcore_inst.rs2[2]      8 19.7ms
+                                                          u_impl.mriscvcore_inst.rs1[21]     12 19.7ms
+                                  $abc$118129$auto$simplemap.cc:246:simplemap_eqne$42673      5 19.7ms
+                            $techmap118975$auto$abc9_ops.cc:1550:reintegrate$118935.A[0]     14 19.4ms
+                                                          u_impl.mriscvcore_inst.rs1[14]     13 19.3ms
+                                    $abc$118129$auto$opt_dff.cc:253:combine_resets$41164      9 19.0ms
+                                                u_impl.mriscvcore_inst.MULT_inst.u2.S[0]     19 18.8ms
+                                                          u_impl.mriscvcore_inst.inst[5]      8 18.5ms
+                                                           u_impl.mriscvcore_inst.rs2[3]      8 18.4ms
+                                            u_impl.mriscvcore_inst.MULT_inst.u5.state[0]     20 18.3ms
+                                                          u_impl.mriscvcore_inst.rs1[13]     13 18.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[34]      1 18.2ms
+                                     $techmap119470$abc$118129$lut$aiger118128$9595.A[2]     15 18.2ms
+                            $techmap120090$auto$abc9_ops.cc:1550:reintegrate$118142.A[4]     16 17.9ms
+                                                           u_impl.mriscvcore_inst.rs2[6]      8 17.9ms
+                                                          u_impl.mriscvcore_inst.rs1[31]     15 17.9ms
+                                             $auto$alumacc.cc:485:replace_alu$40557.Y[6]      1 17.8ms
+                            $techmap119910$auto$abc9_ops.cc:1550:reintegrate$118397.A[2]     17 17.7ms
+                                     $techmap119428$abc$118129$lut$aiger118128$9841.A[4]     16 17.6ms
+                                                          u_impl.mriscvcore_inst.inst[4]      6 17.5ms
+                                             u_impl.mriscvcore_inst.MULT_inst.OutFSM3[1]     19 17.3ms
+                                     $techmap119457$abc$118129$lut$aiger118128$9664.A[5]     34 17.2ms
+                            $techmap121061$auto$abc9_ops.cc:1550:reintegrate$118391.A[2]     11 17.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[39]      1 17.1ms
+                                                          u_impl.mriscvcore_inst.rs2[28]      4 17.0ms
+                                     $techmap119535$abc$118129$lut$aiger118128$4710.A[2]     18 16.9ms
+                                                          u_impl.mriscvcore_inst.rs1[15]     13 16.7ms
+                                                             $abc$118129$iopadmap$seg[1]      1 16.7ms
+                            $techmap119242$auto$abc9_ops.cc:1550:reintegrate$118764.A[2]      4 16.5ms
+                                                         u_impl.mriscvcore_inst.inst[31]      8 16.4ms
+                                                          u_impl.mriscvcore_inst.rs1[10]     13 16.4ms
+                                                          u_impl.mriscvcore_inst.rs2[11]      6 16.4ms
+                                                          u_impl.mriscvcore_inst.rs2[13]      6 16.3ms
+                                                               u_impl.AXI_SP32B1024_A[2]     16 16.3ms
+                                                           u_impl.mriscvcore_inst.rs2[0]      8 16.3ms
+                                                          u_impl.mriscvcore_inst.rs1[12]     13 16.2ms
+                                                         u_impl.mriscvcore_inst.inst[20]      6 16.2ms
+                                                u_impl.mriscvcore_inst.MULT_inst.u4.S[1]     24 16.2ms
+                                                           u_impl.mriscvcore_inst.rs2[4]      8 16.2ms
+                                             $auto$alumacc.cc:485:replace_alu$40536.Y[2]      1 16.2ms
+                                                          u_impl.mriscvcore_inst.rs2[23]      4 16.1ms
+                                                           u_impl.mriscvcore_inst.imm[3]      6 16.1ms
+                                                           u_impl.mriscvcore_inst.en_mem     14 16.0ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[30]      9 16.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[14]      1 15.8ms
+                                                                 u_impl.s_axi_awvalid[0]     15 15.8ms
+                                                          u_impl.mriscvcore_inst.imm[24]      6 15.7ms
+                            $techmap120084$auto$abc9_ops.cc:1550:reintegrate$118141.A[2]     10 15.4ms
+                                                     u_impl.inst_spi_axi_master.full[35]      2 15.4ms
+                                                          u_impl.mriscvcore_inst.rs1[20]     12 15.4ms
+                                                           u_impl.mriscvcore_inst.rs2[8]      6 15.3ms
+                            $techmap121066$auto$abc9_ops.cc:1550:reintegrate$118484.A[2]     11 15.2ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[26]      9 15.2ms
+                                                          u_impl.mriscvcore_inst.rs1[18]     12 15.1ms
+                                                          u_impl.mriscvcore_inst.rs1[27]     12 15.1ms
+                            $techmap120250$auto$abc9_ops.cc:1550:reintegrate$118387.A[1]     14 14.9ms
+                            $techmap120756$auto$abc9_ops.cc:1550:reintegrate$118425.A[0]      9 14.9ms
+                                     $techmap120287$abc$118129$lut$aiger118128$4968.A[0]      6 14.8ms
+                                                     u_impl.inst_spi_axi_master.full[11]      2 14.6ms
+                                                             $abc$118129$iopadmap$seg[0]      1 14.5ms
+                                                      u_impl.inst_spi_axi_master.full[1]      2 14.3ms
+                                                          u_impl.mriscvcore_inst.rs2[15]      6 14.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[51]      1 14.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[36]      1 14.3ms
+                                                          u_impl.mriscvcore_inst.imm[18]      6 14.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[52]      1 14.1ms
+                                                               u_impl.AXI_SP32B1024_A[0]     16 14.1ms
+                                     $techmap119566$abc$118129$lut$aiger118128$4419.A[1]      7 13.9ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[22]      1 13.9ms
+                                                          u_impl.mriscvcore_inst.imm[11]      6 13.9ms
+                            $techmap120288$auto$abc9_ops.cc:1550:reintegrate$118333.A[4]      9 13.9ms
+                                                           u_impl.mriscvcore_inst.imm[0]      9 13.9ms
+                                          u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[8]      2 13.7ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[62]      1 13.6ms
+                                                          u_impl.mriscvcore_inst.imm[19]      6 13.6ms
+                                                              u_impl.AXI_SP32B1024_A[11]     16 13.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[51]      1 13.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[32]      1 13.5ms
+                                                u_impl.mriscvcore_inst.MULT_inst.u2.S[1]     22 13.5ms
+                                    $abc$118129$auto$opt_dff.cc:253:combine_resets$39616     19 13.5ms
+                            $techmap118984$auto$abc9_ops.cc:1550:reintegrate$118934.A[1]      6 13.4ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[20]      1 13.3ms
+                            $techmap118988$auto$abc9_ops.cc:1550:reintegrate$118932.A[1]      6 13.3ms
+                                                                  u_impl.m_axi_rdata[19]      3 13.2ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[24]      6 13.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[47]      1 13.1ms
+                                                     u_impl.inst_spi_axi_master.full[38]      2 13.1ms
+                                                     u_impl.inst_spi_axi_master.full[39]      2 12.9ms
+                                                          u_impl.mriscvcore_inst.inst[6]      6 12.8ms
+                                             $auto$alumacc.cc:485:replace_alu$40548.Y[9]      1 12.7ms
+                                                     u_impl.inst_spi_axi_master.full[36]      2 12.7ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[29]      9 12.5ms
+                                                           u_impl.mriscvcore_inst.rs1[9]     13 12.4ms
+                            $techmap119214$auto$abc9_ops.cc:1550:reintegrate$118780.A[3]      5 12.4ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[21]      6 12.4ms
+                                    $abc$118129$auto$opt_dff.cc:253:combine_resets$39566     32 12.3ms
+                            $techmap119914$auto$abc9_ops.cc:1550:reintegrate$118396.A[2]     12 12.2ms
+                                                         u_impl.mriscvcore_inst.inst[29]      3 12.2ms
+                                                          u_impl.mriscvcore_inst.rs1[17]     12 12.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[42]      1 12.1ms
+                                                               u_impl.AXI_SP32B1024_A[6]     16 12.0ms
+                            $techmap119018$auto$abc9_ops.cc:1550:reintegrate$118916.A[1]      6 12.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[62]      1 12.0ms
+                                        u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[0]      2 11.9ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[26]      6 11.9ms
+                                                                 u_impl.m_axi_araddr[38]      2 11.8ms
+                                                           u_impl.mriscvcore_inst.imm[1]      9 11.8ms
+                                                u_impl.mriscvcore_inst.MULT_inst.u6.S[1]     22 11.7ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[33]      1 11.7ms
+                                     $techmap119529$abc$118129$lut$aiger118128$4695.A[2]      6 11.7ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[31]      9 11.7ms
+                                                          u_impl.mriscvcore_inst.rs2[24]      4 11.6ms
+                                                     u_impl.inst_spi_axi_master.full[58]      2 11.6ms
+                                                     u_impl.inst_spi_axi_master.full[34]      2 11.6ms
+                                     $techmap119805$abc$118129$lut$aiger118128$7294.A[4]      9 11.6ms
+                                                          u_impl.mriscvcore_inst.rs2[20]      4 11.5ms
+                                                                  u_impl.m_axi_wdata[32]      2 11.5ms
+                                                          u_impl.mriscvcore_inst.code[4]      6 11.5ms
+                                                          u_impl.mriscvcore_inst.imm[13]      6 11.5ms
+                                                           u_impl.mriscvcore_inst.rd[21]      2 11.4ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[24]      9 11.4ms
+                                     $techmap119557$abc$118129$lut$aiger118128$4374.A[1]      6 11.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[56]      1 11.3ms
+                                                      u_impl.inst_spi_axi_master.full[9]      2 11.3ms
+                                  $abc$118129$auto$simplemap.cc:246:simplemap_eqne$41727      5 11.2ms
+                            $techmap119365$auto$abc9_ops.cc:1550:reintegrate$118672.A[2]     26 11.2ms
+                            $techmap119917$auto$abc9_ops.cc:1550:reintegrate$118416.A[0]     13 11.2ms
+                                                          u_impl.mriscvcore_inst.rs1[16]     12 11.0ms
+                            $techmap120988$auto$abc9_ops.cc:1550:reintegrate$118414.A[2]     10 11.0ms
+                                             $auto$alumacc.cc:485:replace_alu$40548.Y[3]      1 11.0ms
+                            $techmap119038$auto$abc9_ops.cc:1550:reintegrate$118906.A[1]      6 10.9ms
+                                                          u_impl.mriscvcore_inst.code[7]      5 10.9ms
+                                                           u_impl.mriscvcore_inst.imm[4]      7 10.9ms
+                            $techmap120399$auto$abc9_ops.cc:1550:reintegrate$118264.A[3]      8 10.9ms
+                                                          u_impl.mriscvcore_inst.imm[27]      6 10.9ms
+                            $techmap119910$auto$abc9_ops.cc:1550:reintegrate$118397.A[1]     13 10.9ms
+                                                          u_impl.mriscvcore_inst.imm[10]      6 10.8ms
+                                     $techmap118978$abc$118129$lut$aiger118128$4806.A[3]      4 10.8ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[22]      8 10.8ms
+                                     $techmap119570$abc$118129$lut$aiger118128$4425.A[3]      7 10.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[40]      1 10.6ms
+                                                          u_impl.mriscvcore_inst.rs2[19]      4 10.6ms
+                                                           u_impl.mriscvcore_inst.imm[5]      7 10.5ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[30]      6 10.5ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[11]      2 10.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[12]      1 10.4ms
+                                                                                   por_n     14 10.4ms
+                                                          u_impl.mriscvcore_inst.rs1[23]     12 10.4ms
+                                                               u_impl.AXI_SP32B1024_A[8]     16 10.4ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[23]      9 10.3ms
+                                                           u_impl.mriscvcore_inst.imm[7]      7 10.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[60]      1 10.3ms
+                            $techmap119601$auto$abc9_ops.cc:1550:reintegrate$118398.A[3]     11 10.3ms
+                                                           u_impl.mriscvcore_inst.rs2[1]      8 10.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[48]      1 10.2ms
+                                     $techmap119560$abc$118129$lut$aiger118128$4390.A[0]      3 10.2ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[28]      9 10.0ms
+                            $techmap120083$auto$abc9_ops.cc:1550:reintegrate$118140.A[4]     14 10.0ms
+                                                            u_impl.mriscvcore_inst.pc[0]      4 10.0ms
+                                                u_impl.mriscvcore_inst.FSM_inst.state[6]      6 9.9ms
+                                                           u_impl.mriscvcore_inst.imm[8]      6 9.9ms
+                                                 u_impl.mriscvcore_inst.ALU_inst.BLT_Alu      2 9.9ms
+                                                           u_impl.mriscvcore_inst.imm[9]      6 9.9ms
+                                                u_impl.mriscvcore_inst.MULT_inst.u4.S[0]     20 9.9ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.S[34]      5 9.9ms
+                            $techmap118986$auto$abc9_ops.cc:1550:reintegrate$118933.A[1]      6 9.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[39]      1 9.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[31]      1 9.8ms
+                                                          u_impl.mriscvcore_inst.code[9]      9 9.7ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[42]      1 9.7ms
+                            $techmap119601$auto$abc9_ops.cc:1550:reintegrate$118398.A[2]      6 9.7ms
+             $techmap119132$abc$118129$lut\u_impl.mriscvcore_inst.MULT_inst.ss1[31].A[3]      5 9.6ms
+                                             u_impl.inst_ADC_interface_AXI.state_read[0]      2 9.6ms
+                            $techmap121110$auto$abc9_ops.cc:1550:reintegrate$118528.A[2]      3 9.6ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[19]      6 9.6ms
+                                                            u_impl.mriscvcore_inst.rd[6]      2 9.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[27]      1 9.6ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[32]      6 9.6ms
+                                                          u_impl.mriscvcore_inst.imm[21]      6 9.5ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[33]      6 9.5ms
+                                                          u_impl.mriscvcore_inst.rs1[26]     12 9.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[35]      1 9.5ms
+                            $techmap119026$auto$abc9_ops.cc:1550:reintegrate$118912.A[1]      6 9.4ms
+                      $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[0]$d[20]      1 9.4ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[21]      3 9.3ms
+                                                            u_impl.mriscvcore_inst.pc[2]      6 9.3ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.S[16]      3 9.3ms
+                            $techmap120160$auto$abc9_ops.cc:1550:reintegrate$118182.A[2]      1 9.3ms
+                               $abc$118129$auto$opt_dff.cc:219:make_patterns_logic$39747      5 9.3ms
+                                                           u_impl.mriscvcore_inst.rd[12]      2 9.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[43]      1 9.3ms
+                                                         u_impl.mriscvcore_inst.codif[5]      3 9.3ms
+                                                           $abc$118129$aiger118128$6378b      2 9.2ms
+                                                          u_impl.mriscvcore_inst.rs2[25]      4 9.2ms
+                                                     u_impl.inst_spi_axi_master.full[43]      2 9.2ms
+                                    $abc$118129$auto$opt_dff.cc:253:combine_resets$39760      2 9.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[42]      1 9.1ms
+                     $techmap119894$abc$118129$lut\u_impl.inst_completogpio.ARvalid.A[0]     10 9.1ms
+                                                           u_impl.mriscvcore_inst.imm[2]      6 9.1ms
+                                                          u_impl.mriscvcore_inst.imm[30]      6 9.1ms
+                            $techmap119008$auto$abc9_ops.cc:1550:reintegrate$118921.A[1]      6 9.1ms
+                                                      u_impl.inst_spi_axi_master.full[2]      2 9.1ms
+                                     $techmap120798$abc$118129$lut$aiger118128$5822.A[2]      8 9.0ms
+                            $techmap120924$auto$abc9_ops.cc:1550:reintegrate$118131.A[2]      3 9.0ms
+                                                          u_impl.mriscvcore_inst.rs2[27]      4 9.0ms
+                                                u_impl.mriscvcore_inst.MULT_inst.u6.S[0]     19 9.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40527.Y[10]      1 9.0ms
+                            $techmap120756$auto$abc9_ops.cc:1550:reintegrate$118425.A[1]      9 8.9ms
+                            $techmap121028$auto$abc9_ops.cc:1550:reintegrate$118468.A[2]      1 8.9ms
+                                                         u_impl.mriscvcore_inst.inst[21]      4 8.8ms
+                                                           u_impl.mriscvcore_inst.imm[6]      7 8.8ms
+                                                                 u_impl.m_axi_araddr[51]      1 8.8ms
+                                                     u_impl.inst_spi_axi_master.full[14]      2 8.8ms
+                                                     u_impl.inst_spi_axi_master.full[30]      2 8.7ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[22]      3 8.7ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[21]      3 8.7ms
+                            $techmap119914$auto$abc9_ops.cc:1550:reintegrate$118396.A[0]      8 8.6ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[31]      6 8.6ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[27]      9 8.6ms
+                                                    u_impl.inst_spi_axi_master.data_s[2]      3 8.6ms
+                                                          u_impl.mriscvcore_inst.rs2[21]      4 8.6ms
+                                     $techmap119453$abc$118129$lut$aiger118128$6049.A[0]      3 8.6ms
+                                                    u_impl.inst_axi4_interconnect.rtrans      8 8.5ms
+                                                          u_impl.mriscvcore_inst.rs1[29]     12 8.5ms
+                                                         u_impl.mriscvcore_inst.inst[19]      2 8.5ms
+                            $techmap118990$auto$abc9_ops.cc:1550:reintegrate$118931.A[1]      7 8.5ms
+                                                     u_impl.inst_spi_axi_master.full[44]      2 8.5ms
+                                             $auto$alumacc.cc:485:replace_alu$40506.Y[3]      1 8.4ms
+                            $techmap120251$auto$abc9_ops.cc:1550:reintegrate$118313.A[4]      7 8.4ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[63]      1 8.4ms
+                     $techmap119894$abc$118129$lut\u_impl.inst_completogpio.ARvalid.A[1]      5 8.4ms
+                                                        u_impl.inst_spi_axi_master.st[1]      7 8.4ms
+                                                       u_impl.mriscvcore_inst.enable_alu      9 8.4ms
+                                                                  u_impl.m_axi_rdata[18]      3 8.4ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[59]      1 8.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40497.Y[12]      1 8.3ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[23]      6 8.3ms
+                                                     u_impl.inst_spi_axi_master.full[40]      2 8.3ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.Q1[0]      5 8.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[63]      1 8.3ms
+                            $techmap119910$auto$abc9_ops.cc:1550:reintegrate$118397.A[0]      6 8.3ms
+                                                      u_impl.inst_AXI_SP32B1024.reading1      3 8.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[11]      1 8.2ms
+          $techmap119794$abc$118129$lut\u_impl.mriscvcore_inst.UTILITY_inst.PC_N[5].A[0]      2 8.2ms
+                            $techmap120986$auto$abc9_ops.cc:1550:reintegrate$118413.A[1]      5 8.2ms
+                            $techmap121025$auto$abc9_ops.cc:1550:reintegrate$118474.A[3]     11 8.2ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[36]      6 8.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[38]      1 8.1ms
+                                             $auto$alumacc.cc:485:replace_alu$40533.Y[1]      1 8.1ms
+                     $abc$118129$flatten\u_impl.\inst_spi_axi_master.$procmux$38224_Y[3]      1 8.1ms
+                                                          u_impl.mriscvcore_inst.imm[23]      6 8.1ms
+                                                         u_impl.mriscvcore_inst.inst[14]     10 8.1ms
+                                                         u_impl.mriscvcore_inst.code[10]      6 8.1ms
+                                                          u_impl.mriscvcore_inst.inst[8]      2 8.1ms
+                            $techmap120298$auto$abc9_ops.cc:1550:reintegrate$118341.A[0]      2 8.0ms
+                                     $techmap120793$abc$118129$lut$aiger118128$5808.A[2]      8 8.0ms
+                                                          u_impl.mriscvcore_inst.imm[14]      6 8.0ms
+                                                                   u_impl.m_axi_wdata[0]      2 8.0ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[33]      6 8.0ms
+                                    $techmap119983$abc$118129$lut$aiger118128$11404.A[0]      2 8.0ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[47]      2 8.0ms
+                                     $techmap119849$abc$118129$lut$aiger118128$4754.A[1]      8 8.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[29]      1 7.9ms
+                                             $auto$alumacc.cc:485:replace_alu$40548.Y[7]      1 7.9ms
+                                     u_impl.inst_axi4_interconnect.m_axi_araddr_g[0][13]      2 7.9ms
+                                                          u_impl.mriscvcore_inst.rs2[18]      4 7.9ms
+                            $techmap118994$auto$abc9_ops.cc:1550:reintegrate$118929.A[1]      6 7.9ms
+                            $techmap119235$auto$abc9_ops.cc:1550:reintegrate$118769.A[0]      4 7.9ms
+                                                   u_impl.inst_completogpio.LWAddress[0]      5 7.9ms
+                                                                 u_impl.m_axi_araddr[35]      2 7.9ms
+                                          u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[7]      2 7.9ms
+                                            $auto$alumacc.cc:485:replace_alu$40506.Y[19]      1 7.8ms
+                                             $auto$alumacc.cc:485:replace_alu$40497.X[0]      4 7.8ms
+                                     $techmap119866$abc$118129$lut$aiger118128$4772.A[1]      5 7.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[47]      1 7.8ms
+                                     $techmap119444$abc$118129$lut$aiger118128$9735.A[3]     11 7.8ms
+                                     $techmap119521$abc$118129$lut$aiger118128$4674.A[2]      5 7.7ms
+                                             $auto$alumacc.cc:485:replace_alu$40473.Y[3]      1 7.7ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.Q1[0]      5 7.7ms
+                                                                 u_impl.m_axi_araddr[27]      2 7.7ms
+                            $techmap119032$auto$abc9_ops.cc:1550:reintegrate$118909.A[1]      6 7.7ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[55]      2 7.7ms
+                       $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[1]$d[6]      1 7.7ms
+                            $techmap119000$auto$abc9_ops.cc:1550:reintegrate$118925.A[1]      6 7.7ms
+                                     $techmap119462$abc$118129$lut$aiger118128$5557.A[0]      3 7.7ms
+                     $techmap119891$abc$118129$lut\u_impl.inst_completogpio.AWvalid.A[0]     10 7.7ms
+                                     $techmap119966$abc$118129$lut$aiger118128$5528.A[0]      5 7.6ms
+                                                          u_impl.mriscvcore_inst.rs2[29]      4 7.6ms
+                            $techmap119199$auto$abc9_ops.cc:1550:reintegrate$118787.A[0]      6 7.6ms
+                                                                 u_impl.m_axi_araddr[33]      3 7.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[10]      1 7.6ms
+                                             $auto$alumacc.cc:485:replace_alu$40557.Y[1]      1 7.5ms
+                      $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[1]$d[18]      1 7.5ms
+                                                          u_impl.mriscvcore_inst.inst[2]      5 7.5ms
+                                                         u_impl.mriscvcore_inst.code[11]      6 7.5ms
+                                                          u_impl.mriscvcore_inst.imm[26]      6 7.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[61]      1 7.5ms
+                                                                  u_impl.s_axi_wvalid[0]      1 7.5ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[21]      2 7.4ms
+                            $techmap119030$auto$abc9_ops.cc:1550:reintegrate$118910.A[1]      6 7.4ms
+                            $techmap120221$auto$abc9_ops.cc:1550:reintegrate$118298.A[2]      2 7.4ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[18]      1 7.4ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[31]      2 7.4ms
+                     $techmap119891$abc$118129$lut\u_impl.inst_completogpio.AWvalid.A[1]      8 7.4ms
+                                     $techmap120102$abc$118129$lut$aiger118128$9673.A[4]      1 7.4ms
+                                     $techmap119435$abc$118129$lut$aiger118128$4822.A[0]      2 7.4ms
+                                                                 u_impl.m_axi_araddr[34]      3 7.4ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[18]      2 7.4ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[30]      1 7.4ms
+                                                          u_impl.mriscvcore_inst.inst[9]      2 7.3ms
+                                                         u_impl.mriscvcore_inst.inst[22]      4 7.3ms
+                                                                 u_impl.m_axi_araddr[25]      2 7.3ms
+                                     $techmap119791$abc$118129$lut$aiger118128$5711.A[1]      4 7.3ms
+                                                     u_impl.inst_spi_axi_master.full[10]      2 7.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40497.Y[22]      1 7.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[22]      1 7.3ms
+                                                                  u_impl.m_axi_araddr[1]      5 7.3ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.Q1[3]      4 7.3ms
+                                             $auto$alumacc.cc:485:replace_alu$40506.Y[7]      1 7.3ms
+                            $techmap119273$auto$abc9_ops.cc:1550:reintegrate$118747.A[3]      5 7.3ms
+                                                                   u_impl.m_axi_rdata[8]      3 7.3ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[54]      2 7.2ms
+                                                           u_impl.mriscvcore_inst.pc[16]      4 7.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[59]      1 7.2ms
+                            $techmap121076$auto$abc9_ops.cc:1550:reintegrate$118494.A[1]      2 7.2ms
+                            $techmap119196$auto$abc9_ops.cc:1550:reintegrate$118789.A[2]      5 7.2ms
+                                             $auto$alumacc.cc:485:replace_alu$40497.Y[3]      1 7.2ms
+                            $techmap120150$auto$abc9_ops.cc:1550:reintegrate$118179.A[2]      3 7.2ms
+                                                           u_impl.mriscvcore_inst.rd[18]      2 7.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[46]      1 7.1ms
+                                     $techmap119610$abc$118129$lut$aiger118128$9033.A[1]      2 7.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[23]      1 7.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[50]      1 7.1ms
+                 $techmap120896$abc$118129$lut$auto$fsm_map.cc:170:map_fsm$39248[3].A[2]      6 7.1ms
+                                             $auto$alumacc.cc:485:replace_alu$40533.Y[2]      1 7.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[50]      1 7.1ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[30]      2 7.0ms
+                            $techmap119016$auto$abc9_ops.cc:1550:reintegrate$118917.A[1]      6 7.0ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[14]      2 7.0ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[19]      3 7.0ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[19]      3 7.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[51]      1 7.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[29]      1 7.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[19]      1 6.9ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[22]      6 6.9ms
+                            $techmap119584$auto$abc9_ops.cc:1550:reintegrate$118441.A[1]     10 6.9ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[32]      6 6.9ms
+                                     $techmap119787$abc$118129$lut$aiger118128$5707.A[2]      3 6.9ms
+                                                                  u_impl.m_axi_araddr[9]      3 6.9ms
+                            $techmap120205$auto$abc9_ops.cc:1550:reintegrate$118289.A[2]      6 6.8ms
+                            $techmap119194$auto$abc9_ops.cc:1550:reintegrate$118790.A[0]      4 6.8ms
+                                                    u_impl.inst_spi_axi_master.data_s[0]      1 6.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[24]      1 6.8ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[33]      2 6.8ms
+                                     $techmap119947$abc$118129$lut$aiger118128$5920.A[1]      3 6.8ms
+                                     $techmap119510$abc$118129$lut$aiger118128$4643.A[3]      3 6.8ms
+                                                          u_impl.mriscvcore_inst.rs2[22]      4 6.8ms
+                            $techmap119914$auto$abc9_ops.cc:1550:reintegrate$118396.A[1]      3 6.8ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[16]      4 6.8ms
+                                             $auto$alumacc.cc:485:replace_alu$40527.Y[2]      1 6.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[63]      1 6.8ms
+                            $techmap120449$auto$abc9_ops.cc:1550:reintegrate$118229.A[3]      2 6.7ms
+                            $techmap120756$auto$abc9_ops.cc:1550:reintegrate$118425.A[2]      4 6.7ms
+                                     $techmap120811$abc$118129$lut$aiger118128$5860.A[2]      8 6.7ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[26]      3 6.7ms
+                                                          u_impl.mriscvcore_inst.rs2[12]      6 6.7ms
+                            $techmap121095$auto$abc9_ops.cc:1550:reintegrate$118513.A[1]      2 6.7ms
+                                            $auto$alumacc.cc:485:replace_alu$40497.Y[29]      1 6.7ms
+                                                         u_impl.mriscvcore_inst.inst[27]      3 6.7ms
+                      $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[1]$d[19]      1 6.7ms
+                                                            u_impl.mriscvcore_inst.pc[9]      4 6.7ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[60]      2 6.7ms
+                                                      u_impl.inst_spi_axi_slave.transmit      3 6.7ms
+                                                                 u_impl.m_axi_araddr[40]      2 6.6ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[25]      9 6.6ms
+                                    $abc$118129$auto$opt_dff.cc:253:combine_resets$39922      3 6.6ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[25]      6 6.6ms
+                      $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[0]$d[22]      1 6.6ms
+                                             $auto$alumacc.cc:485:replace_alu$40557.Y[7]      1 6.6ms
+                                        u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[7]      2 6.6ms
+                                     $techmap119114$abc$118129$lut$aiger118128$7785.A[1]      2 6.6ms
+                                                                  u_impl.m_axi_rdata[31]      4 6.6ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[27]      6 6.6ms
+                                                            u_impl.mriscvcore_inst.pc[8]      4 6.6ms
+                                                          u_impl.mriscvcore_inst.rs2[16]      4 6.6ms
+                                             u_impl.mriscvcore_inst.ALU_inst.XOR_Alu[29]      1 6.6ms
+                            $techmap120431$auto$abc9_ops.cc:1550:reintegrate$118245.A[1]      3 6.6ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[40]      2 6.6ms
+                            $techmap120309$auto$abc9_ops.cc:1550:reintegrate$118354.A[1]      7 6.6ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.Q1[6]      3 6.6ms
+                                    $techmap120500$abc$118129$lut$aiger118128$11120.A[4]      1 6.5ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.Q1[5]      3 6.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[45]      1 6.5ms
+                                                        u_impl.inst_spi_axi_master.st[0]      7 6.5ms
+                                                           u_impl.mriscvcore_inst.rd[10]      2 6.5ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[51]      2 6.5ms
+                                                                                  sw0[4]      1 6.5ms
+                                                                 u_impl.m_axi_araddr[37]      2 6.5ms
+                                                   u_impl.mriscvcore_inst.ALU_inst.sl_ok      2 6.5ms
+                                                     u_impl.inst_spi_axi_master.full[33]      2 6.5ms
+                                                      u_impl.inst_spi_axi_master.full[8]      2 6.4ms
+                            $techmap120083$auto$abc9_ops.cc:1550:reintegrate$118140.A[2]      3 6.4ms
+                                     $techmap119557$abc$118129$lut$aiger118128$4374.A[0]      9 6.4ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[45]      1 6.4ms
+                                                           u_impl.mriscvcore_inst.rd[25]      2 6.4ms
+                            $techmap120104$auto$abc9_ops.cc:1550:reintegrate$118152.A[2]      1 6.4ms
+                            $techmap118996$auto$abc9_ops.cc:1550:reintegrate$118927.A[1]      5 6.4ms
+                                                          u_impl.mriscvcore_inst.imm[15]      6 6.4ms
+                            $techmap119229$auto$abc9_ops.cc:1550:reintegrate$118772.A[0]      4 6.4ms
+                                             $auto$alumacc.cc:485:replace_alu$40524.Y[4]      1 6.4ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[20]      3 6.4ms
+                                             $auto$alumacc.cc:485:replace_alu$40557.Y[2]      1 6.4ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SLL_Alu[23]      3 6.4ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[29]      6 6.4ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[59]      2 6.4ms
+                            $techmap120927$auto$abc9_ops.cc:1550:reintegrate$118380.A[1]      5 6.4ms
+                                    $abc$118129$auto$opt_dff.cc:253:combine_resets$39910      2 6.3ms
+                            $techmap119012$auto$abc9_ops.cc:1550:reintegrate$118919.A[1]      5 6.3ms
+                            $techmap119040$auto$abc9_ops.cc:1550:reintegrate$118905.A[1]      7 6.3ms
+                                     $techmap119524$abc$118129$lut$aiger118128$4685.A[5]      2 6.3ms
+                                                          u_impl.mriscvcore_inst.code[8]      8 6.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[32]      1 6.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[49]      1 6.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[53]      1 6.3ms
+        $techmap119807$abc$118129$lut$flatten\u_impl.\mriscvcore_inst.\MULT_inst.\u2.$procmux$35052.Y[5].A[4]      1 6.3ms
+          $techmap119794$abc$118129$lut\u_impl.mriscvcore_inst.UTILITY_inst.PC_N[5].A[1]      3 6.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[47]      1 6.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[37]      1 6.2ms
+                            $techmap119914$auto$abc9_ops.cc:1550:reintegrate$118396.A[3]      9 6.2ms
+                 $techmap119923$abc$118129$lut$auto$fsm_map.cc:170:map_fsm$39248[2].A[3]      2 6.2ms
+                                                        u_impl.inst_AXI_SP32B1024.DP[14]      2 6.2ms
+                                                      u_impl.inst_spi_axi_master.full[7]      2 6.2ms
+                                                          u_impl.mriscvcore_inst.rs2[31]      6 6.2ms
+                            $techmap119002$auto$abc9_ops.cc:1550:reintegrate$118924.A[1]      6 6.2ms
+                                                     u_impl.inst_spi_axi_master.full[54]      2 6.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[53]      1 6.2ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[18]      3 6.2ms
+                                                                 u_impl.m_axi_araddr[41]      2 6.2ms
+                                     $techmap119786$abc$118129$lut$aiger118128$5703.A[0]      3 6.1ms
+                            $techmap120673$auto$abc9_ops.cc:1550:reintegrate$118437.A[2]      5 6.1ms
+                     $abc$118129$flatten\u_impl.\inst_spi_axi_master.$procmux$38224_Y[4]      1 6.1ms
+                            $techmap120927$auto$abc9_ops.cc:1550:reintegrate$118380.A[2]      6 6.1ms
+                                                     u_impl.inst_spi_axi_master.full[42]      2 6.1ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[53]      2 6.1ms
+                                                     u_impl.inst_spi_axi_master.full[41]      2 6.1ms
+                            $techmap121045$auto$abc9_ops.cc:1550:reintegrate$118449.A[1]      2 6.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[54]      1 6.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40506.Y[12]      1 6.1ms
+                                                                 u_impl.m_axi_araddr[36]      2 6.1ms
+                            $techmap119014$auto$abc9_ops.cc:1550:reintegrate$118918.A[1]      6 6.1ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.S[18]      5 6.1ms
+                                                          u_impl.mriscvcore_inst.imm[25]      6 6.1ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[24]      3 6.1ms
+                                          u_impl.mriscvcore_inst.ALU_inst.OUT_Alu_rd[10]      1 6.0ms
+                                    $techmap120077$abc$118129$lut$aiger118128$10121.A[3]      1 6.0ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[17]      3 6.0ms
+                                                         u_impl.mriscvcore_inst.inst[28]      3 6.0ms
+                                                     u_impl.inst_spi_axi_master.full[49]      2 6.0ms
+                                                     u_impl.inst_spi_axi_master.full[32]      2 6.0ms
+                                             $auto$alumacc.cc:485:replace_alu$40524.Y[6]      1 6.0ms
+                                     $techmap119604$abc$118129$lut$aiger118128$9055.A[3]      6 6.0ms
+                                     $techmap119484$abc$118129$lut$aiger118128$4993.A[4]      3 6.0ms
+        $techmap119961$abc$118129$lut$flatten\u_impl.\mriscvcore_inst.\FSM_inst.$procmux$38074.Y[0].A[3]      3 6.0ms
+                                                         u_impl.mriscvcore_inst.inst[11]      2 6.0ms
+                                                          u_impl.mriscvcore_inst.code[2]      6 6.0ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[11]      4 6.0ms
+                                                          u_impl.mriscvcore_inst.imm[29]      6 6.0ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[15]      3 6.0ms
+                      $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[0]$d[17]      1 6.0ms
+                                    $techmap119999$abc$118129$lut$aiger118128$11337.A[0]      2 5.9ms
+                                     $techmap119842$abc$118129$lut$aiger118128$4764.A[3]      6 5.9ms
+                                     $techmap119500$abc$118129$lut$aiger118128$9074.A[1]      2 5.9ms
+                            $techmap119024$auto$abc9_ops.cc:1550:reintegrate$118913.A[1]      6 5.9ms
+                                     $techmap119833$abc$118129$lut$aiger118128$4733.A[0]      1 5.9ms
+                                                     u_impl.inst_spi_axi_master.full[50]      2 5.9ms
+                                                         u_impl.mriscvcore_inst.inst[30]      5 5.9ms
+                            $techmap119004$auto$abc9_ops.cc:1550:reintegrate$118923.A[1]      5 5.9ms
+                                                                 u_impl.m_axi_araddr[39]      2 5.9ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[19]      5 5.9ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[23]      3 5.9ms
+                                     $techmap119461$abc$118129$lut$aiger118128$5556.A[1]      4 5.9ms
+                                             u_impl.mriscvcore_inst.ALU_inst.XOR_Alu[12]      1 5.9ms
+                                        u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[4]      2 5.9ms
+                                                                  u_impl.m_axi_wdata[18]      1 5.9ms
+                                     $techmap119568$abc$118129$lut$aiger118128$4397.A[1]      3 5.9ms
+                            $techmap119270$auto$abc9_ops.cc:1550:reintegrate$118748.A[2]      4 5.9ms
+                                     $techmap119786$abc$118129$lut$aiger118128$5703.A[2]      3 5.8ms
+                                            $abc$118129$auto$rtlil.cc:2675:NotGate$61755      1 5.8ms
+                                  $abc$118129$auto$simplemap.cc:246:simplemap_eqne$41670      5 5.8ms
+                                                                 u_impl.m_axi_araddr[18]      2 5.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[57]      1 5.8ms
+                       $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[0]$d[1]      1 5.8ms
+                                              u_impl.mriscvcore_inst.ALU_inst.is_inst_nr      2 5.8ms
+                                                          u_impl.mriscvcore_inst.imm[20]      6 5.8ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[23]      2 5.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[40]      1 5.8ms
+                                     $techmap119849$abc$118129$lut$aiger118128$4754.A[0]      8 5.8ms
+                                                           $abc$118129$aiger118128$5150b      2 5.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40497.Y[23]      1 5.8ms
+                                                                  u_impl.m_axi_rdata[22]      3 5.8ms
+                            $techmap119318$auto$abc9_ops.cc:1550:reintegrate$118717.A[2]      4 5.8ms
+                                    $techmap120537$abc$118129$lut$not$aiger118128$1650.A      2 5.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[41]      1 5.8ms
+                            $techmap121029$auto$abc9_ops.cc:1550:reintegrate$118467.A[2]      1 5.8ms
+                                                       u_impl.mriscvcore_inst.W_R_mem[0]      3 5.8ms
+                            $techmap119201$auto$abc9_ops.cc:1550:reintegrate$118786.A[0]      4 5.8ms
+                            $techmap119020$auto$abc9_ops.cc:1550:reintegrate$118915.A[1]      5 5.8ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[38]      2 5.7ms
+                                     $techmap119480$abc$118129$lut$aiger118128$4558.A[0]      2 5.7ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[63]      2 5.7ms
+                                                           u_impl.mriscvcore_inst.pc[15]      4 5.7ms
+                                              u_impl.mriscvcore_inst.MULT_inst.u6.Q1[11]      4 5.7ms
+                                                           u_impl.inst_completogpio.W[1]      1 5.7ms
+                                                                 u_impl.m_axi_araddr[32]      3 5.7ms
+                                    $techmap119994$abc$118129$lut$aiger118128$11374.A[4]      1 5.7ms
+                                             $auto$alumacc.cc:485:replace_alu$40527.Y[9]      1 5.7ms
+                                     $techmap119831$abc$118129$lut$aiger118128$4726.A[3]      3 5.6ms
+                                                                 u_impl.m_axi_araddr[56]      1 5.6ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[61]      2 5.6ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[62]      2 5.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40506.Y[15]      1 5.6ms
+                                                         u_impl.mriscvcore_inst.inst[24]      3 5.6ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[63]      2 5.6ms
+                            $techmap121106$auto$abc9_ops.cc:1550:reintegrate$118524.A[1]      3 5.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40506.Y[25]      1 5.6ms
+                                     $techmap119619$abc$118129$lut$aiger118128$8911.A[3]      2 5.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40497.Y[15]      1 5.6ms
+                                                                 u_impl.m_axi_araddr[26]      2 5.6ms
+                                     $techmap119846$abc$118129$lut$aiger118128$4720.A[0]      4 5.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40506.Y[13]      1 5.6ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[60]      2 5.6ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[56]      2 5.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[33]      1 5.6ms
+                                                                 u_impl.m_axi_araddr[15]      2 5.6ms
+                                                           u_impl.mriscvcore_inst.rd[22]      2 5.5ms
+                     $abc$118129$flatten\u_impl.\inst_spi_axi_master.$procmux$38224_Y[7]      1 5.5ms
+                                                          u_impl.mriscvcore_inst.imm[31]      6 5.5ms
+                            $techmap120406$auto$abc9_ops.cc:1550:reintegrate$118260.A[1]      3 5.5ms
+                                                                  u_impl.m_axi_rdata[29]      4 5.5ms
+                                     $techmap119856$abc$118129$lut$aiger118128$4540.A[0]      3 5.5ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[12]      3 5.5ms
+                                                           $abc$118129$aiger118128$5231b      2 5.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[31]      1 5.5ms
+                                     $techmap119786$abc$118129$lut$aiger118128$5703.A[1]      3 5.5ms
+                                                     u_impl.inst_spi_axi_master.full[29]      2 5.5ms
+                                     $techmap119531$abc$118129$lut$aiger118128$4701.A[1]      4 5.5ms
+                                                 u_impl.mriscvcore_inst.MULT_inst.M1[14]      1 5.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[18]      1 5.4ms
+                                                                 u_impl.m_axi_araddr[44]      2 5.4ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.Q1[7]      3 5.4ms
+                                             $auto$alumacc.cc:485:replace_alu$40470.Y[2]      3 5.4ms
+                      $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[1]$d[26]      1 5.4ms
+                                     $techmap119822$abc$118129$lut$aiger118128$4543.A[3]      2 5.4ms
+                                                     u_impl.inst_spi_axi_master.full[51]      2 5.4ms
+                            $techmap120248$auto$abc9_ops.cc:1550:reintegrate$118312.A[5]      1 5.4ms
+                                              u_impl.mriscvcore_inst.MULT_inst.u6.Q1[10]      4 5.4ms
+                                    $techmap120016$abc$118129$lut$aiger118128$10849.A[5]      1 5.4ms
+                            $techmap121091$auto$abc9_ops.cc:1550:reintegrate$118509.A[2]      1 5.4ms
+                                     $techmap119545$abc$118129$lut$aiger118128$4349.A[1]      4 5.4ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[35]      7 5.4ms
+                                            u_impl.mriscvcore_inst.UTILITY_inst.TIME[10]      2 5.4ms
+                                                u_impl.mriscvcore_inst.FSM_inst.state[5]      4 5.4ms
+                                             $auto$alumacc.cc:485:replace_alu$40473.Y[4]      1 5.3ms
+                                                u_impl.mriscvcore_inst.FSM_inst.state[2]      4 5.3ms
+                            $techmap119034$auto$abc9_ops.cc:1550:reintegrate$118908.A[1]      6 5.3ms
+                                                           u_impl.mriscvcore_inst.rd[26]      2 5.3ms
+                            $techmap119251$auto$abc9_ops.cc:1550:reintegrate$118761.A[2]      4 5.3ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[25]      3 5.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[15]      1 5.3ms
+                                              u_impl.mriscvcore_inst.MULT_inst.u2.Q1[10]      3 5.3ms
+                                    $techmap120536$abc$118129$lut$not$aiger118128$1590.A      2 5.3ms
+                                              u_impl.mriscvcore_inst.ALU_inst.SUB_Alu[7]      1 5.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[58]      1 5.3ms
+                                                         u_impl.mriscvcore_inst.inst[25]      4 5.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40473.Y[14]      1 5.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[54]      1 5.3ms
+                            $techmap119044$auto$abc9_ops.cc:1550:reintegrate$118903.A[1]      6 5.3ms
+                                                           u_impl.mriscvcore_inst.pc[20]      4 5.3ms
+                            $techmap120888$auto$abc9_ops.cc:1550:reintegrate$118371.A[3]      1 5.3ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[23]      3 5.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[13]      1 5.2ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[42]      2 5.2ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[54]      2 5.2ms
+                                                    u_impl.inst_spi_axi_master.sclk_s[1]      4 5.2ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[12]      2 5.2ms
+                                     $techmap120862$abc$118129$lut$aiger118128$6216.A[3]      2 5.2ms
+                                              u_impl.inst_completogpio.maquina.state[10]      6 5.2ms
+                                     $techmap118982$abc$118129$lut$aiger118128$4956.A[5]      3 5.2ms
+                            $techmap119028$auto$abc9_ops.cc:1550:reintegrate$118911.A[1]      5 5.2ms
+                     $abc$118129$flatten\u_impl.\inst_spi_axi_master.$procmux$38224_Y[5]      1 5.2ms
+                                     $techmap119539$abc$118129$lut$aiger118128$4717.A[1]      2 5.2ms
+                                                   $abc$118129$ne$basys3_top.v:20$1104_Y     16 5.2ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[57]      2 5.2ms
+                                     $techmap119756$abc$118129$lut$aiger118128$5204.A[0]      2 5.2ms
+                                     $techmap119717$abc$118129$lut$aiger118128$7660.A[2]      2 5.2ms
+                                                   u_impl.inst_completogpio.LRAddress[1]      3 5.2ms
+                                     $techmap119867$abc$118129$lut$aiger118128$4778.A[4]      4 5.1ms
+                                     $techmap119459$abc$118129$lut$aiger118128$5564.A[1]      6 5.1ms
+                                                     u_impl.inst_spi_axi_master.full[13]      2 5.1ms
+                                                         u_impl.mriscvcore_inst.inst[16]      2 5.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[39]      1 5.1ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.S[28]      5 5.1ms
+                                                            $abc$118129$aiger118128$6106      1 5.1ms
+                                     $techmap119822$abc$118129$lut$aiger118128$4543.A[2]      2 5.1ms
+                                             $auto$alumacc.cc:485:replace_alu$40539.Y[3]      1 5.1ms
+                                     u_impl.inst_axi4_interconnect.m_axi_araddr_g[0][14]      3 5.1ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.S[33]      5 5.1ms
+                                                     u_impl.inst_spi_axi_master.full[47]      2 5.0ms
+                                                                 u_impl.m_axi_araddr[57]      1 5.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40497.Y[21]      1 5.0ms
+                                                     u_impl.inst_spi_axi_master.full[64]      3 5.0ms
+                                                      u_impl.inst_spi_axi_master.full[6]      2 5.0ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[28]      6 5.0ms
+                                                     u_impl.inst_spi_axi_master.full[28]      2 5.0ms
+                                                                 u_impl.m_axi_araddr[17]      2 5.0ms
+                                                                             scan_cnt[7]      1 5.0ms
+                            $techmap120275$auto$abc9_ops.cc:1550:reintegrate$118325.A[1]      5 5.0ms
+                                                           u_impl.mriscvcore_inst.pc[22]      4 5.0ms
+                                    $techmap120010$abc$118129$lut$aiger118128$10856.A[2]      2 5.0ms
+                                     $techmap119436$abc$118129$lut$aiger118128$5574.A[0]      3 5.0ms
+                                     $techmap119106$abc$118129$lut$aiger118128$7185.A[1]      2 5.0ms
+                                                         u_impl.mriscvcore_inst.inst[26]      4 5.0ms
+                      $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[1]$d[16]      1 5.0ms
+        $techmap120821$abc$118129$lut$flatten\u_impl.\mriscvcore_inst.\FSM_inst.$procmux$38041_Y.A[1]      2 5.0ms
+                            $techmap121076$auto$abc9_ops.cc:1550:reintegrate$118494.A[2]      3 5.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[16]      1 5.0ms
+                                                          u_impl.mriscvcore_inst.imm[22]      6 5.0ms
+                                                           u_impl.mriscvcore_inst.pc[29]      4 5.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[13]      1 5.0ms
+                            $techmap118998$auto$abc9_ops.cc:1550:reintegrate$118926.A[1]      5 5.0ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[25]      1 5.0ms
+                                     $techmap119108$abc$118129$lut$aiger118128$7191.A[1]      2 5.0ms
+                                                                  u_impl.m_axi_rdata[17]      4 4.9ms
+                                            $auto$alumacc.cc:485:replace_alu$40473.Y[15]      1 4.9ms
+                            $techmap120432$auto$abc9_ops.cc:1550:reintegrate$118244.A[2]      2 4.9ms
+                                     $techmap119710$abc$118129$lut$aiger118128$7744.A[4]      1 4.9ms
+                            $techmap119261$auto$abc9_ops.cc:1550:reintegrate$118754.A[0]      4 4.9ms
+                                     $techmap119079$abc$118129$lut$aiger118128$4832.A[1]      4 4.9ms
+                                                          u_impl.mriscvcore_inst.imm[28]      6 4.9ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[33]      1 4.9ms
+                                                                 u_impl.m_axi_araddr[42]      2 4.9ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[34]      1 4.9ms
+                                                          u_impl.mriscvcore_inst.code[6]      9 4.9ms
+                            $techmap119279$auto$abc9_ops.cc:1550:reintegrate$118745.A[3]      5 4.9ms
+                                                     u_impl.inst_spi_axi_master.full[20]      2 4.9ms
+                                                     u_impl.inst_spi_axi_master.full[37]      2 4.9ms
+                                                     u_impl.inst_spi_axi_master.full[46]      2 4.9ms
+                                            $auto$alumacc.cc:485:replace_alu$40506.Y[30]      1 4.9ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[50]      1 4.9ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[48]      2 4.9ms
+                               $abc$118129$auto$opt_dff.cc:219:make_patterns_logic$41152      2 4.9ms
+                                                     u_impl.inst_spi_axi_master.full[31]      2 4.9ms
+                            $techmap119148$auto$abc9_ops.cc:1550:reintegrate$118826.A[1]      2 4.9ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[61]      2 4.9ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[57]      1 4.9ms
+                                             $auto$alumacc.cc:485:replace_alu$40497.Y[9]      1 4.9ms
+                                                                 u_impl.m_axi_araddr[13]      2 4.9ms
+                                   u_impl.mriscvcore_inst.MEMORY_INTERFACE_inst.state[5]      2 4.9ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[26]      1 4.8ms
+                                                u_impl.mriscvcore_inst.MULT_inst.u6.S[9]      3 4.8ms
+                                                            $abc$118129$aiger118128$5846      1 4.8ms
+                            $techmap120449$auto$abc9_ops.cc:1550:reintegrate$118229.A[4]      2 4.8ms
+                                                           u_impl.mriscvcore_inst.pc[14]      4 4.8ms
+                                     $techmap119513$abc$118129$lut$aiger118128$4651.A[5]      2 4.8ms
+                                             $auto$alumacc.cc:485:replace_alu$40506.Y[9]      1 4.8ms
+                                                     u_impl.inst_spi_axi_master.full[55]      2 4.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[60]      1 4.8ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[22]      3 4.8ms
+                                             $auto$alumacc.cc:485:replace_alu$40473.Y[2]      1 4.8ms
+                                                                  u_impl.m_axi_rdata[20]      3 4.8ms
+                                            u_impl.inst_ADC_interface_AXI.state_write[0]      2 4.8ms
+                            $techmap119338$auto$abc9_ops.cc:1550:reintegrate$118697.A[5]      2 4.8ms
+                                                     u_impl.inst_spi_axi_master.full[62]      2 4.8ms
+                            $techmap119360$auto$abc9_ops.cc:1550:reintegrate$118677.A[2]      5 4.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40473.Y[11]      1 4.8ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.Q1[8]      4 4.8ms
+                            $techmap119036$auto$abc9_ops.cc:1550:reintegrate$118907.A[1]      5 4.8ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[34]      5 4.8ms
+                            $techmap120083$auto$abc9_ops.cc:1550:reintegrate$118140.A[1]      2 4.8ms
+                       $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[0]$d[5]      1 4.8ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[14]      1 4.8ms
+                                             $auto$alumacc.cc:485:replace_alu$40533.Y[4]      1 4.8ms
+                                                            $abc$118129$aiger118128$5837      1 4.7ms
+                            $techmap119186$auto$abc9_ops.cc:1550:reintegrate$118793.A[3]      8 4.7ms
+                                                            u_impl.inst_completogpio.vel      4 4.7ms
+                                                                  u_impl.m_axi_araddr[2]      5 4.7ms
+                                                                  u_impl.m_axi_araddr[7]      3 4.7ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[46]      2 4.7ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.Q1[0]      5 4.7ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.Q1[3]      3 4.7ms
+                            $techmap120978$auto$abc9_ops.cc:1550:reintegrate$118403.A[1]      1 4.7ms
+                                                            u_impl.mriscvcore_inst.pc[4]      4 4.7ms
+                                     $techmap119486$abc$118129$lut$aiger118128$4997.A[2]      2 4.7ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[35]      2 4.7ms
+                                                            $abc$118129$aiger118128$5799      1 4.7ms
+                            $techmap119259$auto$abc9_ops.cc:1550:reintegrate$118755.A[0]      5 4.7ms
+                                                     u_impl.inst_spi_axi_master.full[53]      2 4.6ms
+                                     $techmap120370$abc$118129$lut$aiger118128$9899.A[3]      2 4.6ms
+                            $techmap119192$auto$abc9_ops.cc:1550:reintegrate$118791.A[3]      5 4.6ms
+                                     u_impl.inst_axi4_interconnect.m_axi_araddr_g[0][15]      3 4.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40473.Y[10]      1 4.6ms
+                                                                  u_impl.m_axi_araddr[5]      3 4.6ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[59]      2 4.6ms
+                                                      u_impl.inst_spi_axi_master.full[3]      2 4.6ms
+                                     $techmap119791$abc$118129$lut$aiger118128$5711.A[2]      3 4.6ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[46]      2 4.6ms
+                                                                 u_impl.m_axi_araddr[43]      2 4.6ms
+                                     $techmap119565$abc$118129$lut$aiger118128$4415.A[0]      3 4.6ms
+                                                                 u_impl.m_axi_araddr[28]      2 4.6ms
+                                                          u_impl.mriscvcore_inst.inst[3]      3 4.6ms
+                                                            $abc$118129$aiger118128$6121      1 4.6ms
+                                     $techmap120787$abc$118129$lut$aiger118128$5793.A[2]      8 4.6ms
+                            $techmap121064$auto$abc9_ops.cc:1550:reintegrate$118482.A[1]      2 4.6ms
+                                    $techmap120010$abc$118129$lut$aiger118128$10856.A[0]      2 4.6ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[20]      3 4.6ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[18]      2 4.6ms
+                                     $techmap119544$abc$118129$lut$aiger118128$4348.A[1]      4 4.6ms
+                            $techmap120406$auto$abc9_ops.cc:1550:reintegrate$118260.A[0]      2 4.6ms
+                                                              u_impl.spi_axi_master_DATA      1 4.6ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[61]      1 4.6ms
+        $techmap120757$abc$118129$lut$auto$opt_dff.cc:219:make_patterns_logic$39775.A[1]      2 4.6ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.Q1[8]      3 4.6ms
+                                                           u_impl.mriscvcore_inst.rd[24]      2 4.6ms
+                                             $auto$alumacc.cc:485:replace_alu$40527.Y[3]      1 4.6ms
+                                              u_impl.mriscvcore_inst.MULT_inst.u6.Q1[14]      4 4.5ms
+                            $techmap121088$auto$abc9_ops.cc:1550:reintegrate$118506.A[1]      3 4.5ms
+                                     $techmap119564$abc$118129$lut$aiger118128$4414.A[0]      4 4.5ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[13]      2 4.5ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.Q1[5]      4 4.5ms
+           $techmap119948$abc$118129$lut$auto$pmux2shiftx.cc:711:execute$39989.Y[1].A[5]      4 4.5ms
+                            $techmap119010$auto$abc9_ops.cc:1550:reintegrate$118920.A[1]      6 4.5ms
+                                                     u_impl.inst_spi_axi_master.full[57]      2 4.5ms
+                                     $techmap119410$abc$118129$lut$aiger118128$5993.A[4]      2 4.5ms
+                                              u_impl.mriscvcore_inst.MULT_inst.u2.Q1[15]      3 4.5ms
+                            $techmap119022$auto$abc9_ops.cc:1550:reintegrate$118914.A[1]      5 4.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[46]      1 4.5ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[30]      4 4.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[62]      1 4.5ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[26]      2 4.5ms
+                                                     u_impl.inst_spi_axi_master.full[18]      2 4.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[27]      1 4.5ms
+                                              u_impl.mriscvcore_inst.ALU_inst.OR_Alu[21]      1 4.5ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[38]      1 4.5ms
+                                     $techmap120149$abc$118129$lut$aiger118128$9252.A[3]      2 4.5ms
+                                                u_impl.mriscvcore_inst.ALU_inst.BLTU_Alu      2 4.5ms
+                                     $techmap119477$abc$118129$lut$aiger118128$4557.A[4]      3 4.5ms
+                                                                  u_impl.m_axi_araddr[6]      3 4.5ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[37]      2 4.5ms
+                                                     u_impl.inst_spi_axi_master.ceb_s[2]      3 4.5ms
+                                              u_impl.mriscvcore_inst.MULT_inst.u2.Q1[14]      3 4.5ms
+                 $techmap119932$abc$118129$lut$auto$fsm_map.cc:170:map_fsm$39491[1].A[3]      3 4.5ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.S[21]      5 4.5ms
+                      $techmap120748$abc$118129$lut\u_impl.inst_completogpio.Rdata1.A[2]      1 4.5ms
+                                                                 u_impl.s_axi_arvalid[4]      1 4.5ms
+                                     $techmap119786$abc$118129$lut$aiger118128$5703.A[3]      3 4.5ms
+         $techmap120069$abc$118129$lut\u_impl.mriscvcore_inst.UTILITY_inst.PC_N[21].A[1]      3 4.4ms
+                                                   u_impl.inst_completogpio.LWAddress[2]      3 4.4ms
+                                                           u_impl.inst_completogpio.W[2]      1 4.4ms
+                                                              u_impl.AXI_SP32B1024_Q[16]      2 4.4ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[45]      1 4.4ms
+                                     $techmap119488$abc$118129$lut$aiger118128$9548.A[3]      2 4.4ms
+                                                     u_impl.inst_spi_axi_master.full[56]      2 4.4ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SLL_Alu[19]      3 4.4ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[59]      2 4.4ms
+                                                     u_impl.inst_AXI_SP32B1024.writting2      3 4.4ms
+                                                                  u_impl.m_axi_rdata[26]      4 4.4ms
+                                                                             por_cnt[12]      2 4.4ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.Q1[2]      4 4.4ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u2.S[20]      5 4.4ms
+                                     $techmap119851$abc$118129$lut$aiger118128$4783.A[0]      3 4.4ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.S[34]      6 4.4ms
+                                     $techmap120987$abc$118129$lut$aiger118128$5399.A[2]      3 4.4ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[62]      2 4.3ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[24]      2 4.3ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRA_Alu[15]      3 4.3ms
+                            $techmap119273$auto$abc9_ops.cc:1550:reintegrate$118747.A[2]      5 4.3ms
+                            $techmap119335$auto$abc9_ops.cc:1550:reintegrate$118700.A[5]      2 4.3ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[20]      2 4.3ms
+                                                            u_impl.mriscvcore_inst.pc[3]      4 4.3ms
+                                                         u_impl.inst_AXI_SP32B1024.DP[3]      2 4.3ms
+                                             $auto$alumacc.cc:485:replace_alu$40533.Y[3]      1 4.3ms
+                                                                  u_impl.m_axi_wdata[43]      1 4.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40557.Y[20]      1 4.3ms
+                                     $techmap119532$abc$118129$lut$aiger118128$4702.A[1]      2 4.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[31]      1 4.3ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[35]      2 4.3ms
+                            $techmap120185$auto$abc9_ops.cc:1550:reintegrate$118202.A[2]      3 4.3ms
+                                     $techmap119125$abc$118129$lut$aiger118128$8601.A[1]      2 4.3ms
+                                               u_impl.inst_completogpio.maquina.state[0]      4 4.3ms
+                            $techmap119285$auto$abc9_ops.cc:1550:reintegrate$118740.A[0]      4 4.3ms
+                                     $techmap119972$abc$118129$lut$aiger118128$4892.A[1]      5 4.3ms
+                                                                  u_impl.m_axi_wdata[60]      1 4.3ms
+                                                            u_impl.mriscvcore_inst.pc[5]      4 4.3ms
+                                             $auto$alumacc.cc:485:replace_alu$40548.Y[1]      1 4.3ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u6.Q1[9]      4 4.3ms
+                                     $techmap119094$abc$118129$lut$aiger118128$6423.A[1]      2 4.3ms
+                                            $auto$alumacc.cc:485:replace_alu$40527.Y[11]      1 4.3ms
+                                     $techmap119538$abc$118129$lut$aiger118128$4716.A[1]      4 4.3ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[16]      2 4.3ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[18]      3 4.3ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[32]      2 4.3ms
+                                     $techmap119885$abc$118129$lut$aiger118128$6884.A[3]      1 4.2ms
+                                                     u_impl.inst_spi_axi_master.ceb_s[0]      1 4.2ms
+                                     $techmap119096$abc$118129$lut$aiger118128$6429.A[1]      2 4.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[52]      1 4.2ms
+                            $techmap119323$auto$abc9_ops.cc:1550:reintegrate$118711.A[5]      2 4.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40524.Y[59]      1 4.2ms
+                                                          u_impl.mriscvcore_inst.code[5]      9 4.2ms
+                            $techmap120216$auto$abc9_ops.cc:1550:reintegrate$118293.A[1]      7 4.2ms
+                                                              u_impl.AXI_SP32B1024_Q[18]      2 4.2ms
+                                     $techmap119787$abc$118129$lut$aiger118128$5707.A[3]      3 4.2ms
+                                                               u_impl.AXI_SP32B1024_Q[1]      2 4.2ms
+                                    $techmap120520$abc$118129$lut$aiger118128$11221.A[3]      2 4.2ms
+                                               u_impl.mriscvcore_inst.MULT_inst.u4.Q1[9]      3 4.2ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[58]      2 4.2ms
+                                     $techmap119787$abc$118129$lut$aiger118128$5707.A[1]      3 4.2ms
+                                                                  u_impl.m_axi_wdata[34]      2 4.2ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[20]      2 4.2ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[56]      1 4.2ms
+                            $techmap120274$auto$abc9_ops.cc:1550:reintegrate$118324.A[1]      3 4.2ms
+                                                          u_impl.mriscvcore_inst.imm[17]      6 4.2ms
+                                         u_impl.mriscvcore_inst.UTILITY_inst.N_CYCLE[53]      2 4.2ms
+                            $techmap121030$auto$abc9_ops.cc:1550:reintegrate$118466.A[2]      1 4.2ms
+                                             $auto$alumacc.cc:485:replace_alu$40497.Y[8]      1 4.2ms
+                                                     u_impl.inst_spi_axi_master.full[27]      2 4.2ms
+                                                              $abc$118129$iopadmap$sw[1]      1 4.2ms
+                      $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[1]$d[25]      1 4.2ms
+                            $techmap120097$auto$abc9_ops.cc:1550:reintegrate$118150.A[1]      6 4.2ms
+                                     $techmap119102$abc$118129$lut$aiger118128$6946.A[1]      2 4.1ms
+                                               u_impl.inst_completogpio.maquina.state[8]      4 4.1ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[19]      2 4.1ms
+                                     $techmap119840$abc$118129$lut$aiger118128$4506.A[2]      2 4.1ms
+                                     $techmap119543$abc$118129$lut$aiger118128$4347.A[1]      3 4.1ms
+                                                               u_impl.AXI_SP32B1024_Q[4]      2 4.1ms
+                            $techmap120986$auto$abc9_ops.cc:1550:reintegrate$118413.A[2]      2 4.1ms
+                                    $techmap119994$abc$118129$lut$aiger118128$11374.A[2]      1 4.1ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SLL_Alu[20]      3 4.1ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[11]      2 4.1ms
+                                            $auto$alumacc.cc:485:replace_alu$40548.Y[11]      1 4.1ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[28]      4 4.1ms
+                            $techmap121271$auto$abc9_ops.cc:1550:reintegrate$118536.A[2]      3 4.1ms
+             $techmap119132$abc$118129$lut\u_impl.mriscvcore_inst.MULT_inst.ss1[31].A[2]      3 4.1ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SRL_Alu[26]      3 4.1ms
+                                               u_impl.inst_completogpio.maquina.state[7]      4 4.1ms
+                            $techmap120125$auto$abc9_ops.cc:1550:reintegrate$118164.A[0]      2 4.1ms
+                       $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[1]$d[5]      1 4.1ms
+                       $\u_impl.mriscvcore_inst.REG_FILE_inst.MEM_FILE.ram$rdreg[0]$d[0]      1 4.1ms
+                               $abc$118129$auto$opt_dff.cc:219:make_patterns_logic$39678      3 4.1ms
+                                        u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[4]      2 4.1ms
+                                       u_impl.mriscvcore_inst.UTILITY_inst.N_INSTRUC[61]      2 4.1ms
+                                     $techmap119851$abc$118129$lut$aiger118128$4783.A[2]      2 4.1ms
+                                             u_impl.mriscvcore_inst.ALU_inst.SLL_Alu[27]      3 4.1ms
+                                        u_impl.mriscvcore_inst.UTILITY_inst.REAL_TIME[8]      2 4.1ms
+                                               u_impl.mriscvcore_inst.MULT_inst.cont2[4]      2 4.1ms
+                                                                  u_impl.m_axi_wdata[39]      1 4.1ms
+                                                                  u_impl.m_axi_araddr[0]      5 4.1ms
+Info: Router2 time 17.91s
+Info: Running router1 to check that route is legal...
+
+Info: Routing..
+Info: Setting up routing queue.
+Info: Routing 0 arcs.
+Info:            |   (re-)routed arcs  |   delta    | remaining|       time spent     |
+Info:    IterCnt |  w/ripup   wo/ripup |  w/r  wo/r |      arcs| batch(sec) total(sec)|
+Info:          0 |        0          0 |    0     0 |         0|       0.28       0.28|
+Info: Routing complete.
+Info: Router1 time 0.28s
+Info: Checksum: 0x07d35d73
+
+Info: Critical path report for clock 'clk' (posedge -> posedge):
+Info: curr total
+Info:  0.1  0.1  Source $auto$ff.cc:266:slice$50478.Q
+Info:  1.8  1.9    Net u_impl.inst_axi4_interconnect.counter_wrequests budget 8.026000 ns (10,68) -> (10,56)
+Info:                Sink $abc$118129$lut$aiger118128$4498.A1
+Info:  0.1  2.0  Source $abc$118129$lut$aiger118128$4498.O6
+Info:  0.7  2.7    Net $techmap119484$abc$118129$lut$aiger118128$4993.A[4] budget 7.691000 ns (10,56) -> (10,56)
+Info:                Sink $abc$118129$lut$aiger118128$4500.A4
+Info:  0.1  2.8  Source $abc$118129$lut$aiger118128$4500.O6
+Info:  0.6  3.4    Net $techmap119841$abc$118129$lut$aiger118128$4532.A[2] budget 6.495000 ns (10,56) -> (10,58)
+Info:                Sink $abc$118129$lut$aiger118128$4532.A2
+Info:  0.2  3.6  Source $abc$118129$lut$aiger118128$4532.O5
+Info:  1.6  5.2    Net $techmap119842$abc$118129$lut$aiger118128$4764.A[3] budget 7.216000 ns (10,58) -> (10,82)
+Info:                Sink $abc$118129$lut$aiger118128$4764.A1
+Info:  0.2  5.3  Source $abc$118129$lut$aiger118128$4764.O5
+Info:  1.5  6.8    Net $techmap119851$abc$118129$lut$aiger118128$4783.A[2] budget 7.216000 ns (10,82) -> (10,67)
+Info:                Sink $abc$118129$lut$aiger118128$4771.A4
+Info:  0.1  7.0  Source $abc$118129$lut$aiger118128$4771.O6
+Info:  0.8  7.7    Net $techmap119861$abc$118129$lut$aiger118128$4774.A[1] budget 5.412000 ns (10,67) -> (10,76)
+Info:                Sink $abc$118129$lut$aiger118128$4774.A1
+Info:  0.1  7.9  Source $abc$118129$lut$aiger118128$4774.O5
+Info:  0.5  8.4    Net $techmap119867$abc$118129$lut$aiger118128$4778.A[3] budget 4.720000 ns (10,76) -> (10,76)
+Info:                Sink $abc$118129$lut$aiger118128$4778.A4
+Info:  0.1  8.5  Source $abc$118129$lut$aiger118128$4778.O5
+Info:  0.7  9.3    Net $techmap119975$abc$118129$lut\u_impl.mriscvcore_inst.REG_FILE_inst.rdw_rsrn.A[3] budget 5.335000 ns (10,76) -> (13,74)
+Info:                Sink $abc$118129$lut\u_impl.mriscvcore_inst.REG_FILE_inst.rdw_rsrn.A4
+Info:  0.1  9.4  Source $abc$118129$lut\u_impl.mriscvcore_inst.REG_FILE_inst.rdw_rsrn.O6
+Info:  1.9 11.3    Net u_impl.mriscvcore_inst.rdw_rsrn budget 5.808000 ns (13,74) -> (17,101)
+Info:                Sink $auto$abc9_ops.cc:1550:reintegrate$118433.A5
+Info:  0.1 11.4  Source $auto$abc9_ops.cc:1550:reintegrate$118433.O5
+Info:  2.2 13.7    Net u_impl.mriscvcore_inst.REG_FILE_inst.addr_a[0] budget 5.808000 ns (17,101) -> (17,82)
+Info:                Sink $abc$118129$lut$auto$rtlil.cc:2675:NotGate$60887.A5
+Info:  0.1 13.8  Source $abc$118129$lut$auto$rtlil.cc:2675:NotGate$60887.O5
+Info:  1.2 15.0    Net $abc$118129$auto$rtlil.cc:2675:NotGate$60887 budget 5.808000 ns (17,82) -> (17,102)
+Info:                Sink $auto$ff.cc:266:slice$43824.SR
+Info:  0.1 15.1  Setup $auto$ff.cc:266:slice$43824.SR
+Info: 1.5 ns logic, 13.5 ns routing
+
+Info: Critical path report for clock '$abc$118129$iopadmap$clk100' (posedge -> posedge):
+Info: curr total
+Info:  0.1  0.1  Source $auto$ff.cc:266:slice$44384.Q
+Info:  0.3  0.4    Net por_cnt[0] budget 11.303000 ns (10,125) -> (10,125)
+Info:                Sink $abc$118129$lut$not$aiger118128$68.A1
+Info:  0.1  0.5  Source $abc$118129$lut$not$aiger118128$68.O6
+Info:  0.4  0.9    Net $auto$alumacc.cc:485:replace_alu$40470.Y[0] budget 11.688000 ns (10,125) -> (10,124)
+Info:                Sink $auto$alumacc.cc:485:replace_alu$40470.Y[0]$LUT$2.A1
+Info:  0.1  1.1  Source $auto$alumacc.cc:485:replace_alu$40470.Y[0]$LUT$2.O6
+Info:  0.0  1.1    Net $auto$alumacc.cc:485:replace_alu$40470.Y[0]$legal$1 budget 11.303000 ns (10,124) -> (10,124)
+Info:                Sink $auto$alumacc.cc:485:replace_alu$40470.genblk1.slice[0].genblk1.carry4$split$muxcy0$PACKED_CARRY4$.S0
+Info:  0.5  1.6  Source $auto$alumacc.cc:485:replace_alu$40470.genblk1.slice[0].genblk1.carry4$split$muxcy0$PACKED_CARRY4$.O2
+Info:  0.7  2.3    Net $auto$alumacc.cc:485:replace_alu$40470.Y[2] budget 16.447001 ns (10,124) -> (10,121)
+Info:                Sink $auto$abc9_ops.cc:1550:reintegrate$118428.A1
+Info:  0.1  2.4  Source $auto$abc9_ops.cc:1550:reintegrate$118428.O6
+Info:  1.0  3.4    Net $abc$118129$ne$basys3_top.v:20$1104_Y budget 16.447001 ns (10,121) -> (10,124)
+Info:                Sink $auto$ff.cc:266:slice$44386.CE
+Info:  0.1  3.5  Setup $auto$ff.cc:266:slice$44386.CE
+Info: 1.1 ns logic, 2.4 ns routing
+
+Info: Critical path report for cross-domain path 'posedge $abc$118129$iopadmap$clk100' -> 'posedge clk':
+Info: curr total
+Info:  0.1  0.1  Source $auto$ff.cc:266:slice$41564.Q
+Info:  0.4  0.5    Net por_n budget 6.341000 ns (10,121) -> (10,120)
+Info:                Sink $auto$abc9_ops.cc:1550:reintegrate$118935.A2
+Info:  0.1  0.7  Source $auto$abc9_ops.cc:1550:reintegrate$118935.O6
+Info:  2.7  3.3    Net $techmap120986$auto$abc9_ops.cc:1550:reintegrate$118413.A[0] budget 6.803000 ns (10,120) -> (13,85)
+Info:                Sink $abc$118129$lut$aiger118128$4701.A1
+Info:  0.1  3.4  Source $abc$118129$lut$aiger118128$4701.O6
+Info:  0.3  3.7    Net $techmap119532$abc$118129$lut$aiger118128$4702.A[1] budget 4.570000 ns (13,85) -> (13,85)
+Info:                Sink $abc$118129$lut$aiger118128$4702.A3
+Info:  0.2  3.9  Source $abc$118129$lut$aiger118128$4702.O5
+Info:  0.8  4.7    Net $techmap119535$abc$118129$lut$aiger118128$4710.A[3] budget 5.412000 ns (13,85) -> (13,79)
+Info:                Sink $abc$118129$lut$aiger118128$4710.A4
+Info:  0.1  4.8  Source $abc$118129$lut$aiger118128$4710.O6
+Info:  0.6  5.4    Net $techmap119538$abc$118129$lut$aiger118128$4716.A[1] budget 5.335000 ns (13,79) -> (10,81)
+Info:                Sink $abc$118129$lut$aiger118128$4716.A2
+Info:  0.1  5.5  Source $abc$118129$lut$aiger118128$4716.O6
+Info:  0.8  6.3    Net $techmap119539$abc$118129$lut$aiger118128$4717.A[1] budget 5.412000 ns (10,81) -> (10,86)
+Info:                Sink $abc$118129$lut$aiger118128$4717.A1
+Info:  0.1  6.5  Source $abc$118129$lut$aiger118128$4717.O5
+Info:  0.6  7.0    Net $techmap119540$abc$118129$lut$aiger118128$4719.A[2] budget 5.200000 ns (10,86) -> (14,86)
+Info:                Sink $abc$118129$lut$aiger118128$4719.A3
+Info:  0.1  7.1  Source $abc$118129$lut$aiger118128$4719.O6
+Info:  0.8  8.0    Net $techmap120090$auto$abc9_ops.cc:1550:reintegrate$118142.A[2] budget 5.412000 ns (14,86) -> (13,74)
+Info:                Sink $abc$118129$lut\u_impl.mriscvcore_inst.REG_FILE_inst.rdw_rsrn.A6
+Info:  0.1  8.1  Source $abc$118129$lut\u_impl.mriscvcore_inst.REG_FILE_inst.rdw_rsrn.O6
+Info:  1.9 10.0    Net u_impl.mriscvcore_inst.rdw_rsrn budget 5.808000 ns (13,74) -> (17,101)
+Info:                Sink $auto$abc9_ops.cc:1550:reintegrate$118433.A5
+Info:  0.1 10.2  Source $auto$abc9_ops.cc:1550:reintegrate$118433.O5
+Info:  2.2 12.4    Net u_impl.mriscvcore_inst.REG_FILE_inst.addr_a[0] budget 5.808000 ns (17,101) -> (17,82)
+Info:                Sink $abc$118129$lut$auto$rtlil.cc:2675:NotGate$60887.A5
+Info:  0.1 12.5  Source $abc$118129$lut$auto$rtlil.cc:2675:NotGate$60887.O5
+Info:  1.2 13.7    Net $abc$118129$auto$rtlil.cc:2675:NotGate$60887 budget 5.808000 ns (17,82) -> (17,102)
+Info:                Sink $auto$ff.cc:266:slice$43824.SR
+Info:  0.1 13.8  Setup $auto$ff.cc:266:slice$43824.SR
+Info: 1.5 ns logic, 12.3 ns routing
+
+Info: Max frequency for clock                         'clk': 66.37 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock '$abc$118129$iopadmap$clk100': 285.06 MHz (PASS at 12.00 MHz)
+
+Info: Max delay posedge $abc$118129$iopadmap$clk100 -> posedge clk: 13.78 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 7 endpoint(s)
+Info:          + represents [1,7) endpoint(s)
+Info: [ 68266,  68991) |*****+
+Info: [ 68991,  69716) |****+
+Info: [ 69716,  70441) |*********+
+Info: [ 70441,  71166) |*******+
+Info: [ 71166,  71891) |*********+
+Info: [ 71891,  72616) |********+
+Info: [ 72616,  73341) |*******+
+Info: [ 73341,  74066) |******+
+Info: [ 74066,  74791) |********+
+Info: [ 74791,  75516) |******************+
+Info: [ 75516,  76241) |*************************+
+Info: [ 76241,  76966) |********************************************************+
+Info: [ 76966,  77691) |************************************************************ 
+Info: [ 77691,  78416) |***********************************+
+Info: [ 78416,  79141) |**************************** 
+Info: [ 79141,  79866) |****************************************+
+Info: [ 79866,  80591) |******************************************************+
+Info: [ 80591,  81316) |*****************************************+
+Info: [ 81316,  82041) |***********+
+Info: [ 82041,  82766) |*******************************+
+Info: Running post-routing legalisation...

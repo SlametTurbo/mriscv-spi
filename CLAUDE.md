@@ -6,6 +6,27 @@ Proyek skripsi S1. Semua penjelasan dan komentar kode dalam Bahasa Indonesia.
 
 ---
 
+## Struktur repo (rapikan 2026-10-01)
+
+```
+rtl/            basys3_top.v (top tunggal), SP32B1024.v, basys3_spi.xdc, mriscv/ (RTL upstream: mriscv_axi, mriscvcore, + tb)
+firmware/
+  include/      mriscv.h (HAL), ssd1306.h, font5x7_data.h
+  startup/      crt0.S, link_c.ld
+  apps/         program pakai: ledshow, switch_led, sevensegment, encoder_*, oled_*, uart_hello/echo, breathe, main, ...
+  tests/        uji regresi: mul_test, uart_stress, gpio_bank_test
+  probes/       probe diagnosis lama: uart_probe*, gpio_probe* (riwayat debugging UART)
+tools/          cheetah_mriscv.py (+ cheetah_py.py, cheetah.so, cheetah_loopback.py) - uploader SPI
+results/        logs/ (synth_*.txt, benchmark, seed summary), seedsweep/ (log + skrip sweep seed)
+docs/           CLOCK_UPGRADE.md
+bitstreams/     .bit yang disimpan
+build/fw/       hasil compile firmware (.elf/.bin/.dump, di-gitignore)
+Makefile, openXC7.mk, install.sh, README.md, CLAUDE.md  (root)
+```
+- `make build/prog FW=<nama>` mencari `<nama>.c` otomatis di `firmware/*/` (tidak perlu path). Output ke `build/fw/`.
+- `make synth XDC=basys3_spi.xdc` masih jalan (Makefile mencari juga di `rtl/`). Artefak sintesis (`basys.*`) tetap di root.
+- Folder `oled-with-encoder/` dihapus (Makefile + top + XDC terpisahnya sudah diganti top tunggal).
+
 ## Perintah build
 
 ```bash
@@ -66,10 +87,22 @@ Dibaca terbalik (slave 0 = elemen terakhir):
 | 3 | GPIO | `0x4010`-`0x401F` | byte addr = `0x10040 + i*4` (lama: `0x1040 + i*4`, sebelum relokasi) |
 | 4 | SPI slave | `0x04000000` | output `sc`/`ss`/`sd` menggantung |
 | 5 | UART TX | `0x4020` | byte addr `0x10080`. TX-only, 115200 8N1 fixed. Lihat "UART hardware" di bawah |
+| 6 | UART RX | `0x4021` | byte addr `0x10084`. RX-only, 115200 8N1 fixed. Lihat "UART RX" di bawah |
+| 7 | GPIO bank 2 | `0x4030`-`0x403F` | byte addr = `0x100C0 + i*4`. Encoder (baca pin 0=CLK, 1=DT) + OLED I2C (tulis pin 0=SCL, 1=SDA, open-drain di top). Lihat "Top tunggal" di bawah |
+
+### Top tunggal (2026-10-01) — satu RTL untuk semua firmware
+
+`rtl/basys3_top.v` sekarang mencakup switch, LED, 7-segment, UART, encoder, OLED (dulu `oled-with-encoder/basys3_top.v` (sudah dihapus) terpisah, sudah DIHAPUS; Makefile folder itu memakai top + `rtl/basys3_spi.xdc` parent). `impl_axi` punya 8 slave (`slaves=8`).
+- **Bank 1** (byte `0x10040+i*4`): `pindata`=switch, `datanw`→LED+7-seg. **Bank 2** (byte `0x100C0+i*4`): encoder + OLED. Pin bank 1 tidak berbagi dengan encoder/OLED, jadi tidak ada konflik indeks.
+- HAL: `gpio2_pin()`/`gpio2_rd()`, `GPIO2_ENC_CLK/DT`, `GPIO2_OLED_SCL/SDA` di `firmware/include/mriscv.h`. Firmware encoder/OLED (`firmware/include/ssd1306.h`, `encoder_oled.c`, `oled_test.c`, `encoder_demo.c`, `encoder_7seg.c`) sudah pakai bank 2. **Firmware lama yang baca `gpio_rd(0/1)` sebagai encoder harus diganti `gpio2_rd`.**
+- XDC: `oled_scl`/`oled_sda`/`enc_clk`/`enc_dt` pakai `PULLUP true`; `enc_sw` tetap TIDAK disambung.
+- Verifikasi simulasi: `impl_axi/basys3_top_gpiobank_tb.v` + `gpio_bank_test.c` → PASS (LED=switch, SCL=DT, SDA=CLK, trap=0). **Belum diuji di board** (OLED + encoder fisik).
+- Seed P&R terkunci `PNR_SEED ?= 13` di Makefile (sweep 20 seed, `seed_summary_unified.md`): 66.28 MHz (best), mean 60.16, min 55.74, semua PASS di 50 MHz. Ubah RTL → sweep ulang. Utilisasi seed 13: 4053 LUT (6%), 1536 FF (2%), 8 RAMB36 (10%). Bitstream: `bitstreams/basys_50mhz_unified_seed13.bit`.
+- Koreksi: clock core SUDAH lewat BUFG (Yosys menyisipkan otomatis di `divcnt`), bukan routing fabric biasa.
 
 ### Bus: AXI, bukan APB
 
-Proyek ini pakai jalur **AXI4-Lite-style** (`mriscv/mriscv_axi/*` — `impl_axi`, `axi4_interconnect`, `AXI_SP32B1024`, `spi_axi_master/slave`, DAC/ADC/GPIO AXI). Makefile hanya include folder ini (`Makefile:44-52`), top module instansiasi `impl_axi` (`basys3_top.v:40`).
+Proyek ini pakai jalur **AXI4-Lite-style** (`rtl/mriscv/mriscv_axi/*` — `impl_axi`, `axi4_interconnect`, `AXI_SP32B1024`, `spi_axi_master/slave`, DAC/ADC/GPIO AXI). Makefile hanya include folder ini (`Makefile:44-52`), top module instansiasi `impl_axi` (`basys3_top.v:40`).
 
 Upstream `onchipuis/mriscv` juga punya varian **APB** di `mriscv/mriscv_apb/` (`impl_axi_apb.v`, `gpioAPB.v`, `ADC/DAC_interface_APB.v`) — **tidak dipakai sama sekali** di proyek ini, tidak direferensikan Makefile/XDC/top module manapun. Jangan bingung kalau grep nemu file APB itu di repo.
 
@@ -78,8 +111,8 @@ Upstream `onchipuis/mriscv` juga punya varian **APB** di `mriscv/mriscv_apb/` (`
 GPIO = 1 slave AXI generik (`completogpio`, slave index 3 → word addr `0x4010`-`0x401F`, byte `0x10040+i*4`). Internal: `macstate2` (FSM handshake AXI) → `latchW`×2 (latch alamat pin 0-7) → `decodificador`×2 (decode ke one-hot 8-bit) → `flipsdataw`×8 (tulis: `Wdata[1:0]` → `datanw[i]`+`DSE[i]`) / baca langsung mux `pindata[LRAddress]` → `Rdata[0]`. `Tx`/`Rx` (dari `flipflopRS`) ada di modul tapi **dangling di semua top module yang ada** — abaikan.
 
 Tiap pin GPIO = 2 sinyal fisik terpisah berbagi 1 indeks: `pindata[7:0]` (input ke core) dan `datanw[7:0]` (output dari core). Makna tiap bit ditentukan bebas oleh top module, bukan hardcoded di `completogpio`:
-- `basys3_top.v`: `pindata` = switch (sync 2-FF), `datanw` → LED + 7-segment 2-digit.
-- `oled-with-encoder/basys3_top.v`: `pindata[1:0]` = encoder CLK/DT, `datanw[0:1]` → OLED SCL/SDA lewat tri-state open-drain (`gdat[i] ? 1'bz : 1'b0`) yang dibuat di top module, bukan di `completogpio`.
+- `rtl/basys3_top.v`: `pindata` = switch (sync 2-FF), `datanw` → LED + 7-segment 2-digit.
+- `oled-with-encoder/basys3_top.v` (sudah dihapus): `pindata[1:0]` = encoder CLK/DT, `datanw[0:1]` → OLED SCL/SDA lewat tri-state open-drain (`gdat[i] ? 1'bz : 1'b0`) yang dibuat di top module, bukan di `completogpio`.
 
 ### Dua AXI master: `mriscvcore` vs `spi_axi_master`
 
@@ -89,28 +122,37 @@ Tiap pin GPIO = 2 sinyal fisik terpisah berbagi 1 indeks: `pindata[7:0]` (input 
 
 ~~Catatan kecil: `en_rrequests`/`en_wrequests` ditandai `TODO: NOT ASSIGNED ALREADY` di deklarasi wire-nya~~ **KOREKSI (2026-09-28): ini SALAH BACA sebelumnya** — komentar TODO itu cuma di baris deklarasi (`axi4_interconnect.v:116-117`), tapi keduanya BENAR di-assign lebih jauh di bawah (`axi4_interconnect.v:344-345`: `assign en_rrequests = ~rtrans & ~is_rrequests; assign en_wrequests = ~wtrans & ~is_wrequests;`). Counter round-robin memang digated dengan benar (cuma maju kalau tidak ada transaksi pending). Jangan percaya kesimpulan dari grep sepotong tanpa baca file penuh — pelajaran ini sendiri jadi contoh baru untuk poin "verifikasi sebelum klaim" di bagian bawah.
 
+### UART RX (2026-09-30) — SELESAI & JALAN DI BOARD
+
+Modul `rtl/mriscv/mriscv_axi/UART_RX/uart_rx.v`, slave index 6 (`slaves=7`), word `0x4021` / byte `0x10084`, reset `BUS_RST`. Pin `uart_rxd` → **B18** (`rtl/basys3_spi.xdc`; FTDI TX → FPGA, kabel USB-JTAG yang sama dengan TX). `oled-with-encoder/basys3_top.v` (sudah dihapus) tie RXD ke `1'b1`.
+- **BACA = pop:** `bit[7:0]`=byte, `bit8`=valid, `bit9`=overrun, `bit10`=frame error. Baca menghapus flag. Tulis diterima & diabaikan. Holding register cuma **1 byte** (tanpa FIFO) — firmware yang delay lama kehilangan byte (overrun di-set).
+- Sinkronizer 2-FF, sampel di tengah bit, glitch < ½ bit diabaikan. `CLK_HZ` di instansiasi WAJIB ikut clock core (sama seperti TX).
+- HAL: `uart_getc_nb()` (return -1 kalau kosong), `uart_getc()` (blocking), `UART_RXR` di `firmware/include/mriscv.h`. Contoh: `uart_echo.c`.
+- **Terverifikasi simulasi:** `UART_RX/uart_rx_tb.v` PASS (valid/pop, overrun, framing error, glitch, back-to-back); `impl_axi/impl_axi_uartrx_tb.v` (SoC penuh + firmware `uart_echo`) → banner, echo "Hi", statistik `ovr=0 ferr=0`, `trap=0`. Elaborate kedua top module bersih.
+- **Terverifikasi di board (2026-09-30):** `uart_echo.c` jalan — karakter yang diketik di terminal serial (115200) kembali sebagai echo. Fmax/utilisasi bitstream ini belum dicatat di sini; catat dari `synth_log.txt` (angka Fmax kedua) kalau dipakai untuk bab hasil.
+
 ### UART hardware (TX-only) — SELESAI & JALAN DI HARDWARE
 
 > **✅ ROOT CAUSE TERBUKTI (2026-09-28, diuji langsung di board) — KOREKSI atas diagnosis lama di bawah.**
-> Hang "`uart_puts()` >3 karakter" / "ambang iterasi loop 3 vs 4" **BUKAN bug hardware** (bukan `REG_FILE.v`, bukan counter `axi4_interconnect`, bukan timing). Penyebabnya **bug linker script `link_c.ld`**: `. = ALIGN(4);` ditaruh DI LUAR section `.bss`, sehingga ld menaruh `.bss` di alamat ganjil setiap kali panjang `.rodata` bukan kelipatan 4 (mis. `"0123\0"` = 5 byte → `__bss_start = 0x105`). Lalu `crt0.S` menjalankan `sw zero, 0(0x105)` = **store misaligned** → `FSM.v` `err` → `S4_trap` **sebelum `main()` sempat jalan** (makanya "langsung hang", tanpa output sama sekali). `"X\r\n\0"` = 4 byte kebetulan ter-align, makanya "3 karakter aman".
-> - **Fix:** `.bss : ALIGN(4) {` di `link_c.ld`.
+> Hang "`uart_puts()` >3 karakter" / "ambang iterasi loop 3 vs 4" **BUKAN bug hardware** (bukan `REG_FILE.v`, bukan counter `axi4_interconnect`, bukan timing). Penyebabnya **bug linker script `firmware/startup/link_c.ld`**: `. = ALIGN(4);` ditaruh DI LUAR section `.bss`, sehingga ld menaruh `.bss` di alamat ganjil setiap kali panjang `.rodata` bukan kelipatan 4 (mis. `"0123\0"` = 5 byte → `__bss_start = 0x105`). Lalu `firmware/startup/crt0.S` menjalankan `sw zero, 0(0x105)` = **store misaligned** → `FSM.v` `err` → `S4_trap` **sebelum `main()` sempat jalan** (makanya "langsung hang", tanpa output sama sekali). `"X\r\n\0"` = 4 byte kebetulan ter-align, makanya "3 karakter aman".
+> - **Fix:** `.bss : ALIGN(4) {` di `firmware/startup/link_c.ld`.
 > - **Bukti sebab-akibat:** `uart_probe6_4c.c` (kode instruksi byte-identik dgn `uart_probe6.c`, cuma string `"0123"`) → linker lama: hang tanpa output, baik di 50 MHz MAUPUN 25 MHz; linker baru: jalan normal di 50 MHz ("0123" terus berulang).
 > - **Firmware yang `.bss`-nya misaligned dgn linker lama:** `uart_probe3`, `uart_probe4`, `gpio_probe`, `gpio_probe2`, `uart_probe6_4c` — **persis** daftar yang dulu dicatat "hang" di poin 3/6/7/10 di bawah. Yang dicatat aman (`uart_probe`, `uart_probe2`, `uart_probe6`) semuanya ter-align.
 > - **Teori `jal`/`ret` (poin 8) juga tidak didukung data:** `uart_probe7.c` sengaja memuat semua pola "berbahaya" (fungsi `noinline` bertingkat → `jal`/`ret` + simpan/muat `ra` di stack, `lbu` string runtime 27 karakter, polling `uart_busy()`) → **jalan normal di 50 MHz dan 25 MHz**. Binary `uart_hello.c` versi lama yang dulu hang di poin 8 sudah tidak ada, jadi penyebab persisnya tidak bisa diverifikasi ulang — kemungkinan besar kelas bug yang sama (alignment) atau efek bus macet di bawah.
-> - **HAL sudah dibersihkan (task 2e, 2026-09-28):** `mriscv.h` sekarang pakai pola biasa — `uart_busy()`/`uart_putc()` `static inline` biasa (tanpa `always_inline`), `uart_puts(s)` = `while (*s) uart_putc(*s++);` (tanpa buffer/delay, tanpa batas panjang). `uart_hello.c` pakai `uart_puts("...")` (214 byte, dulu ±600). **Terverifikasi di board:** `uart_stress.c` (string runtime 58 karakter + counter hex, `jal`/`ret` sungguhan, tanpa delay) → 3202 baris dalam 20 detik (~10,5 KB/s, mendekati batas 115200 baud), **0 baris rusak, 0 loncatan counter**. Pakai `uart_stress.c` sebagai uji regresi UART/core kalau RTL diubah.
+> - **HAL sudah dibersihkan (task 2e, 2026-09-28):** `firmware/include/mriscv.h` sekarang pakai pola biasa — `uart_busy()`/`uart_putc()` `static inline` biasa (tanpa `always_inline`), `uart_puts(s)` = `while (*s) uart_putc(*s++);` (tanpa buffer/delay, tanpa batas panjang). `uart_hello.c` pakai `uart_puts("...")` (214 byte, dulu ±600). **Terverifikasi di board:** `uart_stress.c` (string runtime 58 karakter + counter hex, `jal`/`ret` sungguhan, tanpa delay) → 3202 baris dalam 20 detik (~10,5 KB/s, mendekati batas 115200 baud), **0 baris rusak, 0 loncatan counter**. Pakai `uart_stress.c` sebagai uji regresi UART/core kalau RTL diubah.
 > - **Temuan terkait — bus macet setelah trap (✅ DIPERBAIKI 2026-09-28, task 2b):** dulu, kalau CPU trap di tengah transaksi tulis, **semua upload SPI berikutnya gagal diam-diam** sampai reset penuh (`make flash` ulang / `btnC`). Sebab: `axi4_interconnect` hanya di-reset oleh `RST`, bukan `PICORV_RST`, jadi `wtrans`/round-robin bisa terkunci ke master 0 (CPU yang sedang di-reset tidak pernah assert `Bready`). Fix: `BUS_RST` di `impl_axi.v` (lihat "JANGAN DIRUSAK" #8). Terverifikasi di simulasi (`impl_axi_busrst_tb.v`: tanpa fix upload kedua gagal, dengan fix PASS) DAN di board (firmware trap → upload `uart_probe7` tanpa flash ulang → teks muncul berulang). Catatan: simulasi behavioral ternyata BISA mereproduksi bug ini — klaim lama "hang tidak bisa direproduksi di simulasi" lebih karena bug-nya dicari di tempat yang salah.
 > - **Pelajaran debugging:** firmware yang hang TANPA output sama sekali → cek dulu `riscv64-unknown-elf-nm <fw>.elf | grep __bss` (alignment) dan akses memori misaligned/di luar peta, SEBELUM curiga RTL/timing. Dan tanpa LED `trap`, "trap" dan "bus macet" terlihat identik — sambungkan `trap` ke LED (Task Prioritas 1).
 >
 > Catatan poin 1–10 di bawah dipertahankan sebagai **riwayat**; bagian diagnosis/kesimpulan di dalamnya (terutama "KESIMPULAN AKHIR", "SOLUSI", "KEPUTUSAN AKHIR", dan saran investigasi `REG_FILE`/counter interconnect) **sudah terbantah** oleh temuan di atas. Fakta yang TETAP berlaku: bug parameter `.masters/.slaves` (poin 1), redesain non-blocking + race fix `start_pulse` (poin 5), sifat seed nextpnr (poin 4), baud 115200 (poin 9).
 
-Implementasi 2026-09-28. Slave AXI baru (`mriscv/mriscv_axi/UART_TX/uart_tx.v`), slave index 5, word addr `0x4020` (byte `0x10080`), mask exact-match (`32'h00000000`). Baud rate **fixed 9600 8N1**, dihitung dari parameter `CLK_HZ=50_000_000` yang di-pass eksplisit saat instansiasi di `impl_axi.v` — **kalau clock core diubah, parameter ini WAJIB ikut disesuaikan**.
+Implementasi 2026-09-28. Slave AXI baru (`rtl/mriscv/mriscv_axi/UART_TX/uart_tx.v`), slave index 5, word addr `0x4020` (byte `0x10080`), mask exact-match (`32'h00000000`). Baud rate **fixed 9600 8N1**, dihitung dari parameter `CLK_HZ=50_000_000` yang di-pass eksplisit saat instansiasi di `impl_axi.v` — **kalau clock core diubah, parameter ini WAJIB ikut disesuaikan**.
 
 **Semantik register (byte `0x10080`) — versi TERKINI (non-blocking):**
 - **Tulis** byte apapun → kirim 1 byte UART. Transaksi AXI **SELALU cepat** (beberapa siklus, non-blocking, persis seperti GPIO/DAC/ADC) — kalau transmitter masih sibuk, byte yang ditulis **diam-diam diabaikan** oleh hardware.
 - **Baca** → bit0 = busy (1 = sedang transmit).
-- HAL (`mriscv.h`): `uart_putc()` polling `uart_busy()` di SOFTWARE dulu sebelum menulis (supaya byte tidak pernah hilang), `uart_puts()` dibungkus `do-while` (backward-branch saja).
+- HAL (`firmware/include/mriscv.h`): `uart_putc()` polling `uart_busy()` di SOFTWARE dulu sebelum menulis (supaya byte tidak pernah hilang), `uart_puts()` dibungkus `do-while` (backward-branch saja).
 
-**Pin fisik:** `uart_txd` → `A18` (`basys3_spi.xdc`), kabel yang SAMA dengan JTAG programming (channel B FTDI FT2232HQ onboard Basys3 → virtual COM port). ⚠️ Pin ini belum diverifikasi ke reference manual Basys3 asli.
+**Pin fisik:** `uart_txd` → `A18` (`rtl/basys3_spi.xdc`), kabel yang SAMA dengan JTAG programming (channel B FTDI FT2232HQ onboard Basys3 → virtual COM port). ⚠️ Pin ini belum diverifikasi ke reference manual Basys3 asli.
 
 **Perjalanan debugging (2026-09-28, penting buat siapapun lanjutin ini):**
 
@@ -136,17 +178,17 @@ Implementasi 2026-09-28. Slave AXI baru (`mriscv/mriscv_axi/UART_TX/uart_tx.v`),
 
 7. **Workaround `uart_puts()` tanpa polling** (baca `*s` + tulis UART + `delay()` tetap, TANPA `uart_busy()` di dalam loop) — **MASIH HANG JUGA**, meski cuma tersisa SATU baca (`lbu` karakter string) per iterasi.
 
-8. ~~**ROOT CAUSE SEBENARNYA KETEMU (akhirnya):**~~ ⛔ *(TERBANTAH 2026-09-28 — lihat "ROOT CAUSE TERBUKTI" di atas)* ganti `uart_hello.c` supaya kirim tiap karakter via pemanggilan `uart_putc('H'); uart_putc('e'); ...` literal berulang (21×, tanpa loop atas string, tanpa baca RAM sama sekali) — **MASIH HANG**! Investigasi disassembly: `uart_putc` yang dideklarasikan `static inline` di `mriscv.h` ternyata **TIDAK di-inline oleh GCC -Os** begitu dipanggil >~3-4 kali (GCC pilih hemat kode, emit `jal`/`ret` sungguhan alih-alih 21 salinan inline). Setiap `jal` menulis `ra` (return address, lewat `PC_ORIG` di `UTILITY.v`) dan `ret` (`jalr x0,0(ra)`) membacanya kembali — **pola tulis-lalu-baca REGISTER berulang, bukan cuma soal AXI/memori sama sekali!** Fix: paksa `uart_busy()`/`uart_putc()` selalu inline penuh via `__attribute__((always_inline))` di `mriscv.h` (`inline` biasa cuma hint, GCC boleh mengabaikannya). Setelah ini: **BERHASIL** — LED counting normal DAN teks "Hello UART @ mriscv" muncul benar di serial terminal (`/dev/ttyUSB1`, 9600 8N1, lewat kabel USB JTAG yang sama).
+8. ~~**ROOT CAUSE SEBENARNYA KETEMU (akhirnya):**~~ ⛔ *(TERBANTAH 2026-09-28 — lihat "ROOT CAUSE TERBUKTI" di atas)* ganti `uart_hello.c` supaya kirim tiap karakter via pemanggilan `uart_putc('H'); uart_putc('e'); ...` literal berulang (21×, tanpa loop atas string, tanpa baca RAM sama sekali) — **MASIH HANG**! Investigasi disassembly: `uart_putc` yang dideklarasikan `static inline` di `firmware/include/mriscv.h` ternyata **TIDAK di-inline oleh GCC -Os** begitu dipanggil >~3-4 kali (GCC pilih hemat kode, emit `jal`/`ret` sungguhan alih-alih 21 salinan inline). Setiap `jal` menulis `ra` (return address, lewat `PC_ORIG` di `UTILITY.v`) dan `ret` (`jalr x0,0(ra)`) membacanya kembali — **pola tulis-lalu-baca REGISTER berulang, bukan cuma soal AXI/memori sama sekali!** Fix: paksa `uart_busy()`/`uart_putc()` selalu inline penuh via `__attribute__((always_inline))` di `firmware/include/mriscv.h` (`inline` biasa cuma hint, GCC boleh mengabaikannya). Setelah ini: **BERHASIL** — LED counting normal DAN teks "Hello UART @ mriscv" muncul benar di serial terminal (`/dev/ttyUSB1`, 9600 8N1, lewat kabel USB JTAG yang sama).
 
 **~~KESIMPULAN AKHIR~~** ⛔ *(TERBANTAH 2026-09-28 — lihat "ROOT CAUSE TERBUKTI" di atas)* bug core-nya **BUKAN spesifik soal AXI read-then-write** seperti dugaan awal — itu cuma SALAH SATU gejala dari kelas bug yang lebih umum: **register file (`REG_FILE.v`) rapuh terhadap pola tulis-lalu-baca register yang RAPAT/berulang**, entah datanya dari AXI load (`lbu`/`lw`) MAUPUN dari mekanisme intrinsik CPU sendiri (`jal` menulis `ra`, `ret` membacanya). Kandidat kuat penyebab: `REG_FILE.v`'s `true_dpram_sclk` (distributed RAM 32×32-bit, port read+write SAMA, `addr_a = rdw_rsrn?rdi:rs1i`) mengandalkan behavior read-during-write yang mungkin beda antara simulasi Verilog (`<=` non-blocking, selalu baca nilai lama — makanya simulasi CPU penuh custom di sesi ini TIDAK PERNAH bisa mereproduksi hang manapun) vs LUT-RAM Xilinx hasil sintesis Yosys (`ram$rdreg`, kemungkinan policy write-first/read-first/no-change beda) — **masih hipotesis, belum diverifikasi langsung**, tapi sekarang funsi dengan bukti jauh lebih kuat & spesifik (repro minimal: fungsi non-inline yang dipanggil berulang).
 
 **~~SOLUSI YANG DIPAKAI SEKARANG~~** ⛔ *(TERBANTAH 2026-09-28 — lihat "ROOT CAUSE TERBUKTI" di atas)* (workaround ini masih ada di kode, tapi kemungkinan besar tidak diperlukan lagi):
-- `mriscv.h`: `uart_busy()` dan `uart_putc()` dipaksa `__attribute__((always_inline))`.
+- `firmware/include/mriscv.h`: `uart_busy()` dan `uart_putc()` dipaksa `__attribute__((always_inline))`.
 - `uart_hello.c`: kirim string via pemanggilan `uart_putc(literal)` berulang langsung (bukan `uart_puts(char*)` yang baca RAM runtime).
-- `uart_puts(const char*)` di `mriscv.h` MASIH ADA tapi **BELUM terbukti aman untuk string RUNTIME** (baca alamat dari pointer, bukan literal) — kalau mau pakai, uji dulu di hardware, jangan asumsikan aman cuma karena `uart_putc` sekarang always-inline (readnya `*s` sendiri tetap AXI load dari RAM).
-- **IMPLIKASI LEBIH LUAS buat firmware lain di proyek ini:** fungsi `static inline` APAPUN di `mriscv.h` (`gpio_pin`, `led_set`, `gpio_rd`, dst) BERISIKO sama kalau suatu saat dipanggil cukup banyak kali sehingga GCC -Os memutuskan TIDAK meng-inline-nya (jadi `jal`/`ret` sungguhan). Sejauh ini semua firmware yang ada kemungkinan besar aman karena pemanggilannya sedikit/pendek, tapi ini **RISIKO LATEN** yang belum di-audit menyeluruh. Kalau firmware baru tiba-tiba hang tanpa alasan jelas, cek dulu disassembly (`<nama_fw>.dump`) apakah ada `jal`/`ret` berulang ke fungsi HAL yang harusnya inline.
+- `uart_puts(const char*)` di `firmware/include/mriscv.h` MASIH ADA tapi **BELUM terbukti aman untuk string RUNTIME** (baca alamat dari pointer, bukan literal) — kalau mau pakai, uji dulu di hardware, jangan asumsikan aman cuma karena `uart_putc` sekarang always-inline (readnya `*s` sendiri tetap AXI load dari RAM).
+- **IMPLIKASI LEBIH LUAS buat firmware lain di proyek ini:** fungsi `static inline` APAPUN di `firmware/include/mriscv.h` (`gpio_pin`, `led_set`, `gpio_rd`, dst) BERISIKO sama kalau suatu saat dipanggil cukup banyak kali sehingga GCC -Os memutuskan TIDAK meng-inline-nya (jadi `jal`/`ret` sungguhan). Sejauh ini semua firmware yang ada kemungkinan besar aman karena pemanggilannya sedikit/pendek, tapi ini **RISIKO LATEN** yang belum di-audit menyeluruh. Kalau firmware baru tiba-tiba hang tanpa alasan jelas, cek dulu disassembly (`<nama_fw>.dump`) apakah ada `jal`/`ret` berulang ke fungsi HAL yang harusnya inline.
 
-**Testbench unit** (`mriscv/mriscv_axi/UART_TX/uart_tx_tb.v`) PASS semua untuk desain non-blocking `uart_tx.v` (termasuk verifikasi race condition fix) — RTL UART TX-nya sendiri SUDAH BENAR dan bukan sumber masalah sama sekali; seluruh saga ini adalah bug core CPU/toolchain, bukan bug hardware UART yang saya tulis. **Elaborate check** bersih.
+**Testbench unit** (`rtl/mriscv/mriscv_axi/UART_TX/uart_tx_tb.v`) PASS semua untuk desain non-blocking `uart_tx.v` (termasuk verifikasi race condition fix) — RTL UART TX-nya sendiri SUDAH BENAR dan bukan sumber masalah sama sekali; seluruh saga ini adalah bug core CPU/toolchain, bukan bug hardware UART yang saya tulis. **Elaborate check** bersih.
 
 9. **Baud rate dinaikkan 9600 → 115200** (2026-09-28, `impl_axi.v` instansiasi `uart_tx`: `.BAUD(115200)`, DIV=434, error real-baud ~0.0064%). Diuji ulang di hardware, `uart_hello.c` (versi literal) tetap jalan normal di baud baru — cuma perlu ganti baud terminal serial (`screen /dev/ttyUSB1 115200`).
 
@@ -157,7 +199,7 @@ Implementasi 2026-09-28. Slave AXI baru (`mriscv/mriscv_axi/UART_TX/uart_tx.v`),
     - Juga dikonfirmasi BUKAN soal UART/GPIO spesifik: `uart_puts()+gpio_pin()` 1x aman, `uart_puts()+led_set()` (loop 8x GPIO) aman, `uart_puts()+delay()` aman — SEMUA kombinasi itu aman selama dipanggil berulang, TAPI begitu `uart_puts()` sendiri diberi string ≥4 karakter, hang seketika ("langsung hang").
     - ~~**Root cause pasti BELUM ketemu**~~ ⛔ *(TERBANTAH 2026-09-28 — lihat "ROOT CAUSE TERBUKTI" di atas)* — pola byte-identik + ambang tepat di 3/4 sangat mengarah ke bug hardware level rendah (dugaan: counter/state internal beberapa-bit yang wrap di iterasi ke-4, mis. sesuatu terkait `numbit_slaves`/`numbit_masters` di `axi4_interconnect.v`, atau sesuatu di `REG_FILE.v`) TAPI investigasi lebih lanjut butuh logic analyzer/ILA di FPGA asli, di luar jangkauan sesi ini (simulasi behavioral TIDAK bisa mereproduksi bug ini sama sekali, seperti sudah dicatat berkali-kali).
 
-**~~KEPUTUSAN AKHIR (2026-09-28)~~** ⛔ *(TERBANTAH 2026-09-28 — lihat "ROOT CAUSE TERBUKTI" di atas)* karena ambang 3-4 iterasi ini terlalu sempit utk berguna praktis, **`uart_hello.c` dikembalikan ke pola literal `uart_putc()` berulang tanpa loop** (satu-satunya pola yang TERBUKTI KONSISTEN aman di SEMUA pengujian sesi ini, tak terbatas panjang). `uart_puts(const char*)` di `mriscv.h` TETAP ADA dengan desain dua-fase (strictly lebih aman dari desain sebelumnya) tapi diberi peringatan tegas: **JANGAN PAKAI untuk string >3 karakter** sampai root cause ambang batas ini benar-benar ditemukan dan diperbaiki.
+**~~KEPUTUSAN AKHIR (2026-09-28)~~** ⛔ *(TERBANTAH 2026-09-28 — lihat "ROOT CAUSE TERBUKTI" di atas)* karena ambang 3-4 iterasi ini terlalu sempit utk berguna praktis, **`uart_hello.c` dikembalikan ke pola literal `uart_putc()` berulang tanpa loop** (satu-satunya pola yang TERBUKTI KONSISTEN aman di SEMUA pengujian sesi ini, tak terbatas panjang). `uart_puts(const char*)` di `firmware/include/mriscv.h` TETAP ADA dengan desain dua-fase (strictly lebih aman dari desain sebelumnya) tapi diberi peringatan tegas: **JANGAN PAKAI untuk string >3 karakter** sampai root cause ambang batas ini benar-benar ditemukan dan diperbaiki.
 
 **~~Kalau mau lanjutin investigasi root cause di masa depan~~** ⛔ *(TERBANTAH 2026-09-28 — lihat "ROOT CAUSE TERBUKTI" di atas)* Jangan ikuti saran di paragraf ini. dua jalur bug BERBEDA sudah ditemukan (jal/ret berulang di item #8, DAN ambang loop-iterasi 3-vs-4 di item #10) — keduanya sama-sama TIDAK reproducible di simulasi behavioral, keduanya sama-sama soal "pengulangan sesuatu lebih dari beberapa kali". Mulai dari `REG_FILE.v`'s `true_dpram_sclk` (cek behavior read-during-write hasil sintesis Yosys `synth_xilinx` utk distributed RAM 32×32, bandingkan dengan asumsi simulasi) DAN `axi4_interconnect.v`'s counter-counter kecil (`counter_rrequests`/`counter_wrequests`, `numbit_masters`/`numbit_slaves`) sebagai dua kandidat utama. Testbench yang HANYA menyorot komponen spesifik (bukan seluruh CPU), dibandingkan hasil **post-synthesis netlist simulation** (bukan cuma behavioral iverilog — ini kemungkinan besar KUNCI, karena behavioral sim sudah terbukti berkali-kali gagal reproduce), kemungkinan besar dibutuhkan untuk konfirmasi pasti. Reproduksi minimal termudah: `uart_probe6.c` (masih ada di repo) — tinggal ganti isi string literal di `uart_puts()`, 3 karakter aman, 4+ karakter hang, bisa dipakai langsung tanpa perlu re-derive dari nol.
 
@@ -169,7 +211,7 @@ Ini temuan hasil audit RTL, penting untuk tidak salah asumsi:
 
 - **`MULT.v`** — implementasi Booth/Karatsuba multiplier (iteratif, makanya 0 DSP48 di netlist). **KOREKSI 2026-09-28:** klaim lama "tidak pernah dipanggil" SALAH — memang tidak direferensikan di `FSM.v`, tapi **tersambung di `mriscvcore.v`**: `enable_mul = enable_exec` (baris 240), `done_mul & is_inst_mul` ikut `done_exec` (baris 244), `done_mul` ikut `rdw_rsrn` (baris 250), dan `DECO_INSTR` meloloskan opcode `mul/mulh/mulhsu/mulhu`. **✅ TERVERIFIKASI JALAN (2026-09-28)**, simulasi SoC penuh DAN board 50 MHz: `mul_test.c` (50 vektor × `mul`/`mulh`/`mulhsu`/`mulhu`, termasuk kasus tepi `0x80000000`, `-1`, `0x7FFFFFFF`; nilai harapan dihitung di host) → **200/200 lulus**. Core ini jadi **RV32I + Zmmul** (perkalian ya, pembagian tidak). Cara pakai di firmware: `make build FW=x MARCH=rv32i_zmmul` → operator `*` di C jadi `mul`. **JANGAN `-march=rv32im`**: `/`/`%` jadi instruksi `div`/`rem` yang tidak ada → trap saat runtime; dengan `zmmul`, `/` tetap gagal di tahap link (aman). Catatan: `make build` tidak rebuild otomatis kalau cuma `MARCH` yang berubah — hapus `.elf`/`.bin` dulu.
 - **`IRQ.v`** — timer interrupt controller ada, tapi instansiasinya **di-comment** di `impl_axi.v` (`//.outirr (irq ),`).
-- **CSR counter (`rdcycle`/`rdinstret`/`rdtime` + versi `H`)** — **DIPERBAIKI 2026-09-28.** Counter 64-bit ada di `UTILITY.v`, tapi dulu `UTILITY.v` cuma mencocokkan `codif` funct3=000 (= kode ECALL), sedangkan `rdcycle` adalah `csrrs` (funct3=010) → tidak ada unit yang mengangkat `done_exec` → FSM macet permanen di `S2_exec` (trap=0, tidak kelihatan seperti trap). Fix: tambah kode CSRRS/CSRRC/CSRRWI/CSRRSI/CSRRCI di case `opcode` `UTILITY.v` (semua CSR read-only, bagian tulis diabaikan). **CSRRW tetap tidak didukung**: kodenya `000011110011` sama dengan EBREAK dan di-trap FSM. Diverifikasi di simulasi SoC (salinan core di repo `peruri-chip-hackathon`): selisih dua `rdcycle` = 22, persis sama dengan siklus yang dihitung simulator; `rdinstret` benar; `crypto_selftest`/`crypto_bench` hasil identik. **Butuh re-synth** — bitstream lama masih macet di `rdcycle`. HAL: `rdcycle()`/`rdinstret()` di `mriscv.h`. Catatan: `rdtime` naik tiap **101** siklus (`TIME==100`), bukan waktu nyata.
+- **CSR counter (`rdcycle`/`rdinstret`/`rdtime` + versi `H`)** — **DIPERBAIKI 2026-09-28.** Counter 64-bit ada di `UTILITY.v`, tapi dulu `UTILITY.v` cuma mencocokkan `codif` funct3=000 (= kode ECALL), sedangkan `rdcycle` adalah `csrrs` (funct3=010) → tidak ada unit yang mengangkat `done_exec` → FSM macet permanen di `S2_exec` (trap=0, tidak kelihatan seperti trap). Fix: tambah kode CSRRS/CSRRC/CSRRWI/CSRRSI/CSRRCI di case `opcode` `UTILITY.v` (semua CSR read-only, bagian tulis diabaikan). **CSRRW tetap tidak didukung**: kodenya `000011110011` sama dengan EBREAK dan di-trap FSM. Diverifikasi di simulasi SoC (salinan core di repo `peruri-chip-hackathon`): selisih dua `rdcycle` = 22, persis sama dengan siklus yang dihitung simulator; `rdinstret` benar; `crypto_selftest`/`crypto_bench` hasil identik. **Butuh re-synth** — bitstream lama masih macet di `rdcycle`. HAL: `rdcycle()`/`rdinstret()` di `firmware/include/mriscv.h`. Catatan: `rdtime` naik tiap **101** siklus (`TIME==100`), bukan waktu nyata.
 - **Division** — **tidak ada modul DIV sama sekali**. Test resmi upstream diberi akhiran `.disabled` (`tests/div.S.disabled`, `tests/divu.S.disabled`) oleh pengembang aslinya.
 
 ---
@@ -182,20 +224,20 @@ riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -nostdlib -nostartfiles \
 ```
 
 - **JANGAN pakai operator `/` dan `%`** (operator `*` boleh kalau build dengan `MARCH=rv32i_zmmul`) — butuh `__divsi3`/`__modsi3` dari libgcc yang tidak tersedia di `-nostdlib`. Ganti dengan loop pengurangan manual. Ini penyebab error linking yang berulang kali muncul.
-- **`crt0.S` wajib disertakan** dalam perintah compile (setup stack pointer, nol-kan `.bss`, panggil `main()`). Tanpa ini binary tidak punya entry point valid.
+- **`firmware/startup/crt0.S` wajib disertakan** dalam perintah compile (setup stack pointer, nol-kan `.bss`, panggil `main()`). Tanpa ini binary tidak punya entry point valid.
 - Sertakan `#include <stdint.h>` kalau memakai `uint8_t` dkk.
 - Driver ditulis **header-only (`static inline`)** — menghemat 169 byte per program dibanding split `.h`/`.c` (terukur: 2135 vs 2304 byte). Pertahankan pola ini.
 - RAM sekarang 32 KB (dulu 4 KB) — masih tetap cek ukuran dengan `riscv64-unknown-elf-size` setelah compile untuk kebiasaan baik.
-- `link_c.ld` LENGTH sudah diupdate 4K→32K — kalau bikin linker script baru untuk firmware baru, pastikan ikut 32K bukan nyalin dari referensi lama yang masih 4K.
-- **`.bss` WAJIB ter-align 4 byte** — `link_c.ld` sekarang pakai `.bss : ALIGN(4) {` (fix 2026-09-28). `. = ALIGN(4);` di LUAR section TIDAK cukup: ld tetap bisa menaruh `.bss` di alamat ganjil, lalu `crt0.S` melakukan `sw` misaligned → trap sebelum `main()`. Kalau bikin linker script baru (sekarang cuma ada satu: `link_c.ld`), terapkan hal yang sama. Cek cepat: `riscv64-unknown-elf-nm <fw>.elf | grep __bss_start` harus kelipatan 4.
+- `firmware/startup/link_c.ld` LENGTH sudah diupdate 4K→32K — kalau bikin linker script baru untuk firmware baru, pastikan ikut 32K bukan nyalin dari referensi lama yang masih 4K.
+- **`.bss` WAJIB ter-align 4 byte** — `firmware/startup/link_c.ld` sekarang pakai `.bss : ALIGN(4) {` (fix 2026-09-28). `. = ALIGN(4);` di LUAR section TIDAK cukup: ld tetap bisa menaruh `.bss` di alamat ganjil, lalu `firmware/startup/crt0.S` melakukan `sw` misaligned → trap sebelum `main()`. Kalau bikin linker script baru (sekarang cuma ada satu: `firmware/startup/link_c.ld`), terapkan hal yang sama. Cek cepat: `riscv64-unknown-elf-nm <fw>.elf | grep __bss_start` harus kelipatan 4.
 
-### GPIO HAL (`mriscv.h`)
+### GPIO HAL (`firmware/include/mriscv.h`)
 - Tulis: `gpio_pin(i, v)` → tulis `(v&1)|0x2` ke `0x10040+i*4` (base direlokasi dari `0x1040` setelah ekspansi RAM). Bit1 = DSE (drive strength enable, warisan ASIC, selalu di-set 1).
 - Baca: `gpio_rd(i)` → ambil bit0 dari alamat yang sama.
 - `pindata` (input) dan `datanw` (output) adalah **sinyal terpisah** yang cuma berbagi indeks — pin index sama bisa dipakai untuk input DAN output karena terhubung ke pin fisik berbeda di top module.
-- **3 file firmware punya definisi `GP(i)` sendiri** (bukan lewat `mriscv.h`): `switch_led.c`, `sevensegment.c`, `switch_led_satu.c` — semuanya sudah diupdate ke base `0x10040`. Kalau bikin firmware baru dengan pola serupa (define alamat GPIO manual, bukan include `mriscv.h`), JANGAN lupa base barunya.
+- **3 file firmware punya definisi `GP(i)` sendiri** (bukan lewat `firmware/include/mriscv.h`): `switch_led.c`, `sevensegment.c`, `switch_led_satu.c` — semuanya sudah diupdate ke base `0x10040`. Kalau bikin firmware baru dengan pola serupa (define alamat GPIO manual, bukan include `firmware/include/mriscv.h`), JANGAN lupa base barunya.
 
-### OLED SSD1306 (`ssd1306.h`)
+### OLED SSD1306 (`firmware/include/ssd1306.h`)
 Dual-mode via `#define SSD1306_USE_BUFFER` sebelum `#include`:
 - **DIRECT** (default): tiap draw langsung kirim I2C, `display()` = no-op, ~8 byte RAM
 - **BUFFER**: gambar ke `ssd1306_buf[1024]`, `display()` wajib dipanggil, +1024 byte RAM
@@ -207,7 +249,7 @@ assign oled_sda = gdat[1] ? 1'bz : 1'b0;
 ```
 Command init SSD1306 = 25 perintah. Yang krusial: `0x8D,0x14` (charge pump — lupa ini = layar blank), `0x20,0x00` (horizontal addressing mode).
 
-**Kalibrasi timing setelah clock naik ke 50 MHz:** `ihold()` di file-file OLED/I2C (folder `oled-with-encoder/`) sudah disesuaikan 4× (clock domain itu naik dari 12.5→50 MHz). Kalau bikin firmware I2C baru di luar folder ini, cek dulu apakah `ihold()`-nya sudah dikalibrasi atau masih pakai delay lama.
+**Kalibrasi timing setelah clock naik ke 50 MHz:** `ihold()` di file-file OLED/I2C (`firmware/include/ssd1306.h` + `firmware/apps/oled_*`, `encoder_oled`) sudah disesuaikan 4× (clock domain itu naik dari 12.5→50 MHz). Kalau bikin firmware I2C baru di luar folder ini, cek dulu apakah `ihold()`-nya sudah dikalibrasi atau masih pakai delay lama.
 
 ### Wiring OLED + Encoder (referensi cepat)
 
@@ -230,7 +272,7 @@ Semua pin OLED + encoder butuh `PULLUP true` di XDC.
 
 ## JANGAN DIRUSAK — hal yang sudah diperbaiki dengan susah payah
 
-1. **Blok `initial` di `SP32B1024.v`** yang menol-kan memori. Tanpa ini isi BRAM tidak terdefinisi setelah konfigurasi Artix-7 → boot gagal acak (bug yang sulit dilacak).
+1. **Blok `initial` di `rtl/SP32B1024.v`** yang menol-kan memori. Tanpa ini isi BRAM tidak terdefinisi setelah konfigurasi Artix-7 → boot gagal acak (bug yang sulit dilacak).
 2. **Pin `enc_sw` TIDAK boleh disambungkan** ke top module. Pin mengambang terbaca LOW acak → memicu reset software terus-menerus (root cause bug "encoder stuck di 00").
 3. **`CHIPDB = $(abspath ../chipdb)`** — harus absolute path, kalau relatif `bbasm` gagal tulis.
 4. **`spi_axi_master.v` sudah ditulis ulang** jadi single-clock domain (445 → 101 baris). Jangan kembalikan ke versi upstream yang multi-clock.
@@ -240,7 +282,7 @@ Semua pin OLED + encoder butuh `PULLUP true` di XDC.
 7. **JANGAN percaya klaim "sudah dipatch" atau "ini bug" tanpa verifikasi langsung (diff ke upstream ATAU simulasi fungsional).** Dua pelajaran nyata dari proyek ini:
    - Patch negedge→posedge di `AXI_SP32B1024.v` sempat tercatat "selesai" padahal tidak pernah diterapkan — ketahuan lewat `diff` ke upstream.
    - Sebaliknya: `negedge` itu sendiri sempat diasumsikan "bug yang perlu diperbaiki" (termasuk oleh saran sebelumnya di file ini), padahal setelah diuji lewat SIMULASI FUNGSIONAL, terbukti **disengaja dan penting** — patch naif ke posedge justru merusak tulis SRAM total. Cek dulu lewat simulasi sebelum asumsi sesuatu itu "bug", terutama untuk pola timing yang terlihat tidak lazim tapi mungkin punya alasan desain.
-   - Cara verifikasi diff cepat: `diff <(tr -d '\r' < mriscv/mriscv_axi/AXI_SP32B1024/AXI_SP32B1024.v) <(curl -s https://raw.githubusercontent.com/onchipuis/mriscv/master/mriscv_axi/AXI_SP32B1024/AXI_SP32B1024.v | tr -d '\r')`
+   - Cara verifikasi diff cepat: `diff <(tr -d '\r' < rtl/mriscv/mriscv_axi/AXI_SP32B1024/AXI_SP32B1024.v) <(curl -s https://raw.githubusercontent.com/onchipuis/mriscv/master/mriscv_axi/AXI_SP32B1024/AXI_SP32B1024.v | tr -d '\r')`
 
 ---
 
@@ -257,7 +299,7 @@ Semua pin OLED + encoder butuh `PULLUP true` di XDC.
   - **Semua FF dimodelkan `RISING_EDGE`**, setup/hold/clk-to-Q konstan 0.1 ns → 47 FF `negedge` di `AXI_SP32B1024` (45 `FDRE_1` + 2 `FDSE_1`) dicek seolah punya 1 periode penuh, padahal cuma setengah.
   - **`create_clock` di XDC TIDAK dipakai** — log menulis `PASS at 12.00 MHz`, artinya placer cuma mengejar 12 MHz. Ini penjelasan kenapa Fmax berayun lebar antar-seed. **Sejak 2026-09-28 Makefile selalu menambahkan `--freq $(PNR_FREQ)` (default 50)** lewat `override PNR_ARGS +=`, jadi tetap ikut walau `PNR_ARGS` diisi dari command line. Kalau clock core diubah, set `PNR_FREQ` sesuai.
   - **TAPI** keterbatasan ini SUDAH DIUJI dan **BUKAN** penyebab hang UART yang dulu (lihat bagian UART, "ROOT CAUSE TERBUKTI"): turun ke 25 MHz tidak memperbaiki hang, dan pola `jal`/`ret`+string runtime+polling jalan normal di 50 MHz. Tetap layak disebut sebagai batasan penelitian di skripsi.
-- **Reset sekarang disinkronkan ke domain `clk` (2026-09-28):** dulu `rst_n = por_n & ~btnC` (domain `clk100`, `btnC` mentah) langsung dipakai logika domain `clk`, dengan jalur cross-domain ~13.3 ns. Sekarang lewat sinkronizer 3-FF `rst_sync` di `basys3_top.v` (juga di `oled-with-encoder/basys3_top.v`); jalur cross-domain itu hilang dari laporan nextpnr.
+- **Reset sekarang disinkronkan ke domain `clk` (2026-09-28):** dulu `rst_n = por_n & ~btnC` (domain `clk100`, `btnC` mentah) langsung dipakai logika domain `clk`, dengan jalur cross-domain ~13.3 ns. Sekarang lewat sinkronizer 3-FF `rst_sync` di `rtl/basys3_top.v` (juga di `oled-with-encoder/basys3_top.v` (sudah dihapus)); jalur cross-domain itu hilang dari laporan nextpnr.
 
 ---
 
@@ -265,17 +307,17 @@ Semua pin OLED + encoder butuh `PULLUP true` di XDC.
 
 ### Prioritas 1 — murah, dampak besar
 1. ~~**Naikkan clock core.**~~ **SELESAI & TERVERIFIKASI DI HARDWARE** — `wire clk = divcnt[5]` (÷64, 1.5625 MHz) diganti `divcnt` toggle-FF (÷2, **50 MHz**). Upload SPI + jalannya firmware (ledshow, encoder+OLED) sudah diuji di board fisik dan berfungsi. `SPEED` di `ledshow.c` disesuaikan 32x, `ihold()` di file-file OLED/I2C disesuaikan 4x.
-2. ~~**Sambungkan `trap` ke LED.**~~ **SELESAI 2026-09-28** — `trap` → **LD15** (pin `L1`, port `led_trap` di `basys3_top.v` + `basys3_spi.xdc`), sengaja BUKAN `led[7]` supaya 8 LED GPIO firmware tetap utuh. Nyala = core trap (store/load misaligned atau ILLISN seperti `fence`/`ebreak`/`csrrw`), latch sampai CPU di-reset (upload berikutnya). Top module `oled-with-encoder/` BELUM diberi LED ini. **Terkonfirmasi di board 2026-09-28:** upload firmware yang trap (`uart_probe6_4c` dgn linker `.bss` lama) → LD15 nyala. **Terbukti penting (2026-09-28):** bug `.bss` misaligned sempat berbulan-bulan didiagnosis sebagai "bug hardware" karena trap dan bus macet terlihat identik tanpa indikator ini.
+2. ~~**Sambungkan `trap` ke LED.**~~ **SELESAI 2026-09-28** — `trap` → **LD15** (pin `L1`, port `led_trap` di `rtl/basys3_top.v` + `rtl/basys3_spi.xdc`), sengaja BUKAN `led[7]` supaya 8 LED GPIO firmware tetap utuh. Nyala = core trap (store/load misaligned atau ILLISN seperti `fence`/`ebreak`/`csrrw`), latch sampai CPU di-reset (upload berikutnya). Top module `oled-with-encoder/` BELUM diberi LED ini. **Terkonfirmasi di board 2026-09-28:** upload firmware yang trap (`uart_probe6_4c` dgn linker `.bss` lama) → LD15 nyala. **Terbukti penting (2026-09-28):** bug `.bss` misaligned sempat berbulan-bulan didiagnosis sebagai "bug hardware" karena trap dan bus macet terlihat identik tanpa indikator ini.
 2b. ~~**Reset `axi4_interconnect` (dan slave-nya) juga saat CPU di-reset**~~ **SELESAI & TERVERIFIKASI DI BOARD 2026-09-28** — lihat "JANGAN DIRUSAK" #8.
 2c. ~~**Sinkronizer reset di domain `clk`**~~ **SELESAI 2026-09-28** — lihat Catatan toolchain.
 2d. ~~**Pasang `--freq 50` di Makefile**~~ **SELESAI 2026-09-28** — `PNR_FREQ ?= 50`.
-2e. ~~**Update komentar `mriscv.h`**~~ **SELESAI 2026-09-28** — lihat bagian UART, "HAL sudah dibersihkan".
+2e. ~~**Update komentar `firmware/include/mriscv.h`**~~ **SELESAI 2026-09-28** — lihat bagian UART, "HAL sudah dibersihkan".
 3. **Pakai 4 digit seven-segment** (sekarang cuma 2: `assign an = digsel ? 4'b1101 : 4'b1110`).
 
 ~~4. Patch negedge→posedge di `AXI_SP32B1024.v`~~ — **DIBATALKAN, JANGAN DIKERJAKAN.** Sudah diuji lewat simulasi dan terbukti merusak fungsi tulis SRAM. Lihat penjelasan lengkap di bagian "Jalur negedge... DISENGAJA" di atas. Kalau margin timing suatu saat jadi masalah nyata, opsi yang aman adalah turunkan clock sedikit (mis. balik ke pembagi yang menghasilkan ~25-33 MHz), BUKAN sentuh pola negedge ini.
 
 ### Prioritas 2 — usaha sedang
-5. ~~**Perbesar RAM 4 KB → 16/32 KB.**~~ **SELESAI (32 KB) & TERVERIFIKASI** — `SP32B1024` depth 1024→8192 & `A` jadi `[12:0]`, `AXI_SP32B1024` output `A` diperlebar sama, `addr_mask` SRAM `0x3FF`→`0x1FFF`, DAC/ADC/GPIO direlokasi ke `0x4000+`, `GPIO()` base di `mriscv.h` + 3 file firmware yang punya `GP(i)` sendiri (`switch_led.c`, `sevensegment.c`, `switch_led_satu.c`) diupdate ke `0x10040`. `link_c.ld` LENGTH 4K→32K. Sempat ada bug kritis (lihat item #6 di "JANGAN DIRUSAK") yang membuat relokasi/ekspansi ini awalnya tidak berpengaruh sama sekali secara fungsional; sudah diperbaiki dan dikonfirmasi lewat simulasi `iverilog` + uji hardware nyata.
+5. ~~**Perbesar RAM 4 KB → 16/32 KB.**~~ **SELESAI (32 KB) & TERVERIFIKASI** — `SP32B1024` depth 1024→8192 & `A` jadi `[12:0]`, `AXI_SP32B1024` output `A` diperlebar sama, `addr_mask` SRAM `0x3FF`→`0x1FFF`, DAC/ADC/GPIO direlokasi ke `0x4000+`, `GPIO()` base di `firmware/include/mriscv.h` + 3 file firmware yang punya `GP(i)` sendiri (`switch_led.c`, `sevensegment.c`, `switch_led_satu.c`) diupdate ke `0x10040`. `firmware/startup/link_c.ld` LENGTH 4K→32K. Sempat ada bug kritis (lihat item #6 di "JANGAN DIRUSAK") yang membuat relokasi/ekspansi ini awalnya tidak berpengaruh sama sekali secara fungsional; sudah diperbaiki dan dikonfirmasi lewat simulasi `iverilog` + uji hardware nyata.
 6. **Pisahkan LED dan seven-segment.** Keduanya sekarang baca `gpio_datanw` yang sama. Register DAC `0x4000` (baru, dulu `0x400`) tidak terpakai — bisa jadi sumber data independen.
 7. ~~**UART hardware** (`uart_tx.v`)~~ — **SELESAI & JALAN DI HARDWARE ASLI** (`uart_hello.c` terverifikasi: LED counting + teks muncul benar di serial 9600 8N1). Baca detail lengkap di bagian "UART hardware (TX-only)" di atas — jangan cuma baca ringkasan ini, ada temuan bug core CPU (bukan spesifik UART) yang harus dipahami sebelum pakai `uart_puts(char*)` dengan string runtime atau menulis firmware HAL baru. RTL `uart_tx.v` sendiri sudah benar dari awal; masalahnya ternyata di GCC -Os yang tidak selalu inline fungsi `static inline` + kerapuhan `REG_FILE.v` terhadap pola tulis-lalu-baca register. RX belum dikerjakan.
 8. **PWM hardware** (counter-compare) — membebaskan CPU dari loop toggle software.

@@ -44,28 +44,28 @@ This project was developed as part of an undergraduate thesis: demonstrating tha
 
 ```
 mriscv-spi/
-├── basys3_top.v          # Top-level: core + peripheral wiring (LED/7seg/Pmod/switch)
-├── basys3_spi.xdc        # Basys3 pin constraints (clock, LED, 7seg, switch, SPI)
-├── SP32B1024.v           # Memory (block RAM model)
-├── Makefile              # Bitstream build flow (synth → pnr → fasm → bit)
-├── fw.mk                 # Firmware build rules (C/asm → .elf → .bin)
-├── crt0.S                # Startup code (C runtime init)
-├── link_c.ld             # Linker script
-├── mriscv.h              # Register/peripheral definitions for firmware
+├── rtl/
+│   ├── basys3_top.v      # Single top-level: SPI loader + UART + GPIO bank 1 (switch/LED/7seg) + GPIO bank 2 (encoder/OLED)
+│   ├── basys3_spi.xdc    # Basys3 pin constraints
+│   ├── SP32B1024.v       # Memory (block RAM model)
+│   └── mriscv/           # RISC-V soft-core (RV32I) — from onchipuis/mriscv, modified
 │
-├── mriscv/               # RISC-V soft-core (RV32I) — from onchipuis/mriscv, modified
+├── firmware/
+│   ├── include/          # mriscv.h (HAL), ssd1306.h, font5x7_data.h
+│   ├── startup/          # crt0.S, link_c.ld
+│   ├── apps/             # Example programs (LED, switch, 7seg, encoder, OLED, UART)
+│   ├── tests/            # Regression tests (mul_test, uart_stress, gpio_bank_test)
+│   └── probes/           # Old diagnostic probes (UART/GPIO debugging history)
 │
-├── cheetah_mriscv.py     # Host script: upload program to the core over SPI
-├── cheetah_loopback.py   # SPI loopback test (debugging)
-├── cheetah_py.py         # Cheetah adapter library
-├── cheetah.so            # Cheetah driver shared library
-│
-├── breathe.c             # Example firmware: LED breathing
-├── ledshow.c             # Example firmware: LED pattern
-├── sevensegment.c        # Example firmware: seven-segment
-├── switch_led.c          # Example firmware: switch → LED
-└── main.c / main.cpp     # Firmware template
+├── tools/                # cheetah_mriscv.py (SPI uploader) + cheetah_py.py, cheetah.so, loopback test
+├── results/              # Synthesis logs, benchmarks, seed sweeps
+├── docs/                 # Extra notes (CLOCK_UPGRADE.md)
+├── bitstreams/           # Saved .bit files
+├── build/fw/             # Firmware build output (.elf/.bin/.dump, git-ignored)
+├── Makefile, openXC7.mk, install.sh
 ```
+
+`make build FW=<name>` / `make prog FW=<name>` finds `<name>.c` automatically under `firmware/*/`.
 
 > **Note:** build outputs (`spi.bit`, `spi.json`, `spi.frames`, `spi.fasm`, `build.log`, `*.elf`, `*.bin`) are intentionally **not** tracked (see `.gitignore`). They can all be regenerated from source.
 
