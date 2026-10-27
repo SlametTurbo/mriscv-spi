@@ -68,7 +68,11 @@ module spi_axi_slave #
 		if(RST == 1'b0) begin
 			axi_rvalid <= 1'b0;
 		end else begin
-			if(axi_rready == 1'b1) begin
+			// FIX 2026-10-09: rready hanya menghapus rvalid SETELAH rvalid naik (handshake
+			// sungguhan). Versi asli cek rready duluan -> mriscvcore menahan RReady=1
+			// bersamaan ARvalid, rvalid tidak pernah naik, CPU macet permanen saat baca
+			// alamat ini. Ketahuan dari impl_axi_addrmap_tb.v.
+			if(axi_rvalid == 1'b1 && axi_rready == 1'b1) begin
 				axi_rvalid <= 1'b0;
 			end else if(axi_arvalid == 1'b1) begin
 				axi_rvalid <= 1'b1;

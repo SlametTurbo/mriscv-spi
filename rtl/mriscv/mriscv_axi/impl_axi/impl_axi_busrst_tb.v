@@ -68,9 +68,9 @@ module tb;
     // pantau byte yang benar-benar dikirim uart_tx
     integer nchar = 0;
     always @(posedge CLK)
-        if (dut.inst_uart_tx.start_pulse) begin
+        if (dut.inst_uart.start_pulse) begin
             nchar = nchar + 1;
-            if (nchar <= 12) $write("%c", dut.inst_uart_tx.wdata_byte);
+            if (nchar <= 12) $write("%c", dut.inst_uart.wdata_byte);
         end
 
     integer i, ok;

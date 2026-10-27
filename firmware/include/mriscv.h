@@ -65,17 +65,21 @@ static inline unsigned gpio2_rd(unsigned i){ return GPIO2(i) & 1u; }
 
 static inline void delay(volatile unsigned n){ while (n--) __asm__ volatile(""); }
 
-/* ---------------- UART (TX-only, 115200 8N1 fixed) ----------------
- * Register di byte addr 0x10080 (word 0x4020, tepat setelah GPIO).
- *   TULIS byte apapun -> kirim 1 byte lewat UART. Transaksi AXI SELALU cepat
- *     (non-blocking di level hardware, persis seperti GPIO) -- kalau
- *     transmitter masih sibuk, byte yang ditulis diam-diam DIABAIKAN oleh
- *     hardware. uart_putc() di bawah POLLING uart_busy() di SOFTWARE dulu
- *     sebelum tulis, supaya byte tidak pernah hilang.
- *   BACA -> bit0 = busy (1 = masih transmit).
- * Baud rate di-hardcode di RTL (uart_tx.v, CLK_HZ=50MHz/BAUD=115200,
- * DIV=434, error real-baud ~0.0064%). Kalau clock core diubah, parameter
- * CLK_HZ di impl_axi.v WAJIB disesuaikan juga.
+/* ---------------- UART (TX+RX satu slave, 8N1, baud bisa diubah) ----------------
+ * Satu slave AXI (uart.v), word 0x4020-0x4023, byte base 0x10080:
+ *   +0x0 TXDATA  TULIS byte -> kirim. Transaksi AXI SELALU cepat (non-blocking);
+ *                kalau transmitter masih sibuk byte DIABAIKAN hardware, jadi
+ *                uart_putc() polling uart_busy() dulu. BACA = STATUS (bit0 busy).
+ *   +0x4 RXDATA  BACA = pop: bit[7:0]=byte, bit8=valid, bit9=overrun,
+ *                bit10=frame error. Membaca menghapus flag. Holding register
+ *                1 byte -- jangan delay lama di loop yang menunggu input.
+ *   +0x8 STATUS  BACA (tidak pop): bit0 tx_busy, bit1 rx_valid, bit2 overrun,
+ *                bit3 ferr, bit4 rx_busy (sedang menerima frame).
+ *   +0xC BAUDDIV clock per bit = UART_CLK_HZ / baud, 16 bit, minimal 16.
+ *                Reset = 434 (115200). Tulis DIABAIKAN kalau < 16 atau TX/RX
+ *                sedang sibuk -- pakai uart_set_div()/uart_set_baud().
+ * BUS_RST (tiap upload firmware) mengembalikan baud ke 115200.
+ * Alamat +0/+4 sama dengan uart_tx/uart_rx lama, firmware lama tidak berubah.
  *
  * Catatan riwayat (2026-09-28): versi lama HAL ini memaksa always_inline,
  * membuat uart_puts() dua-fase dengan buffer + delay, dan melarang string
@@ -84,7 +88,22 @@ static inline void delay(volatile unsigned n){ while (n--) __asm__ volatile("");
  * misaligned di link_c.ld (crt0.S melakukan sw misaligned -> trap sebelum
  * main()). Setelah linker diperbaiki, pola biasa di bawah terbukti jalan
  * di board -- lihat CLAUDE.md bagian "UART hardware". */
-#define UART_TXD (*(volatile unsigned *)(0x10080u))
+#define UART_TXD  (*(volatile unsigned *)(0x10080u))
+#define UART_RXR  (*(volatile unsigned *)(0x10084u))
+#define UART_STAT (*(volatile unsigned *)(0x10088u))
+#define UART_BDIV (*(volatile unsigned *)(0x1008Cu))
+
+#define UART_ST_TXBUSY  0x01u
+#define UART_ST_RXVALID 0x02u
+#define UART_ST_OVR     0x04u
+#define UART_ST_FERR    0x08u
+#define UART_ST_RXBUSY  0x10u
+
+/* Clock core -- WAJIB sama dengan CLK_HZ instansiasi uart di impl_axi.v. */
+#define UART_CLK_HZ 50000000u
+/* Pembagi dibulatkan. HANYA untuk baud KONSTAN (dihitung compiler): dengan
+ * variabel runtime, '/' butuh __udivsi3 yang tidak ada (-nostdlib). */
+#define UART_DIV(baud) ((UART_CLK_HZ + (baud) / 2u) / (baud))
 
 static inline unsigned uart_busy(void){
     return UART_TXD & 1u;
@@ -99,13 +118,6 @@ static inline void uart_puts(const char *s){
     while (*s) uart_putc(*s++);
 }
 
-/* ---------------- UART RX (115200 8N1 fixed) ----------------
- * Register di byte addr 0x10084 (word 0x4021). BACA = pop:
- *   bit[7:0]=byte, bit8=valid, bit9=overrun, bit10=frame error.
- * Membaca menghapus flag. Holding register 1 byte -- jangan delay lama di
- * loop yang menunggu input, atau byte berikutnya menimpa (overrun). */
-#define UART_RXR (*(volatile unsigned *)(0x10084u))
-
 /* Non-blocking: return byte (0-255), atau -1 kalau belum ada. */
 static inline int uart_getc_nb(void){
     unsigned v = UART_RXR;
@@ -117,6 +129,63 @@ static inline char uart_getc(void){
     int c;
     while ((c = uart_getc_nb()) < 0) {}
     return (char)c;
+}
+
+/* Ganti pembagi baud. Menunggu TX selesai (byte terakhir terkirim utuh di
+ * baud lama), lalu tulis-dan-baca-balik sampai diterima (ditolak hardware
+ * selama RX sedang menerima frame). Return 0 kalau div di luar 16..65535. */
+static inline int uart_set_div(unsigned div){
+    if (div < 16u || div > 0xFFFFu) return 0;
+    while (uart_busy()) {}
+    do { UART_BDIV = div; } while (UART_BDIV != div);
+    return 1;
+}
+
+#define uart_set_baud(baud) uart_set_div(UART_DIV(baud))
+
+/* ---------------- I2C master hardware (400 kHz @ 50 MHz) ----------------
+ * Register di byte addr 0x10100 (word 0x4040), 4 register (lihat i2c_master.v):
+ *   +0 DATA (tulis: byte TX, baca: byte RX terakhir)
+ *   +4 CMD  (bit0 START, bit1 STOP, bit2 WRITE, bit3 READ, bit4 NACK)
+ *   +8 STATUS (bit0 busy, bit1 nack, bit2 arb_lost)   +12 DIV
+ * Pin = oled_scl/oled_sda (JC1/JC2). Tiap fungsi menunggu engine selesai.
+ * i2c_hw_write() return 1 kalau slave ACK, 0 kalau NACK/arbitrasi hilang. */
+#define I2C_DATA   (*(volatile unsigned *)(0x10100u))
+#define I2C_CMD    (*(volatile unsigned *)(0x10104u))
+#define I2C_STATUS (*(volatile unsigned *)(0x10108u))
+#define I2C_DIV    (*(volatile unsigned *)(0x1010Cu))
+#define I2C_START 0x01u
+#define I2C_STOP  0x02u
+#define I2C_WRITE 0x04u
+#define I2C_READ  0x08u
+#define I2C_NACK  0x10u
+
+/* WAJIB dipanggil sekali di awal: GPIO bank 2 reset ke 0 (= SCL/SDA ditarik low
+ * lewat wired-AND di top). Tulis 1 melepas pin supaya controller yang mengemudi. */
+static inline void i2c_hw_init(void){
+    gpio2_pin(GPIO2_OLED_SCL, 1);
+    gpio2_pin(GPIO2_OLED_SDA, 1);
+}
+static inline unsigned i2c__wait(void){
+    unsigned s;
+    while ((s = I2C_STATUS) & 1u) {}
+    return s;
+}
+/* Kirim 1 byte; flags = kombinasi I2C_START / I2C_STOP. */
+static inline int i2c_hw_write(unsigned char b, unsigned flags){
+    I2C_DATA = b;
+    I2C_CMD  = I2C_WRITE | flags;
+    return (i2c__wait() & 6u) == 0;
+}
+/* Terima 1 byte; last=1 -> kirim NACK (byte terakhir), flags dst. */
+static inline unsigned i2c_hw_read(unsigned last, unsigned flags){
+    I2C_CMD = I2C_READ | (last ? I2C_NACK : 0u) | flags;
+    i2c__wait();
+    return I2C_DATA & 0xFFu;
+}
+static inline void i2c_hw_stop(void){
+    I2C_CMD = I2C_STOP;
+    i2c__wait();
 }
 
 /* ---------------- Counter siklus / instruksi (CSR read-only) ----------------

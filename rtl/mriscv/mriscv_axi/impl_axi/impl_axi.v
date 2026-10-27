@@ -27,13 +27,17 @@ module impl_axi(
     output             spi_axi_slave_CEB,
     output             spi_axi_slave_SCLK,
     output             spi_axi_slave_DATA,
-    // Slave 6 (uart_tx), UART TX-only
+    // Slave 6 (uart), UART TX+RX satu slave (nama port lama dipertahankan)
     output             uart_tx_TXD,
-    // Slave 7 (uart_rx), UART RX-only
     input              uart_rx_RXD,
-    // Slave 8 (completogpio #2), GPIO bank 2 (encoder + OLED I2C), word 0x4030
+    // Slave 7 (completogpio #2), GPIO bank 2 (encoder + OLED I2C), word 0x4030
     input  [7:0]     completogpio2_pindata,
-    output [7:0]     completogpio2_datanw
+    output [7:0]     completogpio2_datanw,
+    // Slave 8 (i2c_master), I2C master open-drain (*_O=1 artinya lepas)
+    input              i2c_SCL_I,
+    input              i2c_SDA_I,
+    output             i2c_SCL_O,
+    output             i2c_SDA_O
     );
     
     // Internals
@@ -78,14 +82,15 @@ module impl_axi(
     localparam              slaves = 8;
     // SRAM diperbesar 4 KB -> 32 KB (1024 -> 8192 word, mask 0x3FF -> 0x1FFF).
     // DAC/ADC/GPIO direlokasi ke 0x4000+ supaya tidak tabrakan dengan rentang SRAM baru.
-    // Slave 6 (UART TX) ditambah di 0x4020 (word), tepat setelah rentang GPIO
-    // (0x4010-0x401F), mask=0 -> exact match, cuma 1 register.
-    // Slave 7 (UART RX) di 0x4021 (word, byte 0x10084), mask=0 -> exact match.
-    // Slave 8 (GPIO bank 2) di 0x4030-0x403F (word, byte 0x100C0 + i*4), mask=0xF
+    // Slave 6 (UART TX+RX, uart.v) di 0x4020-0x4023 (word, byte 0x10080), mask=0x3
+    // (4 register: TXDATA, RXDATA, STATUS, BAUDDIV). Dulu dua slave exact-match
+    // terpisah (uart_tx 0x4020, uart_rx 0x4021) -- alamat +0/+4 sengaja sama.
+    // Slave 7 (GPIO bank 2) di 0x4030-0x403F (word, byte 0x100C0 + i*4), mask=0xF
     // seperti GPIO bank 1. Dipakai encoder (input) dan OLED I2C (output) supaya
     // indeks pin-nya tidak bentrok dengan switch/LED/7-seg di bank 1.
-    localparam [slaves*sword-1:0] addr_mask = {32'h0000000F,32'h00000000,32'h00000000,32'h00000000,32'h0000000F,32'h00000001,32'h00000001,32'h00001FFF};
-    localparam [slaves*sword-1:0] addr_use  = {32'h00004030,32'h00004021,32'h00004020,32'h04000000,32'h00004010,32'h00004008,32'h00004000,32'h00000000};
+    // Slave 8 (I2C master) di 0x4040-0x4043 (word, byte 0x10100), mask=0x3 (4 register).
+    localparam [slaves*sword-1:0] addr_mask = {32'h00000003,32'h0000000F,32'h00000003,32'h00000000,32'h0000000F,32'h00000001,32'h00000001,32'h00001FFF};
+    localparam [slaves*sword-1:0] addr_use  = {32'h00004040,32'h00004030,32'h00004020,32'h04000000,32'h00004010,32'h00004008,32'h00004000,32'h00000000};
     
     // AXI4-lite master memory interfaces
 
@@ -427,12 +432,12 @@ module impl_axi(
         .axi_rdata(s_axi_rdata_o[4])
     );
 
-    // Slave 6, uart_tx (TX-only, baud tetap 115200 @ CLK_HZ=50MHz -- lihat komentar di uart_tx.v)
-    // DIV = 50_000_000/115200 = 434 (real baud ~115207, error ~0.0064%, jauh di bawah toleransi UART ~2%)
-    uart_tx #(
+    // Slave 6 (index 5), uart: TX+RX satu slave, baud awal 115200 @ CLK_HZ=50MHz,
+    // bisa diubah lewat register BAUDDIV (lihat uart.v). CLK_HZ WAJIB ikut clock core.
+    uart #(
         .CLK_HZ(50_000_000),
         .BAUD(115200)
-    ) inst_uart_tx
+    ) inst_uart
     (
         .CLK(CLK),
         .RST(BUS_RST),
@@ -451,59 +456,63 @@ module impl_axi(
         .ARREADY(s_axi_arready[5]),
         .RVALID(s_axi_rvalid[5]),
         .RDATA(s_axi_rdata_o[5]),
-        .TXD(uart_tx_TXD)
-    );
-
-    // Slave 7 (index 6), uart_rx (RX-only, baud tetap 115200 @ CLK_HZ=50MHz -- lihat uart_rx.v)
-    uart_rx #(
-        .CLK_HZ(50_000_000),
-        .BAUD(115200)
-    ) inst_uart_rx
-    (
-        .CLK(CLK),
-        .RST(BUS_RST),
-        .AWVALID(s_axi_awvalid[6]),
-        .WVALID(s_axi_wvalid[6]),
-        .BREADY(s_axi_bready[6]),
-        .AWADDR(s_axi_awaddr_o[6]),
-        .WDATA(s_axi_wdata_o[6]),
-        .WSTRB(s_axi_wstrb_o[6]),
-        .AWREADY(s_axi_awready[6]),
-        .WREADY(s_axi_wready[6]),
-        .BVALID(s_axi_bvalid[6]),
-        .ARVALID(s_axi_arvalid[6]),
-        .RREADY(s_axi_rready[6]),
-        .ARADDR(s_axi_araddr_o[6]),
-        .ARREADY(s_axi_arready[6]),
-        .RVALID(s_axi_rvalid[6]),
-        .RDATA(s_axi_rdata_o[6]),
+        .TXD(uart_tx_TXD),
         .RXD(uart_rx_RXD)
     );
 
-    // Slave 8 (index 7), completogpio bank 2: encoder (pindata[1:0]) + OLED I2C (datanw[1:0])
+    // Slave 7 (index 6), completogpio bank 2: encoder (pindata[1:0]) + OLED I2C (datanw[1:0])
     wire [7:0] gpio2_Rx, gpio2_Tx, gpio2_DSE;
     completogpio inst_completogpio2(
         .clock(CLK),
         .reset(BUS_RST),
-        .WAddress(s_axi_awaddr_o[7]),
-        .Wdata(s_axi_wdata_o[7]),
-        .Rdata(s_axi_rdata_o[7]),
-        .AWvalid(s_axi_awvalid[7]),
-        .RAddress(s_axi_araddr_o[7]),
-        .Wvalid(s_axi_wvalid[7]),
-        .ARvalid(s_axi_arvalid[7]),
-        .Rready(s_axi_rready[7]),
-        .Bready(s_axi_bready[7]),
-        .ARready(s_axi_arready[7]),
-        .Rvalid(s_axi_rvalid[7]),
-        .AWready(s_axi_awready[7]),
-        .Wready(s_axi_wready[7]),
-        .Bvalid(s_axi_bvalid[7]),
+        .WAddress(s_axi_awaddr_o[6]),
+        .Wdata(s_axi_wdata_o[6]),
+        .Rdata(s_axi_rdata_o[6]),
+        .AWvalid(s_axi_awvalid[6]),
+        .RAddress(s_axi_araddr_o[6]),
+        .Wvalid(s_axi_wvalid[6]),
+        .ARvalid(s_axi_arvalid[6]),
+        .Rready(s_axi_rready[6]),
+        .Bready(s_axi_bready[6]),
+        .ARready(s_axi_arready[6]),
+        .Rvalid(s_axi_rvalid[6]),
+        .AWready(s_axi_awready[6]),
+        .Wready(s_axi_wready[6]),
+        .Bvalid(s_axi_bvalid[6]),
         .pindata(completogpio2_pindata),
         .Rx(gpio2_Rx),
         .datanw(completogpio2_datanw),
         .Tx(gpio2_Tx),
         .DSE(gpio2_DSE)
+    );
+
+    // Slave 8 (index 7), i2c_master (level byte, 400 kHz @ CLK_HZ=50MHz -- lihat i2c_master.v)
+    i2c_master #(
+        .CLK_HZ(50_000_000),
+        .I2C_HZ(400_000)
+    ) inst_i2c_master
+    (
+        .CLK(CLK),
+        .RST(BUS_RST),
+        .AWVALID(s_axi_awvalid[7]),
+        .WVALID(s_axi_wvalid[7]),
+        .BREADY(s_axi_bready[7]),
+        .AWADDR(s_axi_awaddr_o[7]),
+        .WDATA(s_axi_wdata_o[7]),
+        .WSTRB(s_axi_wstrb_o[7]),
+        .AWREADY(s_axi_awready[7]),
+        .WREADY(s_axi_wready[7]),
+        .BVALID(s_axi_bvalid[7]),
+        .ARVALID(s_axi_arvalid[7]),
+        .RREADY(s_axi_rready[7]),
+        .ARADDR(s_axi_araddr_o[7]),
+        .ARREADY(s_axi_arready[7]),
+        .RVALID(s_axi_rvalid[7]),
+        .RDATA(s_axi_rdata_o[7]),
+        .SCL_I(i2c_SCL_I),
+        .SDA_I(i2c_SDA_I),
+        .SCL_O(i2c_SCL_O),
+        .SDA_O(i2c_SDA_O)
     );
 
 endmodule

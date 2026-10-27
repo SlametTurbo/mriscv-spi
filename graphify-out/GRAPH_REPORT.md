@@ -1,232 +1,254 @@
-# Graph Report - mriscv-spi  (2026-09-28)
+# Graph Report - mriscv-spi  (2026-10-09)
 
 ## Corpus Check
-- Large corpus: 151 files · ~3,684,563 words. Semantic extraction will be expensive (many Claude tokens). Consider running on a subfolder.
+- Large corpus: 182 files · ~5,163,093 words. Semantic extraction will be expensive (many Claude tokens). Consider running on a subfolder.
 
 ## Summary
-- 524 nodes · 672 edges · 63 communities (19 shown, 44 thin omitted)
-- Extraction: 88% EXTRACTED · 10% INFERRED · 1% AMBIGUOUS · INFERRED: 69 edges (avg confidence: 0.85)
-- Token cost: 652,915 input · 0 output
+- 637 nodes · 969 edges · 74 communities (26 shown, 48 thin omitted)
+- Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 171 edges (avg confidence: 0.86)
+- Token cost: 376,504 input · 0 output
 
 ## Community Hubs (Navigation)
-- ALU & Instruction Decoder
-- AXI/APB Top-Level Integration & Lessons
-- GPIO/LED Demo Firmware
-- TRNG Research & Bus Architecture
-- Physical Test Board (PCB/Schematics)
-- Synthesis Benchmarks & Project Findings
-- SPI Uploader Tool (cheetah_mriscv.py)
-- Core Architecture Diagram (mriscv.jpg)
-- AXI SRAM & SPI Master Testbenches
-- UART TX Hardware & Testbench
-- Cheetah Python Array Types
-- GPIO AXI Submodules (completogpio)
-- ALU RTL Module
-- LED Show Demo Firmware
-- Open-V / Onchip Ecosystem Docs
-- Cheetah Device Open/Version API
-- Cheetah Device Discovery API
-- Cheetah SPI Batch/Async API
-- ADC APB Interface
-- DAC APB Interface
-- APB Top-Level Testbench
-- AXI Top-Level Testbench
-- Seven-Segment Demo Firmware
-- APB Interconnect RTL
-- Priority Encoder Utility
-- Cheetah API: ch_close
-- Cheetah API: ch_dev_addr
-- Cheetah API: ch_host_ifce_speed
-- Cheetah API: ch_open
-- Cheetah API: ch_port
-- Cheetah API: ch_sleep_ms
-- Cheetah API: ch_spi_async_submit
-- Cheetah API: ch_spi_batch_length
-- Cheetah API: ch_spi_bitrate
-- Cheetah API: ch_spi_configure
-- Cheetah API: ch_spi_queue_array
-- Cheetah API: ch_spi_queue_byte
-- Cheetah API: ch_spi_queue_clear
-- Cheetah API: ch_spi_queue_delay_cycles
-- Cheetah API: ch_spi_queue_oe
-- Cheetah API: ch_spi_queue_ss
-- Cheetah API: ch_status_string
-- Cheetah API: ch_target_power
-- Cheetah API: ch_unique_id
-- Install Script
-- GPIO APB Submodule: decodificador
-- GPIO APB Submodule: flipflopRS
-- GPIO APB Submodule: flipsdataw
-- GPIO APB Submodule: latchW
-- GPIO APB Submodule: macstate2
-- GPIO AXI Submodule: decodificador
-- GPIO AXI Submodule: flipflopRS
-- GPIO AXI Submodule: flipsdataw
-- GPIO AXI Submodule: latchW
-- GPIO AXI Submodule: macstate2
-- Bus Sync Utility
-- seecode.sh Script
-- MAX4234RU Op-Amp Component
-- PCB Training Header Block
+- Firmware Apps & HAL
+- OLED Encoder Firmware
+- Project Docs & Clock Upgrade
+- Core Module Docs (ES)
+- CIDIC Test Board PCB
+- SRAM AXI Testbench
+- Hex/Upload Python Scripts
+- mRISC-V 100MHz Paper
+- I2C Master Hardware
+- Upstream SoC Diagram
+- Basys3 Top & GPIO Bank TB
+- LED Show Firmware
+- Cheetah SPI Python API
+- APB GPIO Composition
+- Encoder OLED Bit-bang
+- ALU Operations
+- Core Block Diagram
+- OLED Test Bit-bang
+- APB Variant SoC
+- UART TX & Testbench
+- impl_axi SoC & UART RX TB
+- Cheetah Extension Info
+- AXI Interconnect Testbench
+- Cheetah Device Discovery
+- Cheetah SPI Batch Transfer
+- APB ADC Interface
+- APB DAC Interface
+- APB SoC Testbench
+- AXI ADC Interface
+- AXI DAC Interface
+- Bus Reset Testbench
+- impl_axi Testbench
+- APB AXI4 Interconnect
+- AXI4 Interconnect
+- Priority Encoder Util
+- Toolchain Installer
+- Seed Sweep Script
+- Seed Sweep Script 2
+- APB GPIO Decoder
+- APB GPIO RS Flip-flop
+- APB GPIO Data Flops
+- APB GPIO Address Latch
+- APB GPIO Handshake FSM
+- AXI GPIO Decoder
+- AXI GPIO RS Flip-flop
+- AXI GPIO Data Flops
+- AXI GPIO Address Latch
+- AXI GPIO Handshake FSM
+- Bus Sync Util
+- Core Cycle/Instr Counters
+- Disassembly Script
+- Cheetah Close
+- Cheetah Device Address
+- Cheetah Host Speed
+- Cheetah Open
+- Cheetah Port
+- Cheetah Sleep
+- Cheetah Async Submit
+- Cheetah Batch Length
+- Cheetah SPI Bitrate
+- Cheetah SPI Configure
+- Cheetah Queue Array
+- Cheetah Queue Byte
+- Cheetah Queue Clear
+- Cheetah Queue Delay
+- Cheetah Queue OE
+- Cheetah Queue SS
+- Cheetah Status String
+- Cheetah Target Power
+- Cheetah Unique ID
 
 ## God Nodes (most connected - your core abstractions)
-1. `led_set()` - 17 edges
-2. `mriscv-spi Project Overview` - 16 edges
-3. `impl_axi` - 15 edges
-4. `ALU` - 15 edges
-5. `mriscv CPU Core (yellow block)` - 13 edges
-6. `mriscvcore` - 11 edges
-7. `RISC-V Core Block Diagram` - 11 edges
-8. `mriscvcore_tb` - 10 edges
-9. `mRISC-V Microcontroller` - 9 edges
-10. `CIDIC MCU block (chip under test)` - 9 edges
+1. `led_set()` - 26 edges
+2. `impl_axi` - 16 edges
+3. `main()` - 14 edges
+4. `main()` - 13 edges
+5. `uart_puts()` - 13 edges
+6. `ssd1306_fillRect()` - 13 edges
+7. `ALU` - 12 edges
+8. `ssd1306_clearDisplay()` - 11 edges
+9. `ssd1306_print()` - 11 edges
+10. `i2c_master_tb` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `AXI_SP32B1024 Negedge Timing Design (Intentional)` --references--> `AXI_SP32B1024`  [AMBIGUOUS]
-  CLAUDE.md → mriscv/mriscv_axi/AXI_SP32B1024/AXI_SP32B1024.v
-- `UART TX Hardware Implementation` --references--> `uart_tx`  [AMBIGUOUS]
-  CLAUDE.md → mriscv/mriscv_axi/UART_TX/uart_tx.v
-- `axi4_interconnect Missing Parameter Override Bug` --references--> `axi4_interconnect`  [AMBIGUOUS]
-  CLAUDE.md → mriscv/mriscv_axi/axi4_interconnect/axi4_interconnect.v
-- `axi4_interconnect Missing Parameter Override Bug` --references--> `impl_axi`  [AMBIGUOUS]
-  CLAUDE.md → mriscv/mriscv_axi/impl_axi/impl_axi.v
-- `Troubleshooting Guide` --semantically_similar_to--> `Things That Must Not Be Broken (JANGAN DIRUSAK)`  [INFERRED] [semantically similar]
-  README.md → CLAUDE.md
+- `SPI SCLK <= 1/4 core clock rule` --conceptually_related_to--> `SPI Runtime Loader`  [INFERRED]
+  docs/CLOCK_UPGRADE.md → README.md
+- `Timing margin over 50 MHz operating point` --conceptually_related_to--> `Core clock 50 MHz via divcnt toggle-FF`  [INFERRED]
+  results/logs/seed_summary.md → docs/CLOCK_UPGRADE.md
+- `spi_axi_master (programming SPI master)` --implements--> `SPI Runtime Loader`  [INFERRED]
+  rtl/mriscv/README.md → README.md
+- `Core clock 50 MHz via divcnt toggle-FF` --references--> `basys3_top.v single top-level`  [INFERRED]
+  docs/CLOCK_UPGRADE.md → README.md
+- `onchipuis/mriscv upstream RV32I core` --conceptually_related_to--> `mriscv microcontroller (RV32I core, 4KB SRAM, ADC, DAC, GPIO, SPI master/slave)`  [INFERRED]
+  README.md → rtl/mriscv/README.md
 
 ## Import Cycles
 - None detected.
 
 ## Hyperedges (group relationships)
-- **UART Hang Debugging Investigation** — claude_uart_tx_hardware, claude_axi4_interconnect_param_bug, claude_reg_file_fragility_bug, claude_gcc_inline_workaround, claude_uart_debug_saga [INFERRED 0.85]
-- **Fmax / Timing Margin Investigation Across Docs** — claude_fmax_variability, claude_nextpnr_seed_determinism, benchmark_summary_fmax_determinism_finding, seed_summary_seed_sensitivity_finding, clock_upgrade_margin_analysis [INFERRED 0.85]
-- **Verify-Before-Claim Lessons** — claude_verify_before_claim_principle, claude_axi_sp32b1024_negedge, claude_axi4_interconnect_param_bug [EXTRACTED 1.00]
-- **mRISC-V dual-bus AXI4-Lite/APB peripheral architecture** — mriscv_pid4063257_mrisc_v, mriscv_pid4063257_axi4lite, mriscv_pid4063257_apb, mriscv_pid4063257_apb_bridge, mriscv_pid4063257_spi_master [EXTRACTED 0.95]
-- **Testing board connector blocks feeding CIDIC MCU chip under test** — mriscv_board_schematics_testing_board_cidic_rev_aamaya_sch_cidic_mcu, mriscv_board_schematics_testing_board_cidic_rev_aamaya_sch_spi_programming_interface, mriscv_board_schematics_testing_board_cidic_rev_aamaya_sch_slave_spi_conn, mriscv_board_schematics_testing_board_cidic_rev_aamaya_sch_adc_conn, mriscv_board_schematics_testing_board_cidic_rev_aamaya_sch_dac_conn, mriscv_board_schematics_testing_board_cidic_rev_aamaya_sch_gpio_conn [EXTRACTED 0.90]
-- **SPI-based programming and peripheral verification flow (simulation testbench and physical test board)** — mriscv_pid4063257_testbench, mriscv_pid4063257_spi_master, mriscv_board_schematics_testing_board_cidic_rev_aamaya_sch_spi_programming_interface [INFERRED 0.85]
-- **Onchip Web IDE -> Ticket -> SPI Programming Flow** — mriscv_demo1_onchip_web_platform, mriscv_demo1_blink_led_demo, mriscv_demo1_ticket_system, mriscv_demo1_spi_programming_flow [INFERRED 0.80]
-- **mRISC-V Analog/Mixed-Signal Peripheral Set** — mriscv_mriscv_axi_32_bit_100mhz_mriscv_microcontroller, mriscv_mriscv_axi_32_bit_100mhz_sar_adc_10bit, mriscv_mriscv_axi_32_bit_100mhz_dac_12bit, mriscv_mriscv_axi_32_bit_100mhz_gpio_module [EXTRACTED 1.00]
-- **TRNG Entropy-Extraction-PostProcessing Pipeline** — mriscv_fully_synthesized_trng_fully_synthesized_trng, mriscv_fully_synthesized_trng_three_edge_ring_oscillator, mriscv_fully_synthesized_trng_capture_stage, mriscv_fully_synthesized_trng_cellular_automata_post_processing [EXTRACTED 1.00]
-- **Instruction decode (codif/opcode) feeding ALU and UTILITY execution stages** — mriscv_mriscvcore_deco_instr_decinstdocum_decodificador_de_instrucciones, mriscv_mriscvcore_alu_instrucciones_alu_manual_del_alu, mriscv_mriscvcore_utilities_utilidades_del_procesador_manual_de_usuariov2_0_utility_manual [INFERRED 0.80]
-- **RV32M multiply extension: decoder encoding + multiplier design + unused RTL module** — mriscv_mriscvcore_deco_instr_decinstdocum_riscv_instruction_encoding_table, mriscv_mriscvcore_mult_multiplicador_informe_bloque_multiplicador, mriscv_mriscvcore_mult_mult_mult [INFERRED 0.85]
-- **Interrupt handling: IRQ block instructions, decoder encoding of IRQ opcodes, UTILITY PC redirection** — mriscv_mriscvcore_irq_irqmanual_irq_manual, mriscv_mriscvcore_deco_instr_decinstdocum_decodificador_de_instrucciones, mriscv_mriscvcore_utilities_utilidades_del_procesador_manual_de_usuariov2_0_pc_control_logic [INFERRED 0.80]
+- **Seed sweep / Fmax measurement methodology** — results_logs_benchmark_summary_pnr_deterministic_default_seed, results_logs_seed_summary_seed_sensitivity, results_logs_benchmark_summary_post_route_fmax, results_logs_seed_summary_rtl_terkini_pnr_seed_11_lock, results_logs_seed_summary_unified_pnr_seed_13_lock, results_logs_seed_summary_rtl_terkini_pnr_freq_50 [INFERRED 0.85]
+- **mriscv AXI SoC components** — rtl_mriscv_readme_impl_axi, rtl_mriscv_readme_axi4_interconnect, rtl_mriscv_readme_spi_axi_master, rtl_mriscv_readme_spi_axi_slave, rtl_mriscv_readme_axi_sp32b1024, rtl_mriscv_mriscvcore_readme_mriscvcore [EXTRACTED 1.00]
+- **SPI program upload flow** — readme_cheetah_spi_adapter, readme_spi_runtime_loader, rtl_mriscv_readme_spi_axi_master, readme_bitstream_program_separation [INFERRED 0.85]
+- **mRISC-V SoC blocks on AXI4-Lite/APB** — rtl_mriscv_pid4063257_axi4_lite_interconnect, rtl_mriscv_pid4063257_apb_bridge, rtl_mriscv_pid4063257_spi_axi_master, rtl_mriscv_pid4063257_sar_adc_10bit, rtl_mriscv_pid4063257_dac_12bit, rtl_mriscv_pid4063257_gpio_8bit, rtl_mriscv_pid4063257_ram_4kb [EXTRACTED 1.00]
+- **CIDIC testing board design files** — rtl_mriscv_board_schematics_testing_board_cidic_rev_aamaya_sch_schematic, rtl_mriscv_board_pcb_testing_board_cidic_rev_aamaya_brd_top_layout, rtl_mriscv_board_pcb_testing_board_cidic_rev_aamaya_brd_bot_layout, rtl_mriscv_board_eagle_microaxi_pcb1_layout, rtl_mriscv_board_eagle_microaxi_pcb2_layout [INFERRED 0.85]
+- **mriscvcore execution/support units** — rtl_mriscv_mriscvcore_alu_instrucciones_alu_alu_module, rtl_mriscv_mriscvcore_deco_instr_decinstdocum_deco_instr_module, rtl_mriscv_mriscvcore_irq_irqmanual_irq_module, rtl_mriscv_mriscvcore_memory_interface_memory_interface_memory_interface_module, rtl_mriscv_mriscvcore_mult_multiplicador_informe_mult_module, rtl_mriscv_mriscvcore_utilities_utilidades_del_procesador___manual_de_usuariov2_0_utility_module [INFERRED 0.85]
+- **mRISC-V SoC bus and peripherals** — rtl_mriscv_mriscv_axi_32_bit_100mhz_axi4_lite_bus, rtl_mriscv_mriscv_axi_32_bit_100mhz_apb_bus, rtl_mriscv_mriscv_axi_32_bit_100mhz_sar_adc_10bit, rtl_mriscv_mriscv_axi_32_bit_100mhz_spi_axi_master, rtl_mriscv_mriscv_axi_32_bit_100mhz_spi_axi_slave, rtl_mriscv_mriscv_axi_32_bit_100mhz_ram_4kb [EXTRACTED 1.00]
+- **APB peripherals (ADC, DAC, GPIO, SPI slave)** — rtl_mriscv_mriscv_apb_bus, rtl_mriscv_mriscv_adc, rtl_mriscv_mriscv_dac, rtl_mriscv_mriscv_gpio, rtl_mriscv_mriscv_spi_slave [EXTRACTED 1.00]
+- **Core datapath (decoder, regs, shift ctrl, ALU)** — rtl_mriscv_mriscv_instruction_decoder, rtl_mriscv_mriscv_cpu_regs, rtl_mriscv_mriscv_shift_ctrl, rtl_mriscv_mriscv_alu [EXTRACTED 1.00]
+- **Timer/counters/IRQ/PCPI muxed into result writeback path** — rtl_mriscv_mriscvcore_riscv_core_timer, rtl_mriscv_mriscvcore_riscv_core_cycle_counter, rtl_mriscv_mriscvcore_riscv_core_instr_counter, rtl_mriscv_mriscvcore_riscv_core_irq_handling, rtl_mriscv_mriscvcore_riscv_core_pc [EXTRACTED 1.00]
+- **Decode-register-ALU datapath** — rtl_mriscv_mriscvcore_riscv_core_instruction_decoder, rtl_mriscv_mriscvcore_riscv_core_cpu_regs, rtl_mriscv_mriscvcore_riscv_core_shift_ctrl, rtl_mriscv_mriscvcore_riscv_core_alu [EXTRACTED 1.00]
 
-## Communities (63 total, 44 thin omitted)
+## Communities (74 total, 48 thin omitted)
 
-### Community 0 - "ALU & Instruction Decoder"
-Cohesion: 0.05
-Nodes (48): ALU Arithmetic/Logical/Comparison Operations, Manual del A.L.U, Rationale: dedicated 'En' input gates multi-cycle shifts to avoid wasted cycles/resources, ALU Shift Operations (SLL/SRL/SRA), Decodificador de Instrucciones (Instruction Decoder Manual), Invalid Instruction Handling (unrecognized inst -> codif=4095, all 1s), RISC-V 49-Instruction 12-bit Encoding Table (funct+opcode), DECO_INSTR (+40 more)
-
-### Community 1 - "AXI/APB Top-Level Integration & Lessons"
-Cohesion: 0.05
-Nodes (34): APB_TOP, axi4_interconnect, basys3_top, axi4_interconnect Missing Parameter Override Bug, AXI_SP32B1024 Negedge Timing Design (Intentional), Things That Must Not Be Broken (JANGAN DIRUSAK), Verify Before Claiming Done/Bug Principle, impl_axi_apb (+26 more)
-
-### Community 2 - "GPIO/LED Demo Firmware"
-Cohesion: 0.10
-Nodes (26): main(), pwm_all(), main(), main(), main(), main(), main(), delay() (+18 more)
-
-### Community 3 - "TRNG Research & Bus Architecture"
-Cohesion: 0.06
-Nodes (40): TRNG ASIC Implementation (130nm CMOS, 170x58um), Capture Stage (cycle counter + PFD), Cellular-Automata Post-Processing (Rule_X), TRNG FPGA Implementation (Spartan 3AN), Fully-Synthesized TRNG (130nm CMOS), Jitter Accumulation / Edge Collapse Mechanism, NIST Randomness Test Suite Verification, 3-Edge Ring Oscillator Entropy Source (+32 more)
-
-### Community 4 - "Physical Test Board (PCB/Schematics)"
+### Community 0 - "Firmware Apps & HAL"
 Cohesion: 0.07
-Nodes (38): microAXI PCB1 (cropped) - Top Layer Render, rev 2016-08-12, microAXI PCB1 - Top Layer Render, rev 2016-08-12, microAXI PCB2 (cropped) - Bottom Layer Render, rev 2016-08-12, microAXI PCB2 - Bottom Layer Render, rev 2016-08-12, Testing Board CIDIC (rev aamaya) - PCB Bottom Copper Layer, Testing Board CIDIC (rev aamaya) - PCB Top Copper Layer, AD1580ARTZ Precision Voltage Reference, ADA4940 Differential Amplifier (ADC driver) (+30 more)
+Nodes (44): main(), pwm_all(), main(), main(), main(), main(), main(), gpio2_rd() (+36 more)
 
-### Community 5 - "Synthesis Benchmarks & Project Findings"
+### Community 1 - "OLED Encoder Firmware"
+Cohesion: 0.11
+Nodes (46): draw_value(), int_to_str(), main(), str_len(), val_to_bar(), long_delay(), main(), main() (+38 more)
+
+### Community 2 - "Project Docs & Clock Upgrade"
+Cohesion: 0.06
+Nodes (47): Clock Upgrade Notes, Core clock 50 MHz via divcnt toggle-FF, Firmware busy-wait delay recalibration (32x), SPI SCLK <= 1/4 core clock rule, mriscv-SPI README, Digilent Basys3 (Artix-7 xc7a35t), basys3_top.v single top-level, Bitstream vs program separation (+39 more)
+
+### Community 3 - "Core Module Docs (ES)"
+Cohesion: 0.06
+Nodes (32): else, endif, INSTRUCCIONES ALU (ALU manual), ALU module, Multi-cycle shifter (SLL/SRL/SRA), Decodificador de Instrucciones (DecInstDocum), 12-bit instruction encoding (decinst), Instruction decoder (DECO_INSTR) (+24 more)
+
+### Community 4 - "CIDIC Test Board PCB"
+Cohesion: 0.07
+Nodes (35): microAXI PCB1 layout (cropped), microAXI PCB1 layout, microAXI PCB2 layout (cropped), microAXI PCB2 layout, Testing board PCB layout (bottom), Testing board PCB layout (top: 30MHz osc, CY22150 clock gen, level shifter, LEDs, SMA), ADC/DAC reference & front-end (AD1580, MAX4234, ADA4940), mRISC-V chip pinout (GPIO00-07, SPI AXI slave/master, ADC/DAC, AXI_CLK) (+27 more)
+
+### Community 5 - "SRAM AXI Testbench"
 Cohesion: 0.08
-Nodes (36): Finding: nextpnr Fmax Deterministic for Fixed RTL, Synthesis Benchmark Methodology, Config: new_32kb_50mhz, Config: old_4kb_1.5mhz, FPGA Resource Utilization Comparison, AXI Address Map (Post RAM Expansion), AXI Bus Used, APB Variant Unused, Clock Core Upgrade to 50 MHz (+28 more)
+Nodes (20): aexpect, AXI_SP32B1024_INTERCONNECT, AXI_SP32B1024_tb, aexpect, xorshift64_next, spi_axi_master_tb, aexpect, xorshift64_next (+12 more)
 
-### Community 6 - "SPI Uploader Tool (cheetah_mriscv.py)"
+### Community 6 - "Hex/Upload Python Scripts"
 Cohesion: 0.10
-Nodes (15): argparse, array, CheetahLink, do_gpio(), do_release(), do_upload(), DryRun, frame_bytes() (+7 more)
+Nodes (15): argparse, array, struct, sys, CheetahLink, do_gpio(), do_release(), do_upload() (+7 more)
 
-### Community 7 - "Core Architecture Diagram (mriscv.jpg)"
+### Community 7 - "mRISC-V 100MHz Paper"
 Cohesion: 0.11
-Nodes (21): ADC 10bit 10MS/s block, ALU block, APB bus, AXI4 bus, mriscv.jpg — Core Architecture Block Diagram, mriscv CPU Core (yellow block), CPU REGS (register file) block, Cycle Counter block (+13 more)
+Nodes (23): A 32-bit 100MHz RISC-V Microcontroller with 10-bit SAR ADC in 130nm CMOS, APB bus / APB bridge, AXI4-Lite bus, 130nm CMOS implementation (167uW/MHz, 798x484um), mRISC-V microcontroller, 4kB SRAM, 10-bit SAR ADC, SPI AXI master (programming interface) (+15 more)
 
-### Community 8 - "AXI SRAM & SPI Master Testbenches"
+### Community 8 - "I2C Master Hardware"
 Cohesion: 0.10
-Nodes (13): aexpect, AXI_SP32B1024_INTERCONNECT, AXI_SP32B1024_tb, aexpect, xorshift64_next, spi_axi_master_tb, aexpect, xorshift64_next (+5 more)
+Nodes (17): axi_read, axi_write, i2c_master, i2c_master_tb, axi_read, axi_write, check, op (+9 more)
 
-### Community 9 - "UART TX Hardware & Testbench"
-Cohesion: 0.11
-Nodes (15): begin, else, end, endif, fork, uart_tx_tb, axi_write, uart_capture (+7 more)
+### Community 9 - "Upstream SoC Diagram"
+Cohesion: 0.12
+Nodes (20): ADC 10-bit 10MS/s, ALU, APB Bus (upstream variant), mriscv SoC Architecture Diagram, AXI4 Bus, mriscv RISC-V Core (CPU block), CPU Register File, DAC 12-bit (+12 more)
 
-### Community 10 - "Cheetah Python Array Types"
+### Community 10 - "Basys3 Top & GPIO Bank TB"
+Cohesion: 0.14
+Nodes (11): check, basys3_top, tb, check, spi_frame, tb, recv_byte, spi_frame (+3 more)
+
+### Community 11 - "LED Show Firmware"
+Cohesion: 0.31
+Nodes (12): main(), mode_alt(), mode_counter(), mode_fill(), mode_knight(), mode_random(), mode_shift(), rnd8() (+4 more)
+
+### Community 12 - "Cheetah SPI Python API"
 Cohesion: 0.15
-Nodes (4): cheetah, ch_spi_queue_delay_ns(), usage: int return = ch_spi_queue_delay_ns(Cheetah cheetah, int nanoseconds), os
+Nodes (4): cheetah, os, ch_spi_queue_delay_ns(), usage: int return = ch_spi_queue_delay_ns(Cheetah cheetah, int nanoseconds)
 
-### Community 11 - "GPIO AXI Submodules (completogpio)"
+### Community 13 - "APB GPIO Composition"
 Cohesion: 0.21
 Nodes (9): decodificador, flipflopRS, flipsdataw, latchW, macstate2, gpioAPB, gpioAPB_tb, completogpio (+1 more)
 
-### Community 12 - "ALU RTL Module"
+### Community 14 - "Encoder OLED Bit-bang"
+Cohesion: 0.50
+Nodes (12): clear(), cmd(), draw_glyph(), draw_hex2(), i2c_start(), i2c_stop(), i2c_tx(), ihold() (+4 more)
+
+### Community 15 - "ALU Operations"
 Cohesion: 0.27
 Nodes (11): ALU, ALU_add, ALU_and, ALU_beq, ALU_blt, ALU_bltu, ALU_or, ALU_sub (+3 more)
 
-### Community 13 - "LED Show Demo Firmware"
-Cohesion: 0.38
-Nodes (9): main(), mode_alt(), mode_counter(), mode_fill(), mode_knight(), mode_random(), mode_shift(), rnd8() (+1 more)
+### Community 16 - "Core Block Diagram"
+Cohesion: 0.22
+Nodes (13): ALU, CPU Registers (register file), RISC-V Core Block Diagram (riscv_core.png), Instruction Decoder, IRQ Handling, Memory Data Bus, Memory Instr Bus, Memory Interface (+5 more)
 
-### Community 14 - "Open-V / Onchip Ecosystem Docs"
-Cohesion: 0.24
-Nodes (10): Blink LED Demo, Onchip Web IDE Platform (onchip.uis.edu.co), Open-V Microcontroller (dev board target), USB-to-SPI Programming Flow, Board Access Ticket System, Design Skills Venn Diagram (PeripheralRISCV copy), RISC-V Recommends: Open-IP Bus Table, Open-V Crowd Supply Campaign (+2 more)
+### Community 17 - "OLED Test Bit-bang"
+Cohesion: 0.50
+Nodes (11): cmd(), fill(), i2c_start(), i2c_stop(), i2c_tx(), ihold(), main(), scl() (+3 more)
 
-### Community 15 - "Cheetah Device Open/Version API"
+### Community 18 - "APB Variant SoC"
+Cohesion: 0.18
+Nodes (6): APB_TOP, picorv32_axi, impl_axi_apb, AXI_SP32B1024, spi_axi_slave, SP32B1024
+
+### Community 19 - "UART TX & Testbench"
+Cohesion: 0.22
+Nodes (7): begin, end, fork, uart_tx_tb, axi_write, uart_capture, uart_tx
+
+### Community 20 - "impl_axi SoC & UART RX TB"
+Cohesion: 0.25
+Nodes (5): impl_axi, tb, host_send, spi_frame, spi_axi_master
+
+### Community 21 - "Cheetah Extension Info"
 Cohesion: 0.25
 Nodes (6): ch_open_ext(), ch_version(), CheetahExt, CheetahVersion, usage: (Cheetah return, CheetahExt ch_ext) = ch_open_ext(int port_number), usage: (int return, CheetahVersion version) = ch_version(Cheetah cheetah)
 
-### Community 16 - "Cheetah Device Discovery API"
+### Community 22 - "AXI Interconnect Testbench"
+Cohesion: 0.33
+Nodes (4): axi4_interconnect, axi4_interconnect_tb, aexpect, xorshift64_next
+
+### Community 23 - "Cheetah Device Discovery"
 Cohesion: 0.33
 Nodes (6): array_u16(), array_u32(), ch_find_devices(), ch_find_devices_ext(), usage: (int return, u16[] devices) = ch_find_devices(u16[] devices) All arrays…, usage: (int return, u16[] devices, u32[] unique_ids) =…
 
-### Community 17 - "Cheetah SPI Batch/Async API"
+### Community 24 - "Cheetah SPI Batch Transfer"
 Cohesion: 0.40
 Nodes (5): array_u08(), ch_spi_async_collect(), ch_spi_batch_shift(), usage: (int return, u08[] data_in) = ch_spi_batch_shift(Cheetah cheetah, u08[]…, usage: (int return, u08[] data_in) = ch_spi_async_collect(Cheetah cheetah,…
 
-### Community 22 - "Seven-Segment Demo Firmware"
-Cohesion: 0.83
-Nodes (3): delay(), main(), tampilkan_ke_hardware()
+### Community 30 - "Bus Reset Testbench"
+Cohesion: 0.50
+Nodes (3): tb, spi_frame, upload
 
 ## Ambiguous Edges - Review These
-- `AXI_SP32B1024` → `AXI_SP32B1024 Negedge Timing Design (Intentional)`  [AMBIGUOUS]
-  CLAUDE.md · relation: references
-- `uart_tx` → `UART TX Hardware Implementation`  [AMBIGUOUS]
-  CLAUDE.md · relation: references
-- `axi4_interconnect` → `axi4_interconnect Missing Parameter Override Bug`  [AMBIGUOUS]
-  CLAUDE.md · relation: references
-- `impl_axi` → `axi4_interconnect Missing Parameter Override Bug`  [AMBIGUOUS]
-  CLAUDE.md · relation: references
-- `FSM` → `PC (Program Counter) Block`  [AMBIGUOUS]
-  mriscv/mriscvcore/riscv_core.png · relation: implements
-- `IRQ` → `Timer Block`  [AMBIGUOUS]
-  mriscv/mriscvcore/riscv_core.png · relation: implements
-- `IRQ.v Timer Interrupt Controller Disabled` → `weas.txt Disassembly Test Dump (ddr2.o)`  [AMBIGUOUS]
-  mriscv/mriscvcore/tests/weas.txt · relation: conceptually_related_to
-- `mriscv.jpg — Core Architecture Block Diagram` → `APB bus`  [AMBIGUOUS]
-  mriscv/mriscv.jpg · relation: conceptually_related_to
-- `mriscv.jpg — Core Architecture Block Diagram` → `RAM 4KB block (diagram)`  [AMBIGUOUS]
-  mriscv/mriscv.jpg · relation: conceptually_related_to
+- `ALU` → `PCPI (co-processor interface)`  [AMBIGUOUS]
+  rtl/mriscv/mriscvcore/riscv_core.png · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **95 isolated node(s):** `install.sh script`, `decodificador`, `flipflopRS`, `flipsdataw`, `latchW` (+90 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 226 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **44 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **107 isolated node(s):** `install.sh script`, `run.sh script`, `run2.sh script`, `decodificador`, `flipflopRS` (+102 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 246 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **48 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **What is the exact relationship between `AXI_SP32B1024` and `AXI_SP32B1024 Negedge Timing Design (Intentional)`?**
-  _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
-- **What is the exact relationship between `uart_tx` and `UART TX Hardware Implementation`?**
-  _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
-- **What is the exact relationship between `axi4_interconnect` and `axi4_interconnect Missing Parameter Override Bug`?**
-  _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
-- **What is the exact relationship between `impl_axi` and `axi4_interconnect Missing Parameter Override Bug`?**
-  _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
-- **What is the exact relationship between `FSM` and `PC (Program Counter) Block`?**
-  _Edge tagged AMBIGUOUS (relation: implements) - confidence is low._
-- **What is the exact relationship between `IRQ` and `Timer Block`?**
-  _Edge tagged AMBIGUOUS (relation: implements) - confidence is low._
-- **What is the exact relationship between `IRQ.v Timer Interrupt Controller Disabled` and `weas.txt Disassembly Test Dump (ddr2.o)`?**
+- **What is the exact relationship between `ALU` and `PCPI (co-processor interface)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
+- **Why does `impl_axi` connect `impl_axi SoC & UART RX TB` to `Core Module Docs (ES)`, `I2C Master Hardware`, `Basys3 Top & GPIO Bank TB`, `APB GPIO Composition`, `APB Variant SoC`, `UART TX & Testbench`, `AXI Interconnect Testbench`, `AXI ADC Interface`, `AXI DAC Interface`, `Bus Reset Testbench`?**
+  _High betweenness centrality (0.066) - this node is a cross-community bridge._
+- **Why does `mriscvcore` connect `Core Module Docs (ES)` to `SRAM AXI Testbench`, `impl_axi SoC & UART RX TB`, `mRISC-V 100MHz Paper`, `ALU Operations`?**
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `ALU` connect `ALU Operations` to `Core Module Docs (ES)`?**
+  _High betweenness centrality (0.021) - this node is a cross-community bridge._
+- **Are the 23 inferred relationships involving `led_set()` (e.g. with `pwm_all()` and `main()`) actually correct?**
+  _`led_set()` has 23 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 8 inferred relationships involving `main()` (e.g. with `led_set()` and `ssd1306_begin()`) actually correct?**
+  _`main()` has 8 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 7 inferred relationships involving `main()` (e.g. with `led_set()` and `ssd1306_begin()`) actually correct?**
+  _`main()` has 7 INFERRED edges - model-reasoned connections that need verification._
