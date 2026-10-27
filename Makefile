@@ -67,8 +67,8 @@ RTL_DIRS := \
 	$(MRISCV)/mriscv_axi/DAC_interface_AXI \
 	$(MRISCV)/mriscv_axi/ADC_interface_AXI \
 	$(MRISCV)/mriscv_axi/GPIO \
-	$(MRISCV)/mriscv_axi/UART_TX \
-	$(MRISCV)/mriscv_axi/UART_RX \
+	$(MRISCV)/mriscv_axi/UART \
+	$(MRISCV)/mriscv_axi/I2C \
 	$(MRISCV)/mriscv_axi/util \
 	$(MRISCV)/mriscvcore \
 	$(MRISCV)/mriscvcore/ALU \

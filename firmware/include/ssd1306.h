@@ -14,6 +14,10 @@
  *   API SAMA di kedua mode (drawPixel, fillRect, drawChar, print, dll),
  *   jadi program tinggal tambah/hapus 1 baris #define untuk ganti mode.
  *
+ *   Tambah `#define SSD1306_HW_I2C` sebelum #include untuk memakai controller
+ *   I2C hardware (i2c_master.v, 400 kHz) sebagai pengganti bit-bang GPIO.
+ *   Default tetap bit-bang (belum diuji di board dengan OLED fisik).
+ *
  *   PENTING soal display():
  *     - MODE DIRECT: display() = no-op (gambar sudah tampil saat dipanggil).
  *     - MODE BUFFER: display() WAJIB dipanggil agar isi buffer muncul di layar.
@@ -39,6 +43,7 @@
 static inline void ssd1306__ihold(void){ volatile int i; for(i=0;i<16;i++); }  /* x4: clock naik 12.5->50MHz */
 static inline void ssd1306__scl(unsigned v){ gpio2_pin(SSD1306_SCL_PIN,v); }
 static inline void ssd1306__sda(unsigned v){ gpio2_pin(SSD1306_SDA_PIN,v); }
+#ifndef SSD1306_HW_I2C
 static inline void ssd1306__start(void){
     ssd1306__sda(1); ssd1306__scl(1); ssd1306__ihold();
     ssd1306__sda(0); ssd1306__ihold(); ssd1306__scl(0); ssd1306__ihold();
@@ -56,6 +61,21 @@ static inline void ssd1306__tx(unsigned b){
     ssd1306__sda(1); ssd1306__scl(1); ssd1306__ihold();
     ssd1306__scl(0); ssd1306__ihold();
 }
+#else
+/* I2C hardware (i2c_master.v): start() hanya menandai, START ikut dikirim bersama
+ * byte pertama (alamat). Lihat mriscv.h bagian "I2C master hardware". */
+static unsigned ssd1306__pend = 0;
+static unsigned ssd1306__nacks = 0, ssd1306__arbs = 0;   /* statistik error bus (dipakai oled_i2c_stress) */
+static inline void ssd1306__start(void){ ssd1306__pend = I2C_START; }
+static inline void ssd1306__tx(unsigned b){
+    if (!i2c_hw_write((unsigned char)b, ssd1306__pend)) {
+        ssd1306__nacks++;
+        if (I2C_STATUS & 4u) ssd1306__arbs++;
+    }
+    ssd1306__pend = 0;
+}
+static inline void ssd1306__stop(void){ i2c_hw_stop(); }
+#endif
 static inline void ssd1306__cmd(unsigned c){
     ssd1306__start();
     ssd1306__tx(SSD1306_ADDR); ssd1306__tx(SSD1306_CTL_CMD); ssd1306__tx(c);
@@ -64,7 +84,11 @@ static inline void ssd1306__cmd(unsigned c){
 
 /* ---- urutan init SSD1306 (sama kedua mode) ---- */
 static inline void ssd1306__init_seq(void){
+#ifdef SSD1306_HW_I2C
+    i2c_hw_init();
+#else
     ssd1306__sda(1); ssd1306__scl(1);
+#endif
     ssd1306__cmd(0xAE);ssd1306__cmd(0xD5);ssd1306__cmd(0x80);
     ssd1306__cmd(0xA8);ssd1306__cmd(0x3F);ssd1306__cmd(0xD3);ssd1306__cmd(0x00);
     ssd1306__cmd(0x40);ssd1306__cmd(0x8D);ssd1306__cmd(0x14);

@@ -19,7 +19,7 @@ module basys3_top (
     output uart_txd,
     input  uart_rxd,
     input  enc_clk, input enc_dt,        // rotary encoder (enc_sw SENGAJA tidak disambung)
-    output oled_scl, output oled_sda,    // OLED I2C open-drain (pull-up di XDC)
+    inout  oled_scl, inout  oled_sda,    // OLED I2C open-drain (pull-up di XDC); inout agar SCL/SDA bisa dibaca balik
     output led_trap          // LD15: nyala = core trap (misaligned/ILLISN), latch sampai reset
 );
     // Power-On Reset (~0.65 ms @ 100 MHz)
@@ -54,6 +54,7 @@ module basys3_top (
     always @(posedge clk) begin ec0 <= {ec0[0], enc_clk}; ed0 <= {ed0[0], enc_dt}; end
     wire [7:0] pindata2 = {6'b0, ed0[1], ec0[1]};
     wire [7:0] gpio2_datanw;
+    wire       i2c_scl_o, i2c_sda_o;
 
     wire trap;
     wire [11:0] dac_data;
@@ -82,12 +83,18 @@ module basys3_top (
         .uart_tx_TXD            (uart_txd),
         .uart_rx_RXD            (uart_rxd),
         .completogpio2_pindata  (pindata2),
-        .completogpio2_datanw   (gpio2_datanw)
+        .completogpio2_datanw   (gpio2_datanw),
+        .i2c_SCL_I              (oled_scl),
+        .i2c_SDA_I              (oled_sda),
+        .i2c_SCL_O              (i2c_scl_o),
+        .i2c_SDA_O              (i2c_sda_o)
     );
 
-    // I2C open-drain: datanw=1 -> lepas (high lewat pull-up), datanw=0 -> tarik low
-    assign oled_scl = gpio2_datanw[0] ? 1'bz : 1'b0;
-    assign oled_sda = gpio2_datanw[1] ? 1'bz : 1'b0;
+    // I2C open-drain, wired-AND: bus ditarik low kalau SALAH SATU sumber menarik low
+    // (GPIO bank 2 bit-bang lama ATAU controller I2C hardware). Keduanya idle=1
+    // (lepas), jadi firmware bit-bang lama tetap jalan tanpa mux.
+    assign oled_scl = (gpio2_datanw[0] & i2c_scl_o) ? 1'bz : 1'b0;
+    assign oled_sda = (gpio2_datanw[1] & i2c_sda_o) ? 1'bz : 1'b0;
 
     assign led = gpio_datanw;
 

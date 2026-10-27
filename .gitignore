@@ -27,3 +27,6 @@
 *~
 __pycache__/
 build/
+
+# Konteks lokal Claude Code (jangan ikut repo)
+CLAUDE.md
