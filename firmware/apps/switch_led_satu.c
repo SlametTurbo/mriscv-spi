@@ -1,5 +1,6 @@
 /* switch_led_satu.c -- sw0 menyalakan led0. */
-#define GP(i) (*(volatile unsigned *)(0x10040 + (i)*4u))
+#include "mriscv.h"
+#define GP(i) GPIO(i)
 int main(void){
     for(;;){
         unsigned s = GP(0) & 1u;     /* baca switch 0 */

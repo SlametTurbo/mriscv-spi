@@ -3,16 +3,29 @@
 /* ============================================================================
  * mriscv.h -- helper GPIO untuk core mriscv (RV32I) @ Basys3
  *
+ * PETA ALAMAT (byte, sejak 2026-10-30): slave n di base n<<16, jendela 64 KB.
+ *   0x00000 SRAM 32 KB   0x10000 DAC   0x20000 ADC   0x30000 GPIO bank 1
+ *   0x40000 SPI slave    0x50000 UART  0x60000 GPIO bank 2   0x70000 I2C
+ * Register ter-alias berulang di dalam jendela (decoder hanya membandingkan bit
+ * alamat [31:16]). Byte 0x8000-0xFFFF dan >= 0x80000 TIDAK terpetakan: akses ke
+ * sana menggantung bus (tanpa trap) sampai reset penuh.
+ *
  * (Bank 2 untuk encoder + OLED: lihat bagian GPIO BANK 2 di bawah.)
- * GPIO bit-addressed: pin i pada alamat byte (0x10040 + i*4), i = 0..7.
- *   (base direlokasi dari 0x1040 -> 0x10040 setelah SRAM diperbesar 4 KB -> 32 KB,
- *    supaya tidak tabrakan dengan rentang alamat SRAM yang baru)
+ * GPIO bit-addressed: pin i pada alamat byte (GPIO_BASE + i*4), i = 0..7.
  *   - TULIS : 0x3 = nyala (data=1, enable/DSE=1)
  *             0x2 = mati  (data=0, enable=1)        -> datanw[i] (output: LED, dsb)
  *   - BACA  : bit0 hasil load = pindata[i]          (input: switch, encoder, dsb)
  * ============================================================================ */
 
-#define GPIO(i)  (*(volatile unsigned *)(0x10040u + (unsigned)(i) * 4u))
+#define DAC_BASE   0x10000u
+#define ADC_BASE   0x20000u
+#define GPIO_BASE  0x30000u
+#define SPIS_BASE  0x40000u
+#define UART_BASE  0x50000u
+#define GPIO2_BASE 0x60000u
+#define I2C_BASE   0x70000u
+
+#define GPIO(i)  (*(volatile unsigned *)(GPIO_BASE + (unsigned)(i) * 4u))
 
 /* ---------------- OUTPUT (tulis) ---------------- */
 
@@ -47,12 +60,12 @@ static inline unsigned gpio_bus_rd(void){
 static inline void gpio_wr(unsigned i, unsigned v){ gpio_pin(i, v); }
 
 /* ---------------- GPIO BANK 2 (encoder + OLED I2C) ----------------
- * Slave AXI kedua, byte 0x100C0 + i*4, i = 0..7. Semantik tulis/baca SAMA dengan
+ * Slave AXI kedua, byte GPIO2_BASE + i*4, i = 0..7. Semantik tulis/baca SAMA dengan
  * bank 1. Pemakaian di top module (basys3_top.v):
  *   baca : pin 0 = encoder CLK, pin 1 = encoder DT
  *   tulis: pin 0 = OLED SCL,    pin 1 = OLED SDA (open-drain: 1 = lepas, 0 = low)
  * Bank 1 (switch/LED/7-seg) tidak terganggu. */
-#define GPIO2(i) (*(volatile unsigned *)(0x100C0u + (unsigned)(i) * 4u))
+#define GPIO2(i) (*(volatile unsigned *)(GPIO2_BASE + (unsigned)(i) * 4u))
 #define GPIO2_ENC_CLK 0u
 #define GPIO2_ENC_DT  1u
 #define GPIO2_OLED_SCL 0u
@@ -66,7 +79,7 @@ static inline unsigned gpio2_rd(unsigned i){ return GPIO2(i) & 1u; }
 static inline void delay(volatile unsigned n){ while (n--) __asm__ volatile(""); }
 
 /* ---------------- UART (TX+RX satu slave, 8N1, baud bisa diubah) ----------------
- * Satu slave AXI (uart.v), word 0x4020-0x4023, byte base 0x10080:
+ * Satu slave AXI (uart.v), byte base UART_BASE (0x50000):
  *   +0x0 TXDATA  TULIS byte -> kirim. Transaksi AXI SELALU cepat (non-blocking);
  *                kalau transmitter masih sibuk byte DIABAIKAN hardware, jadi
  *                uart_putc() polling uart_busy() dulu. BACA = STATUS (bit0 busy).
@@ -79,7 +92,6 @@ static inline void delay(volatile unsigned n){ while (n--) __asm__ volatile("");
  *                Reset = 434 (115200). Tulis DIABAIKAN kalau < 16 atau TX/RX
  *                sedang sibuk -- pakai uart_set_div()/uart_set_baud().
  * BUS_RST (tiap upload firmware) mengembalikan baud ke 115200.
- * Alamat +0/+4 sama dengan uart_tx/uart_rx lama, firmware lama tidak berubah.
  *
  * Catatan riwayat (2026-09-28): versi lama HAL ini memaksa always_inline,
  * membuat uart_puts() dua-fase dengan buffer + delay, dan melarang string
@@ -88,10 +100,10 @@ static inline void delay(volatile unsigned n){ while (n--) __asm__ volatile("");
  * misaligned di link_c.ld (crt0.S melakukan sw misaligned -> trap sebelum
  * main()). Setelah linker diperbaiki, pola biasa di bawah terbukti jalan
  * di board -- lihat CLAUDE.md bagian "UART hardware". */
-#define UART_TXD  (*(volatile unsigned *)(0x10080u))
-#define UART_RXR  (*(volatile unsigned *)(0x10084u))
-#define UART_STAT (*(volatile unsigned *)(0x10088u))
-#define UART_BDIV (*(volatile unsigned *)(0x1008Cu))
+#define UART_TXD  (*(volatile unsigned *)(UART_BASE + 0x0u))
+#define UART_RXR  (*(volatile unsigned *)(UART_BASE + 0x4u))
+#define UART_STAT (*(volatile unsigned *)(UART_BASE + 0x8u))
+#define UART_BDIV (*(volatile unsigned *)(UART_BASE + 0xCu))
 
 #define UART_ST_TXBUSY  0x01u
 #define UART_ST_RXVALID 0x02u
@@ -144,16 +156,16 @@ static inline int uart_set_div(unsigned div){
 #define uart_set_baud(baud) uart_set_div(UART_DIV(baud))
 
 /* ---------------- I2C master hardware (400 kHz @ 50 MHz) ----------------
- * Register di byte addr 0x10100 (word 0x4040), 4 register (lihat i2c_master.v):
+ * Register di byte addr I2C_BASE (0x70000), 4 register (lihat i2c_master.v):
  *   +0 DATA (tulis: byte TX, baca: byte RX terakhir)
  *   +4 CMD  (bit0 START, bit1 STOP, bit2 WRITE, bit3 READ, bit4 NACK)
  *   +8 STATUS (bit0 busy, bit1 nack, bit2 arb_lost)   +12 DIV
  * Pin = oled_scl/oled_sda (JC1/JC2). Tiap fungsi menunggu engine selesai.
  * i2c_hw_write() return 1 kalau slave ACK, 0 kalau NACK/arbitrasi hilang. */
-#define I2C_DATA   (*(volatile unsigned *)(0x10100u))
-#define I2C_CMD    (*(volatile unsigned *)(0x10104u))
-#define I2C_STATUS (*(volatile unsigned *)(0x10108u))
-#define I2C_DIV    (*(volatile unsigned *)(0x1010Cu))
+#define I2C_DATA   (*(volatile unsigned *)(I2C_BASE + 0x0u))
+#define I2C_CMD    (*(volatile unsigned *)(I2C_BASE + 0x4u))
+#define I2C_STATUS (*(volatile unsigned *)(I2C_BASE + 0x8u))
+#define I2C_DIV    (*(volatile unsigned *)(I2C_BASE + 0xCu))
 #define I2C_START 0x01u
 #define I2C_STOP  0x02u
 #define I2C_WRITE 0x04u

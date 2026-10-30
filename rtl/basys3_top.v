@@ -2,8 +2,8 @@
 // basys3_top.v 
 // Top-level TUNGGAL Basys3: SPI loader + UART + GPIO bank 1 (switch, LED,
 // seven-segment) + GPIO bank 2 (rotary encoder + OLED SSD1306 I2C).
-//   Bank 1 (byte 0x10040 + i*4): pindata = sw[7:0], datanw -> LED + 7-seg
-//   Bank 2 (byte 0x100C0 + i*4): pindata[0]=enc CLK, [1]=enc DT
+//   Bank 1 (byte 0x30000 + i*4): pindata = sw[7:0], datanw -> LED + 7-seg
+//   Bank 2 (byte 0x60000 + i*4): pindata[0]=enc CLK, [1]=enc DT
 //                                datanw[0]=OLED SCL, [1]=OLED SDA (open-drain)
 // Satu bitstream untuk semua firmware; ganti firmware cukup lewat SPI.
 // =============================================================================

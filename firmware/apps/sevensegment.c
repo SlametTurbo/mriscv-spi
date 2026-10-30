@@ -1,7 +1,8 @@
-#define GP(i) (*(volatile unsigned *)(0x10040 + (i)*4u))
+#include "mriscv.h"
+#define GP(i) GPIO(i)
 
 // Fungsi delay bare-metal agar perubahan angka bisa dilihat mata
-void delay(volatile unsigned int count) {
+void tunda(volatile unsigned int count) {
     while (count--) {
         __asm__ volatile ("nop");
     }
@@ -31,7 +32,7 @@ int main(void) {
         tampilkan_ke_hardware(counter);
 
         // 2. Beri jeda waktu (silakan naikkan/turunkan nilai ini sesuai clock CPU Anda)
-        delay(15000);
+        tunda(15000);
 
         // 3. Naikkan nilai counter. 
         // Karena bertipe 'unsigned char' (8-bit), setelah 255 (0xFF) ia akan otomatis kembali ke 0
