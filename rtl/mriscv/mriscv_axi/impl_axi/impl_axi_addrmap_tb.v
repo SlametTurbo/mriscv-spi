@@ -57,30 +57,35 @@ module tb;
     reg [31:0] p_addr [0:NP-1];
     integer    p_slv  [0:NP-1];
     initial begin
+        // Peta 2026-10-30: slave n di word n<<14, mask jendela penuh 0x3FFF
+        // (SRAM 0x1FFF). Tiap slave diprobe di awal & akhir jendela; probe akhir
+        // jendela juga menguji alias (slave cuma memakai bit alamat rendah).
         // SRAM 32 KB: 0x0000-0x1FFF (dua titik, bukan 0 supaya tidak menimpa program)
         p_addr[ 0] = 32'h0000_0100; p_slv[ 0] = 0;
         p_addr[ 1] = 32'h0000_1FFF; p_slv[ 1] = 0;
-        p_addr[ 2] = 32'h0000_4000; p_slv[ 2] = 1;   // DAC  0x4000-0x4001
-        p_addr[ 3] = 32'h0000_4001; p_slv[ 3] = 1;
-        p_addr[ 4] = 32'h0000_4008; p_slv[ 4] = 2;   // ADC  0x4008-0x4009
-        p_addr[ 5] = 32'h0000_4009; p_slv[ 5] = 2;
-        p_addr[ 6] = 32'h0000_4010; p_slv[ 6] = 3;   // GPIO 0x4010-0x401F
-        p_addr[ 7] = 32'h0000_401F; p_slv[ 7] = 3;
-        p_addr[ 8] = 32'h0400_0000; p_slv[ 8] = 4;   // SPI slave (exact)
-        p_addr[ 9] = 32'h0000_4023; p_slv[ 9] = 5;   // UART 0x4020-0x4023 (BAUDDIV)
-        p_addr[10] = 32'h0000_4020; p_slv[10] = 5;   // (TXDATA; tulis setelah BAUDDIV,
+        p_addr[ 2] = 32'h0000_4000; p_slv[ 2] = 1;   // DAC  0x4000-0x7FFF
+        p_addr[ 3] = 32'h0000_7FFF; p_slv[ 3] = 1;
+        p_addr[ 4] = 32'h0000_8000; p_slv[ 4] = 2;   // ADC  0x8000-0xBFFF
+        p_addr[ 5] = 32'h0000_BFFF; p_slv[ 5] = 2;
+        p_addr[ 6] = 32'h0000_C000; p_slv[ 6] = 3;   // GPIO 0xC000-0xFFFF (pin0)
+        p_addr[ 7] = 32'h0000_FFFF; p_slv[ 7] = 3;   // (alias pin7)
+        p_addr[ 8] = 32'h0001_7FFF; p_slv[ 8] = 5;   // UART 0x14000-0x17FFF (alias BAUDDIV)
+        p_addr[ 9] = 32'h0001_4000; p_slv[ 9] = 5;   // (TXDATA; tulis setelah BAUDDIV,
                                                      //  kalau tx_busy BAUDDIV ditolak)
-        p_addr[11] = 32'h0000_4030; p_slv[11] = 6;   // GPIO bank 2 0x4030-0x403F
-        p_addr[12] = 32'h0000_403F; p_slv[12] = 6;
-        p_addr[13] = 32'h0000_4040; p_slv[13] = 7;   // I2C 0x4040-0x4043
-        p_addr[14] = 32'h0000_4042; p_slv[14] = 7;   // (STATUS, aman dibaca)
-        p_addr[15] = 32'h0000_4043; p_slv[15] = 7;   // (DIV)
+        p_addr[10] = 32'h0001_8000; p_slv[10] = 6;   // GPIO bank 2 0x18000-0x1BFFF (pin0)
+        p_addr[11] = 32'h0001_BFFF; p_slv[11] = 6;   // (alias pin7)
+        p_addr[12] = 32'h0001_C000; p_slv[12] = 7;   // I2C 0x1C000-0x1FFFF (DATA)
+        p_addr[13] = 32'h0001_FFFF; p_slv[13] = 7;   // (alias DIV)
+        p_addr[14] = 32'h0001_0000; p_slv[14] = 4;   // SPI slave 0x10000-0x13FFF
+        p_addr[15] = 32'h0001_3FFF; p_slv[15] = 4;   // (paling akhir di [R])
     end
     localparam NU = 6;                       // probe [U] tambahan
     reg [31:0] u_addr [0:NU-1];
     initial begin
-        u_addr[0] = 32'h0000_2000; u_addr[1] = 32'h0000_4002; u_addr[2] = 32'h0000_400A;
-        u_addr[3] = 32'h0000_4024; u_addr[4] = 32'h0000_4044; u_addr[5] = 32'h0400_0001;
+        u_addr[0] = 32'h0000_2000; u_addr[1] = 32'h0000_3FFF;   // celah SRAM 32-64 KB
+        u_addr[2] = 32'h0002_0000; u_addr[3] = 32'h0003_FFFF;   // slot 8-15 kosong
+        u_addr[4] = 32'h0400_0000;                              // alamat SPI slave lama
+        u_addr[5] = 32'h8000_C000;                              // bit atas wajib dibandingkan
     end
 
     integer errors = 0;
@@ -185,11 +190,11 @@ module tb;
         for (i = 0; i < NP; i = i + 1) begin
             case (i)
                 0, 1:  probe_write(p_addr[i], 32'hA5A5_0000 | i, p_slv[i]);  // pola SRAM
-                6:     probe_write(p_addr[i], 32'h3, p_slv[i]);     // GPIO pin0 = 1
-                11:    probe_write(p_addr[i], 32'h3, p_slv[i]);     // GPIO2 pin0 = 1
-                9:     probe_write(p_addr[i], 32'd217, p_slv[i]);   // UART BAUDDIV = 217 (230400)
-                10:    probe_write(p_addr[i], 32'h55, p_slv[i]);    // UART TX kirim 'U'
-                15:    probe_write(p_addr[i], 32'd50, p_slv[i]);    // I2C DIV = 50
+                6, 7, 10, 11:
+                       probe_write(p_addr[i], 32'h3, p_slv[i]);     // GPIO 1/2 pin0 & pin7 = 1
+                8:     probe_write(p_addr[i], 32'd217, p_slv[i]);   // UART BAUDDIV = 217 (230400)
+                9:     probe_write(p_addr[i], 32'h55, p_slv[i]);    // UART TX kirim 'U'
+                13:    probe_write(p_addr[i], 32'd50, p_slv[i]);    // I2C DIV = 50
                 default: probe_write(p_addr[i], 32'h0, p_slv[i]);
             endcase
         end
@@ -200,8 +205,8 @@ module tb;
             $display("  FAIL [W] isi SRAM: mem[0x100]=%h mem[0x1FFF]=%h",
                      dut.SP32B1024_INT.mem[13'h0100], dut.SP32B1024_INT.mem[13'h1FFF]);
         end
-        if (dnw[0] !== 1'b1)  begin errors = errors + 1; $display("  FAIL [W] GPIO bank 1 pin0 tidak naik"); end
-        if (dnw2[0] !== 1'b1) begin errors = errors + 1; $display("  FAIL [W] GPIO bank 2 pin0 tidak naik"); end
+        if (dnw  !== 8'h81) begin errors = errors + 1; $display("  FAIL [W] GPIO bank 1 = %b, harap 10000001", dnw); end
+        if (dnw2 !== 8'h81) begin errors = errors + 1; $display("  FAIL [W] GPIO bank 2 = %b, harap 10000001", dnw2); end
         if (!uart_started)    begin errors = errors + 1; $display("  FAIL [W] UART TX tidak mulai kirim"); end
         if (dut.inst_uart.div !== 16'd217) begin
             errors = errors + 1; $display("  FAIL [W] BAUDDIV UART = %0d, harap 217", dut.inst_uart.div);
@@ -214,8 +219,7 @@ module tb;
         $display("[R] decode BACA lewat CPU (lui+lw per alamat)");
         np = 0;
         for (k = 0; k < NP; k = k + 1) begin
-            i = (k == NP-1) ? 8 : (k >= 8 ? k + 1 : k);       // SPI slave paling akhir
-            ba = p_addr[i] << 2;                                  // alamat byte CPU
+            ba = p_addr[k] << 2;                                  // alamat byte CPU
             hi = (ba + 32'h800) >> 12;
             prog[np] = LUI(5'd5, hi[19:0]);               np = np + 1;
             prog[np] = LW (5'd6, 5'd5, ba[11:0]);         np = np + 1;

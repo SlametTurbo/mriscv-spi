@@ -29,7 +29,7 @@ module uart_tb;
     task axi_write(input [1:0] r, input [31:0] d);
         integer t;
         begin
-            @(posedge CLK); AWADDR <= 32'h4020 | r; WDATA <= d;
+            @(posedge CLK); AWADDR <= 32'h14000 | r; WDATA <= d;
             AWVALID <= 1; WVALID <= 1; BREADY <= 1;
             t = 0; while (!(AWREADY && WREADY) && t < 50) begin @(posedge CLK); t = t + 1; end
             AWVALID <= 0; WVALID <= 0;
@@ -42,7 +42,7 @@ module uart_tb;
     reg [31:0] v;
     task axi_read(input [1:0] r);
         begin
-            @(posedge CLK); ARADDR <= 32'h4020 | r; ARVALID <= 1;
+            @(posedge CLK); ARADDR <= 32'h14000 | r; ARVALID <= 1;
             @(posedge CLK); wait (ARREADY); @(posedge CLK); ARVALID <= 0;
             RREADY <= 1; wait (RVALID); v = RDATA; @(posedge CLK); RREADY <= 0;
             repeat (2) @(posedge CLK);

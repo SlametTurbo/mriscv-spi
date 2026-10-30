@@ -30,7 +30,7 @@ module impl_axi(
     // Slave 6 (uart), UART TX+RX satu slave (nama port lama dipertahankan)
     output             uart_tx_TXD,
     input              uart_rx_RXD,
-    // Slave 7 (completogpio #2), GPIO bank 2 (encoder + OLED I2C), word 0x4030
+    // Slave 7 (completogpio #2), GPIO bank 2 (encoder + OLED I2C)
     input  [7:0]     completogpio2_pindata,
     output [7:0]     completogpio2_datanw,
     // Slave 8 (i2c_master), I2C master open-drain (*_O=1 artinya lepas)
@@ -80,17 +80,28 @@ module impl_axi(
     localparam                sword = 32;
     localparam              masters = 2;
     localparam              slaves = 8;
-    // SRAM diperbesar 4 KB -> 32 KB (1024 -> 8192 word, mask 0x3FF -> 0x1FFF).
-    // DAC/ADC/GPIO direlokasi ke 0x4000+ supaya tidak tabrakan dengan rentang SRAM baru.
-    // Slave 6 (UART TX+RX, uart.v) di 0x4020-0x4023 (word, byte 0x10080), mask=0x3
-    // (4 register: TXDATA, RXDATA, STATUS, BAUDDIV). Dulu dua slave exact-match
-    // terpisah (uart_tx 0x4020, uart_rx 0x4021) -- alamat +0/+4 sengaja sama.
-    // Slave 7 (GPIO bank 2) di 0x4030-0x403F (word, byte 0x100C0 + i*4), mask=0xF
-    // seperti GPIO bank 1. Dipakai encoder (input) dan OLED I2C (output) supaya
-    // indeks pin-nya tidak bentrok dengan switch/LED/7-seg di bank 1.
-    // Slave 8 (I2C master) di 0x4040-0x4043 (word, byte 0x10100), mask=0x3 (4 register).
-    localparam [slaves*sword-1:0] addr_mask = {32'h00000003,32'h0000000F,32'h00000003,32'h00000000,32'h0000000F,32'h00000001,32'h00000001,32'h00001FFF};
-    localparam [slaves*sword-1:0] addr_use  = {32'h00004040,32'h00004030,32'h00004020,32'h04000000,32'h00004010,32'h00004008,32'h00004000,32'h00000000};
+    // Peta alamat (2026-10-30): slave n di byte base n<<16 (word base n<<14), jadi
+    // digit hex ke-5 byte address = nomor slave, 4 digit bawah = offset register.
+    // Base tiap slave bisa dimuat satu instruksi `lui` (imm = n<<4).
+    // Mask PENUH jendela 64 KB (word 0x3FFF): decoder cuma membandingkan bit
+    // [31:14], akses di dalam jendela tidak pernah menggantung bus (tidak ada
+    // DECERR), tapi register ter-alias berulang di seluruh jendela karena slave
+    // hanya memakai bit alamat rendah (GPIO [2:0], UART/I2C [1:0], DAC/ADC/SPI
+    // tidak memakai alamat). Pengecualian SRAM: mask 0x1FFF (32 KB), jadi word
+    // 0x2000-0x3FFF (byte 0x8000-0xFFFF) TIDAK terpetakan.
+    //   idx  periferal        word base   byte base
+    //   0    SRAM 32 KB       0x00000     0x00000  (mask 0x1FFF)
+    //   1    DAC              0x04000     0x10000
+    //   2    ADC              0x08000     0x20000
+    //   3    GPIO bank 1      0x0C000     0x30000  (+4*pin)
+    //   4    spi_axi_slave    0x10000     0x40000
+    //   5    UART TX+RX       0x14000     0x50000  (TXDATA,RXDATA,STATUS,BAUDDIV)
+    //   6    GPIO bank 2      0x18000     0x60000  (+4*pin, encoder + OLED)
+    //   7    I2C master       0x1C000     0x70000  (DATA,CMD,STATUS,DIV)
+    // Slot 0 maksimal 64 KB; SRAM lebih besar butuh peta baru.
+    localparam [slaves*sword-1:0] addr_mask = {32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00001FFF};
+    localparam [slaves*sword-1:0] addr_use  = {32'h0001C000,32'h00018000,32'h00014000,32'h00010000,32'h0000C000,32'h00008000,32'h00004000,32'h00000000};
+    //                                         slave 7      slave 6      slave 5      slave 4      slave 3      slave 2      slave 1      slave 0
     
     // AXI4-lite master memory interfaces
 

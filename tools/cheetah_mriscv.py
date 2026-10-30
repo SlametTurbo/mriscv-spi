@@ -33,7 +33,7 @@ from array import array
 INSTR_WRITE = 0b10
 INSTR_NOP   = 0b00
 SRAM_BASE   = 0x000          # word-address RAM (program) 0x0000..0x1FFF (32 KB)
-GPIO_BASE   = 0x4010         # word-address GPIO pin 0; pin i -> 0x4010 + i (direlokasi dari 0x410)
+GPIO_BASE   = 0xC000         # word-address GPIO bank 1 pin 0 (byte 0x30000); pin i -> 0xC000 + i
 GPIO_ON     = 0x3            # data=1, DSE(enable)=1
 GPIO_OFF    = 0x2            # data=0, DSE(enable)=1
 FRAME_BYTES = 9              # 66 bit -> 9 byte (72 bit) dgn padding

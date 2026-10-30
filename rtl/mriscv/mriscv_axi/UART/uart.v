@@ -6,8 +6,8 @@
 // bedanya pembagi baud sekarang register, bukan localparam.
 //
 // REGISTER (dipilih lewat ADDR[1:0] = indeks word di dalam slave; byte base
-// 0x10080 -- alamat +0/+4 SAMA dengan uart_tx/uart_rx lama, jadi firmware
-// lama tetap jalan tanpa diubah):
+// 0x50000, ter-alias tiap 16 byte di jendela 64 KB slave. Offset +0/+4 sama
+// dengan uart_tx/uart_rx lama):
 //   0 TXDATA  tulis: kirim WDATA[7:0] (diabaikan diam-diam kalau tx_busy)
 //             baca : STATUS (sama dengan reg 2, TIDAK pop) -- bit0 = tx_busy
 //                    seperti uart_tx lama
