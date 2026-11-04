@@ -5,19 +5,23 @@
 //      LAMA (tanpa ALIGN(4) di dalam section), mis.
 //        git show d22f868~1:link_c.ld > /tmp/old.ld
 //        riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -nostdlib -nostartfiles \
-//            -ffreestanding -Os -T /tmp/old.ld crt0.S uart_probe6_4c.c -o bad.elf
+//            -ffreestanding -Os -Ifirmware/include -T /tmp/old.ld \
+//            firmware/startup/crt0.S firmware/probes/uart_probe6_4c.c -o bad.elf
 //        riscv64-unknown-elf-objcopy -O binary bad.elf bad.bin
-//   2) make build FW=uart_probe7   (-> uart_probe7.bin)
+//      (cek: riscv64-unknown-elf-nm bad.elf | grep __bss_start harus GANJIL)
+//   2) make build FW=uart_probe7   (-> build/fw/uart_probe7.bin)
 //   3) Ubah kedua .bin jadi hex satu kata per baris (little-endian) -> bad.hex, good.hex
 //      python3 -c "import struct,sys;d=open(sys.argv[1],'rb').read();d+=b'\0'*(-len(d)%4);print('\n'.join('%08x'%struct.unpack('<I',d[i:i+4])[0] for i in range(0,len(d),4)))" bad.bin > bad.hex
-//   4) iverilog -g2012 -s tb -o tb.vvp mriscv/mriscv_axi/impl_axi/impl_axi_busrst_tb.v SP32B1024.v <semua .v non-tb> && vvp tb.vvp
+//   4) iverilog -g2012 -s tb -o tb.vvp rtl/mriscv/mriscv_axi/impl_axi/impl_axi_busrst_tb.v rtl/SP32B1024.v <semua .v non-tb>
+//      lalu vvp tb.vvp dari folder yang berisi bad.hex + good.hex
 //      Tambah -DNO_BUSRST untuk mematikan fix (harus FAIL: upload kedua gagal).
 // Hasil 2026-09-28: dengan fix PASS ("Hello UART @", SRAM benar), -DNO_BUSRST FAIL.
+// Ulang 2026-10-30 (peta alamat baru, firmware di-rebuild): PASS.
 `timescale 1ns/1ps
 // Testbench reset bus (task 2b): upload firmware yang trap di tengah
 // transaksi AXI, lalu upload firmware kedua (uart_probe7) lewat SPI persis
 // seperti cheetah_mriscv.py, dan cek apakah firmware kedua benar-benar jalan
-// (karakter keluar lewat uart_tx). Kompilasi dengan -DNO_BUSRST untuk
+// (karakter keluar lewat UART, uart.v). Kompilasi dengan -DNO_BUSRST untuk
 // mematikan fix dan memastikan testbench memang mereproduksi bug.
 module tb;
     reg CLK = 0; always #10 CLK = ~CLK;      // 50 MHz
@@ -65,7 +69,7 @@ module tb;
         end
     endtask
 
-    // pantau byte yang benar-benar dikirim uart_tx
+    // pantau byte yang benar-benar dikirim UART (uart.v)
     integer nchar = 0;
     always @(posedge CLK)
         if (dut.inst_uart.start_pulse) begin

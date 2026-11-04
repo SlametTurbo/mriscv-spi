@@ -4,11 +4,12 @@
  * mriscv.h -- helper GPIO untuk core mriscv (RV32I) @ Basys3
  *
  * PETA ALAMAT (byte, sejak 2026-10-30): slave n di base n<<16, jendela 64 KB.
- *   0x00000 SRAM 32 KB   0x10000 DAC   0x20000 ADC   0x30000 GPIO bank 1
+ *   0x00000 SRAM 64 KB   0x10000 DAC   0x20000 ADC   0x30000 GPIO bank 1
  *   0x40000 SPI slave    0x50000 UART  0x60000 GPIO bank 2   0x70000 I2C
  * Register ter-alias berulang di dalam jendela (decoder hanya membandingkan bit
- * alamat [31:16]). Byte 0x8000-0xFFFF dan >= 0x80000 TIDAK terpetakan: akses ke
- * sana menggantung bus (tanpa trap) sampai reset penuh.
+ * alamat [31:16]). Byte >= 0x80000 TIDAK terpetakan: akses ke sana menggantung
+ * bus (tanpa trap) sampai reset penuh. (SRAM 64 KB sejak 2026-10-30; bitstream
+ * lama 32 KB punya celah 0x8000-0xFFFF -- stack firmware 64 KB jatuh ke sana.)
  *
  * (Bank 2 untuk encoder + OLED: lihat bagian GPIO BANK 2 di bawah.)
  * GPIO bit-addressed: pin i pada alamat byte (GPIO_BASE + i*4), i = 0..7.

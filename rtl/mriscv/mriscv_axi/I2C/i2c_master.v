@@ -2,7 +2,8 @@
 // ============================================================================
 // i2c_master.v -- I2C master level-byte, slave AXI4-lite. Satu modul, satu FSM.
 //
-// REGISTER (dipilih lewat ADDR[1:0] = indeks word di dalam slave):
+// REGISTER (dipilih lewat ADDR[1:0] = indeks word di dalam slave; byte base
+// 0x70000 = I2C_BASE di mriscv.h, ter-alias tiap 16 byte di jendela 64 KB slave):
 //   0 DATA   tulis: byte yang akan dikirim      baca: byte terakhir diterima
 //   1 CMD    tulis: bit0 START  bit1 STOP  bit2 WRITE  bit3 READ  bit4 NACK
 //            Satu tulis = satu operasi, urutan tetap:
@@ -12,7 +13,7 @@
 //                  bit2 arb_lost (SDA ditarik slave/master lain saat kirim '1')
 //   3 DIV    tulis/baca: clk per seperempat periode SCL (minimal 4, saat idle)
 //
-// Semantik NON-BLOCKING seperti uart_tx: tulis AXI selalu cepat. Tulis DATA/CMD/
+// Semantik NON-BLOCKING seperti uart.v: tulis AXI selalu cepat. Tulis DATA/CMD/
 // DIV saat busy diabaikan diam-diam, jadi firmware polling busy dulu.
 //
 // Pin open-drain: *_O = 1 artinya LEPAS (bus ditarik pull-up), 0 = tarik low.

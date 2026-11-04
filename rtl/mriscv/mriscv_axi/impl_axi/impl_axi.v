@@ -4,36 +4,38 @@ module impl_axi(
     // General
     input             CLK,
     input             RST,
-    // Master 1 (picorv32_axi), trap
+    // Indeks master/slave di bawah 0-based = indeks m_axi_*/s_axi_*[n] dan
+    // tabel peta alamat (localparam addr_use). Slave n = byte base n<<16.
+    // Master 0 (mriscvcore), trap
     output            trap,
-    // Master 2 (spi_axi_master), SPI Slave Interface
+    // Master 1 (spi_axi_master), SPI Slave Interface (loader)
     input             spi_axi_master_CEB, 
     input             spi_axi_master_SCLK, 
     input             spi_axi_master_DATA, 
     output             spi_axi_master_DOUT,
-    // Slave 1 (AXI_SP32B1024), NOTHING
-    // Slave 2 (DAC_interface_AXI), DAC Interface
+    // Slave 0 (AXI_SP32B1024, SRAM byte 0x00000), NOTHING
+    // Slave 1 (DAC_interface_AXI, byte 0x10000), DAC Interface
     output [11:0]     DAC_interface_AXI_DATA,
-    // Slave 3 (ADC_interface_AXI), ADC Interface
+    // Slave 2 (ADC_interface_AXI, byte 0x20000), ADC Interface
     input             ADC_interface_AXI_BUSY,
     input  [9:0]     ADC_interface_AXI_DATA,
-    // Slave 4 (completogpio), GPIO Control Pins
+    // Slave 3 (completogpio, byte 0x30000), GPIO bank 1 Control Pins
     input  [7:0]     completogpio_pindata,
     output [7:0]     completogpio_Rx,
     output [7:0]     completogpio_Tx,
     output [7:0]     completogpio_datanw,
     output [7:0]     completogpio_DSE,
-    // Slave 5 (spi_axi_slave), SPI Master Interface
+    // Slave 4 (spi_axi_slave, byte 0x40000), SPI Master Interface
     output             spi_axi_slave_CEB,
     output             spi_axi_slave_SCLK,
     output             spi_axi_slave_DATA,
-    // Slave 6 (uart), UART TX+RX satu slave (nama port lama dipertahankan)
+    // Slave 5 (uart, byte 0x50000), UART TX+RX satu slave (nama port lama dipertahankan)
     output             uart_tx_TXD,
     input              uart_rx_RXD,
-    // Slave 7 (completogpio #2), GPIO bank 2 (encoder + OLED I2C)
+    // Slave 6 (completogpio #2, byte 0x60000), GPIO bank 2 (encoder + OLED I2C)
     input  [7:0]     completogpio2_pindata,
     output [7:0]     completogpio2_datanw,
-    // Slave 8 (i2c_master), I2C master open-drain (*_O=1 artinya lepas)
+    // Slave 7 (i2c_master, byte 0x70000), I2C master open-drain (*_O=1 artinya lepas)
     input              i2c_SCL_I,
     input              i2c_SDA_I,
     output             i2c_SCL_O,
@@ -87,10 +89,11 @@ module impl_axi(
     // [31:14], akses di dalam jendela tidak pernah menggantung bus (tidak ada
     // DECERR), tapi register ter-alias berulang di seluruh jendela karena slave
     // hanya memakai bit alamat rendah (GPIO [2:0], UART/I2C [1:0], DAC/ADC/SPI
-    // tidak memakai alamat). Pengecualian SRAM: mask 0x1FFF (32 KB), jadi word
-    // 0x2000-0x3FFF (byte 0x8000-0xFFFF) TIDAK terpetakan.
+    // tidak memakai alamat). SRAM mengisi penuh slot 0 (64 KB, sejak 2026-10-30;
+    // dulu 32 KB mask 0x1FFF dengan celah byte 0x8000-0xFFFF), jadi yang tidak
+    // terpetakan tinggal word >= 0x20000 (byte >= 0x80000).
     //   idx  periferal        word base   byte base
-    //   0    SRAM 32 KB       0x00000     0x00000  (mask 0x1FFF)
+    //   0    SRAM 64 KB       0x00000     0x00000  (A[13:0] = 16384 word)
     //   1    DAC              0x04000     0x10000
     //   2    ADC              0x08000     0x20000
     //   3    GPIO bank 1      0x0C000     0x30000  (+4*pin)
@@ -99,7 +102,7 @@ module impl_axi(
     //   6    GPIO bank 2      0x18000     0x60000  (+4*pin, encoder + OLED)
     //   7    I2C master       0x1C000     0x70000  (DATA,CMD,STATUS,DIV)
     // Slot 0 maksimal 64 KB; SRAM lebih besar butuh peta baru.
-    localparam [slaves*sword-1:0] addr_mask = {32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00001FFF};
+    localparam [slaves*sword-1:0] addr_mask = {32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF,32'h00003FFF};
     localparam [slaves*sword-1:0] addr_use  = {32'h0001C000,32'h00018000,32'h00014000,32'h00010000,32'h0000C000,32'h00008000,32'h00004000,32'h00000000};
     //                                         slave 7      slave 6      slave 5      slave 4      slave 3      slave 2      slave 1      slave 0
     
@@ -194,10 +197,10 @@ module impl_axi(
         end
     endgenerate
     
-    // Slave 1 (AXI_SP32B1024), Memory Interface
+    // Slave 0 (AXI_SP32B1024), Memory Interface
     wire  [31:0]     AXI_SP32B1024_D;
     wire  [31:0]     AXI_SP32B1024_Q;
-    wire  [12:0]     AXI_SP32B1024_A;
+    wire  [13:0]     AXI_SP32B1024_A;
     wire             AXI_SP32B1024_CEN;
     wire             AXI_SP32B1024_WEN;
     
@@ -249,11 +252,13 @@ module impl_axi(
         .s_axi_rdata(s_axi_rdata)
     ); 
     
-    // Master 1, processor
+    // Master 0, processor
     // For everyone in this vast processor world, address increments in 4-terms
     // For us, only increment one
     // This is a fix for this issue (as expresed on the testbench)
     // This is a little workaround for the RAM
+    // Akibatnya SELURUH bus (addr_use/addr_mask + semua slave) memakai WORD address:
+    // byte address firmware = word address << 2 (mis. UART byte 0x50000 = word 0x14000).
     wire [31:0] mriscvcore_awaddr; assign m_axi_awaddr_o[0] = {2'b00, mriscvcore_awaddr[31:2]};
     wire [31:0] mriscvcore_araddr; assign m_axi_araddr_o[0] = {2'b00, mriscvcore_araddr[31:2]};
     mriscvcore mriscvcore_inst (
@@ -281,7 +286,7 @@ module impl_axi(
         .inirr  (32'd0          )
     );
     
-    // Master 2, spi_axi_master
+    // Master 1, spi_axi_master
     spi_axi_master inst_spi_axi_master
     (
         .CEB(spi_axi_master_CEB), 
@@ -310,7 +315,7 @@ module impl_axi(
         .axi_rdata(m_axi_rdata_o[1])
     );
     
-    // Slave 1, AXI_SP32B1024
+    // Slave 0, AXI_SP32B1024
     AXI_SP32B1024 inst_AXI_SP32B1024(
         .CLK(CLK),
         .RST(BUS_RST),
@@ -347,7 +352,7 @@ module impl_axi(
     .D        (AXI_SP32B1024_D)
     );
     
-    // Slave 2, DAC_interface_AXI
+    // Slave 1, DAC_interface_AXI
     DAC_interface_AXI inst_DAC_interface_AXI(
         .CLK(CLK),
         .RST(BUS_RST),
@@ -368,7 +373,7 @@ module impl_axi(
         .DATA(DAC_interface_AXI_DATA)
     );
     
-    //Slave 3, ADC_interface_AXI
+    // Slave 2, ADC_interface_AXI
     ADC_interface_AXI inst_ADC_interface_AXI(
         .CLK(CLK),
         .RST(BUS_RST),
@@ -391,7 +396,7 @@ module impl_axi(
         .BUSY(ADC_interface_AXI_BUSY)
     );
     
-    //Slave 4, completogpio
+    // Slave 3, completogpio (bank 1)
     completogpio inst_completogpio(
         .clock(CLK),
         .reset(BUS_RST),
@@ -416,7 +421,7 @@ module impl_axi(
         .DSE(completogpio_DSE)
     );
     
-    // Slave 5, spi_axi_slave
+    // Slave 4, spi_axi_slave
     spi_axi_slave inst_spi_axi_slave
     (
         .CEB(spi_axi_slave_CEB), 
@@ -443,7 +448,7 @@ module impl_axi(
         .axi_rdata(s_axi_rdata_o[4])
     );
 
-    // Slave 6 (index 5), uart: TX+RX satu slave, baud awal 115200 @ CLK_HZ=50MHz,
+    // Slave 5, uart: TX+RX satu slave, baud awal 115200 @ CLK_HZ=50MHz,
     // bisa diubah lewat register BAUDDIV (lihat uart.v). CLK_HZ WAJIB ikut clock core.
     uart #(
         .CLK_HZ(50_000_000),
@@ -471,7 +476,7 @@ module impl_axi(
         .RXD(uart_rx_RXD)
     );
 
-    // Slave 7 (index 6), completogpio bank 2: encoder (pindata[1:0]) + OLED I2C (datanw[1:0])
+    // Slave 6, completogpio bank 2: encoder (pindata[1:0]) + OLED I2C (datanw[1:0])
     wire [7:0] gpio2_Rx, gpio2_Tx, gpio2_DSE;
     completogpio inst_completogpio2(
         .clock(CLK),
@@ -497,7 +502,7 @@ module impl_axi(
         .DSE(gpio2_DSE)
     );
 
-    // Slave 8 (index 7), i2c_master (level byte, 400 kHz @ CLK_HZ=50MHz -- lihat i2c_master.v)
+    // Slave 7, i2c_master (level byte, 400 kHz @ CLK_HZ=50MHz -- lihat i2c_master.v)
     i2c_master #(
         .CLK_HZ(50_000_000),
         .I2C_HZ(400_000)

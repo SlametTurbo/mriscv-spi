@@ -29,7 +29,7 @@ module AXI_SP32B1024(
 	input [31:0] Q,
 	output reg CEN,
 	output reg WEN,
-	output reg [12:0] A,
+	output reg [13:0] A,
 	output [31:0] D
 	);
 
@@ -37,20 +37,20 @@ module AXI_SP32B1024(
 	assign axi_awready = 1'b1;
 	assign axi_arready = 1'b1;
 	assign axi_wready = 1'b1;
-	//reg [12:0] A;
+	//reg [13:0] A;
 	reg [31:0] DP;
 	//wire [31:0] Q;
 	assign axi_rdata = Q;
 	// For memory, we provide the signals in negedge, because the setup and hold sh*t
 	always @(negedge CLK) begin
 		if (RST==1'b0) begin
-			A <= {13{1'b0}};
+			A <= {14{1'b0}};
 			DP <= {32{1'b0}};
 		end else begin
 			if(axi_awvalid == 1'b1) begin
-				A <= axi_awaddr[12:0];
+				A <= axi_awaddr[13:0];
 			end else if(axi_arvalid == 1'b1) begin
-				A <= axi_araddr[12:0];
+				A <= axi_araddr[13:0];
 			end
 			
 			if(axi_wvalid == 1'b1) begin

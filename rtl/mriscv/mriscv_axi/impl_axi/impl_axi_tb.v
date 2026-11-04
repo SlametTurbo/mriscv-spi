@@ -1,4 +1,13 @@
 `timescale 1ns/1ns
+// ============================================================================
+// impl_axi_tb.v -- testbench BAWAAN UPSTREAM onchipuis/mriscv. SUDAH USANG, JANGAN
+// DIPAKAI untuk regresi: masih memakai peta alamat upstream asli (DAC 0x400,
+// ADC 0x408, GPIO 0x410, slaves=5), port UART/GPIO bank 2/I2C tidak disambung,
+// memakai frame SPI baca (instr 01) yang tidak didukung spi_axi_master versi
+// repo ini, dan firmware_mini.hex tidak ada. Peta alamat sekarang (2026-10-30)
+// ada di impl_axi.v; tb yang dipakai: impl_axi_addrmap_tb, impl_axi_busrst_tb,
+// impl_axi_uartbaud_tb, impl_axi_uartrx_tb, basys3_top_*_tb.
+// ============================================================================
 
 module impl_axi_tb();
 
