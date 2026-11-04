@@ -58,11 +58,11 @@ module tb;
     integer    p_slv  [0:NP-1];
     initial begin
         // Peta 2026-10-30: slave n di word n<<14, mask jendela penuh 0x3FFF
-        // (SRAM 0x1FFF). Tiap slave diprobe di awal & akhir jendela; probe akhir
+        // (SRAM juga 0x3FFF sejak 64 KB). Tiap slave diprobe di awal & akhir jendela; probe akhir
         // jendela juga menguji alias (slave cuma memakai bit alamat rendah).
-        // SRAM 32 KB: 0x0000-0x1FFF (dua titik, bukan 0 supaya tidak menimpa program)
+        // SRAM 64 KB: 0x0000-0x3FFF (dua titik, bukan 0 supaya tidak menimpa program)
         p_addr[ 0] = 32'h0000_0100; p_slv[ 0] = 0;
-        p_addr[ 1] = 32'h0000_1FFF; p_slv[ 1] = 0;
+        p_addr[ 1] = 32'h0000_3FFF; p_slv[ 1] = 0;   // (bekas celah 32 KB)
         p_addr[ 2] = 32'h0000_4000; p_slv[ 2] = 1;   // DAC  0x4000-0x7FFF
         p_addr[ 3] = 32'h0000_7FFF; p_slv[ 3] = 1;
         p_addr[ 4] = 32'h0000_8000; p_slv[ 4] = 2;   // ADC  0x8000-0xBFFF
@@ -82,8 +82,8 @@ module tb;
     localparam NU = 6;                       // probe [U] tambahan
     reg [31:0] u_addr [0:NU-1];
     initial begin
-        u_addr[0] = 32'h0000_2000; u_addr[1] = 32'h0000_3FFF;   // celah SRAM 32-64 KB
-        u_addr[2] = 32'h0002_0000; u_addr[3] = 32'h0003_FFFF;   // slot 8-15 kosong
+        u_addr[0] = 32'h0002_C000; u_addr[1] = 32'h0003_FFFF;   // slot 11, akhir slot 15
+        u_addr[2] = 32'h0002_0000; u_addr[3] = 32'h0004_0000;   // slot 8, bit 18 (byte 0x100000)
         u_addr[4] = 32'h0400_0000;                              // alamat SPI slave lama
         u_addr[5] = 32'h8000_C000;                              // bit atas wajib dibandingkan
     end
@@ -199,11 +199,11 @@ module tb;
             endcase
         end
         // efek samping: memastikan data benar-benar sampai ke modul yang dimaksud
-        if (dut.SP32B1024_INT.mem[13'h0100] !== 32'hA5A5_0000 ||
-            dut.SP32B1024_INT.mem[13'h1FFF] !== 32'hA5A5_0001) begin
+        if (dut.SP32B1024_INT.mem[14'h0100] !== 32'hA5A5_0000 ||
+            dut.SP32B1024_INT.mem[14'h3FFF] !== 32'hA5A5_0001) begin
             errors = errors + 1;
-            $display("  FAIL [W] isi SRAM: mem[0x100]=%h mem[0x1FFF]=%h",
-                     dut.SP32B1024_INT.mem[13'h0100], dut.SP32B1024_INT.mem[13'h1FFF]);
+            $display("  FAIL [W] isi SRAM: mem[0x100]=%h mem[0x3FFF]=%h",
+                     dut.SP32B1024_INT.mem[14'h0100], dut.SP32B1024_INT.mem[14'h3FFF]);
         end
         if (dnw  !== 8'h81) begin errors = errors + 1; $display("  FAIL [W] GPIO bank 1 = %b, harap 10000001", dnw); end
         if (dnw2 !== 8'h81) begin errors = errors + 1; $display("  FAIL [W] GPIO bank 2 = %b, harap 10000001", dnw2); end

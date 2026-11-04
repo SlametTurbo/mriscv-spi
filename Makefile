@@ -46,11 +46,11 @@ override XDC := $(or $(wildcard $(XDC)),$(wildcard rtl/$(XDC)),$(XDC))
 PNR_FREQ     ?= 50
 override PNR_ARGS += --freq $(PNR_FREQ)
 
-# Seed P&R terkunci (hasil sweep 20 seed 2026-10-30 pada RTL peta alamat baru: seed 17 =
-# 67.15 MHz terbaik; lihat results/logs/seed_summary_addrmap.md). Tanpa ini
+# Seed P&R terkunci (hasil sweep 20 seed 2026-10-30 pada RTL SRAM 64 KB: seed 15 =
+# 69.44 MHz terbaik; lihat results/logs/seed_summary_ram64.md). Tanpa ini
 # nextpnr pakai seed internal default. Diabaikan kalau PNR_ARGS sudah memuat
 # --seed atau -r. Ubah RTL -> sweep ulang, seed lama tidak berlaku lagi.
-PNR_SEED     ?= 17
+PNR_SEED     ?= 15
 ifeq ($(findstring --seed,$(PNR_ARGS))$(filter -r,$(PNR_ARGS)),)
 override PNR_ARGS += --seed $(PNR_SEED)
 endif

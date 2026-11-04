@@ -1,6 +1,6 @@
 OUTPUT_ARCH(riscv)
 ENTRY(_start)
-MEMORY { RAM (rwx) : ORIGIN = 0x00000000, LENGTH = 32K }
+MEMORY { RAM (rwx) : ORIGIN = 0x00000000, LENGTH = 64K }
 SECTIONS {
   .text 0x0 : { *(.text.init) *(.text*) } > RAM
   .rodata : { *(.rodata*) *(.srodata*) } > RAM

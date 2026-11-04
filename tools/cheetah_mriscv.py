@@ -3,6 +3,8 @@
 # cheetah_mriscv.py - Host uploader untuk mriscv via Total Phase Cheetah (Ubuntu)
 #
 # Mengirim frame SPI 66-bit {instr[1:0], addr[31:0], data[31:0]} ke spi_axi_master
+# (addr = WORD address apa adanya, tanpa >>2; byte address firmware = word << 2,
+#  peta lengkap di rtl/mriscv/mriscv_axi/impl_axi/impl_axi.v)
 # (versi single-clock) untuk:
 #   - upload program ke BRAM lalu melepas core, atau
 #   - memprogram GPIO langsung (core boleh tetap di-reset).
@@ -32,7 +34,7 @@ from array import array
 # --- konstanta protokol ---
 INSTR_WRITE = 0b10
 INSTR_NOP   = 0b00
-SRAM_BASE   = 0x000          # word-address RAM (program) 0x0000..0x1FFF (32 KB)
+SRAM_BASE   = 0x000          # word-address RAM (program) 0x0000..0x3FFF (64 KB)
 GPIO_BASE   = 0xC000         # word-address GPIO bank 1 pin 0 (byte 0x30000); pin i -> 0xC000 + i
 GPIO_ON     = 0x3            # data=1, DSE(enable)=1
 GPIO_OFF    = 0x2            # data=0, DSE(enable)=1
