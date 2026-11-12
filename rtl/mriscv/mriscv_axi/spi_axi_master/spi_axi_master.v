@@ -1,5 +1,5 @@
 // ============================================================================
-// spi_axi_master.v  -- DITULIS ULANG: single-clock (domain CLK), FPGA-routable.
+// spi_axi_master.v  -- single-clock (domain CLK), FPGA-routable.
 // SCLK/CEB/DATA di-oversample di domain CLK (bukan dipakai sbg clock) -> tak ada
 // clock kedua utk dirutekan, tak perlu bus_sync_sf, tak perlu BUFG utk SCLK.
 // Port identik dgn versi asli (impl_axi tak berubah). Mode: tulis RAM + lepas core.
@@ -23,9 +23,11 @@ module spi_axi_master #(
     input axi_rvalid, output reg axi_rready = 0, input [sword-1:0] axi_rdata
 );
     localparam NBITS = 2 + sword + sword;   // 66
-
-    // ---- sinkronkan input SPI ke domain CLK (2-3 FF) ----
+    
     reg [2:0] sclk_s = 0, ceb_s = 3'b111, data_s = 0;
+
+    // Shift Reg
+
     always @(posedge CLK) begin
         if (RST==1'b0) begin sclk_s<=0; ceb_s<=3'b111; data_s<=0; end
         else begin
@@ -34,7 +36,7 @@ module spi_axi_master #(
             data_s <= {data_s[1:0], DATA};
         end
     end
-    wire sclk_rise  = (sclk_s[2:1] == 2'b01);   // tepi naik SCLK terdeteksi di CLK
+    wire sclk_rise  = (sclk_s[2:1] == 2'b01);   // Pos edge trigger
     wire cs_active  = ~ceb_s[2];                 // CS rendah = aktif
     wire mosi       = data_s[2];
 
