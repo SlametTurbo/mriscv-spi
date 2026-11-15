@@ -11,7 +11,7 @@ This project was developed as part of an undergraduate thesis: demonstrating tha
 ## Features
 
 - **RV32I soft-core** running on the Basys3 via an open-source flow (no Vivado).
-- **SPI runtime loader** — programs are uploaded to the core's memory over SPI (Cheetah adapter), so switching programs requires **no** bitstream rebuild.en code
+- **SPI runtime loader** — programs are uploaded to the core's memory over SPI (Cheetah adapter), so switching programs requires **no** bitstream rebuild.
 - **Automatic Power-On Reset (POR)** — the bitstream runs immediately after configuration, no need to press `btnC` manually.
 - **Integrated peripherals** via `basys3_top.v`:
   - `gpio_datanw[7:0]` → 8 onboard LEDs
